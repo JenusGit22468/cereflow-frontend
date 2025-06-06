@@ -1730,7 +1730,17 @@
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
                 
-                const response = await fetch('http://localhost:3000/api/search', {
+                // Use production backend URL for deployed sites, localhost for development
+                let apiUrl;
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    // Development
+                    apiUrl = 'http://localhost:3000/api/search';
+                } else {
+                    // Production - Using your Render backend
+                    apiUrl = 'https://cereflow-backend.onrender.com/api/search';
+                }
+                
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1756,13 +1766,17 @@
                 console.error('Medical network error:', medicalError);
                 hideHealingPortal();
                 
-                // Better error handling for mobile
-                let errorMessage = 'Network connection problem. Please check your internet connection and try again.';
+                // Better error handling for production vs development
+                let errorMessage = 'Cannot connect to medical database.';
                 
                 if (medicalError.name === 'AbortError') {
-                    errorMessage = 'Request timed out. Please try again with a different location.';
-                } else if (medicalError.message.includes('Failed to fetch')) {
-                    errorMessage = 'Cannot connect to medical database. Please check your internet connection.';
+                    errorMessage = 'Request timed out. Please try again.';
+                } else if (medicalError.message.includes('Failed to fetch') || medicalError.message.includes('Network request failed')) {
+                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                        errorMessage = 'Cannot connect to local backend. Make sure your backend is running on http://localhost:3000';
+                    } else {
+                        errorMessage = 'Cannot connect to backend server. The medical database may be temporarily unavailable. Please try again in a few moments.';
+                    }
                 } else if (medicalError.message) {
                     errorMessage = medicalError.message;
                 }
