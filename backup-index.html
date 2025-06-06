@@ -1,0 +1,2862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="CereFlow - Global stroke resource finder. Find rehabilitation facilities, hospitals, and emergency care worldwide.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#dc2626">
+    <title>CereFlow - Revolutionary Stroke Care Network</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Medical-inspired color palette */
+            --primary-red: #dc2626;
+            --pulse-pink: #ec4899;
+            --neural-blue: #0ea5e9;
+            --healing-green: #10b981;
+            --warning-amber: #f59e0b;
+            --deep-navy: #0f172a;
+            --soft-gray: #f8fafc;
+            --medical-white: #ffffff;
+            
+            /* Gradients for depth */
+            --heartbeat-gradient: linear-gradient(135deg, #dc2626 0%, #ec4899 50%, #f97316 100%);
+            --neural-gradient: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 50%, #6366f1 100%);
+            --healing-gradient: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            --depth-shadow: rgba(15, 23, 42, 0.1);
+            
+            /* Typography */
+            --font-primary: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Spacing & Layout */
+            --container-max: 1400px;
+            --section-padding: clamp(4rem, 8vw, 8rem);
+            --border-radius: 24px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--soft-gray);
+            color: var(--deep-navy);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Emergency Alert Bar */
+        .emergency-alert {
+            background: var(--heartbeat-gradient);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
+            animation: pulseGlow 3s ease-in-out infinite;
+            transition: margin-top 0.3s ease-in-out;
+        }
+
+        .emergency-alert.hidden {
+            margin-top: -100px;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3); }
+            50% { box-shadow: 0 8px 40px rgba(220, 38, 38, 0.5); }
+        }
+
+        .emergency-content {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            text-align: center;
+        }
+
+        .emergency-icon {
+            font-size: 1.5rem;
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            14% { transform: scale(1.2); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.2); }
+            70% { transform: scale(1); }
+        }
+
+        .emergency-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+        }
+
+        .emergency-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .emergency-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            margin-left: 1rem;
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+
+        .emergency-close:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.1);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 72px;
+            z-index: 999;
+            transition: top 0.3s ease-in-out;
+        }
+
+        .navbar.adjust-position {
+            top: 0;
+        }
+
+        .nav-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--deep-navy);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--heartbeat-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: brainPulse 4s ease-in-out infinite;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
+        }
+
+        @keyframes brainPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            33% { transform: scale(1.1) rotate(2deg); }
+            66% { transform: scale(0.95) rotate(-1deg); }
+        }
+
+        .logo-text {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--deep-navy);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--deep-navy);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--neural-gradient);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .nav-link:hover::before {
+            left: 0;
+        }
+
+        .nav-link:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section - Medical Scanner Aesthetic */
+        .hero {
+            background: var(--deep-navy);
+            color: white;
+            padding: var(--section-padding) 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(220, 38, 38, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 60% 40%, rgba(16, 185, 129, 0.2) 0%, transparent 50%);
+            animation: medicalScan 8s ease-in-out infinite;
+        }
+
+        @keyframes medicalScan {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .hero-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-family: var(--font-primary);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 50%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text .highlight {
+            background: var(--heartbeat-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes textPulse {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            max-width: 500px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--heartbeat-gradient);
+            border: none;
+            color: white;
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 8px 30px rgba(220, 38, 38, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--pulse-pink);
+            color: var(--pulse-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
+        }
+
+        /* Medical Visualization */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .medical-scanner {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scannerRotate 10s linear infinite;
+        }
+
+        @keyframes scannerRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .brain-core {
+            width: 200px;
+            height: 200px;
+            background: var(--neural-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            animation: brainCore 3s ease-in-out infinite;
+            box-shadow: 
+                0 0 50px rgba(14, 165, 233, 0.5),
+                inset 0 0 30px rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes brainCore {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 50px rgba(14, 165, 233, 0.5), inset 0 0 30px rgba(255, 255, 255, 0.2); }
+            50% { transform: scale(1.1); box-shadow: 0 0 80px rgba(14, 165, 233, 0.8), inset 0 0 50px rgba(255, 255, 255, 0.3); }
+        }
+
+        .scan-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--pulse-pink);
+            border-right: 3px solid var(--neural-blue);
+            animation: scanLines 4s linear infinite;
+        }
+
+        @keyframes scanLines {
+            0% { transform: rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: rotate(360deg) scale(1.2); opacity: 0.3; }
+        }
+
+        .medical-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--healing-green);
+            border-radius: 50%;
+            animation: particleFloat 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+        .particle:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 2s; }
+        .particle:nth-child(4) { bottom: 10%; right: 10%; animation-delay: 3s; }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.7; }
+            50% { transform: translateY(-20px) scale(1.5); opacity: 1; }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: white;
+            padding: 4rem 0;
+            border-top: 1px solid rgba(220, 38, 38, 0.1);
+        }
+
+        .stats-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--heartbeat-gradient);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-red);
+            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.15);
+        }
+
+        .stat-number {
+            font-family: var(--font-primary);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            display: block;
+            margin-bottom: 0.5rem;
+            animation: countUp 2s ease-out;
+        }
+
+        @keyframes countUp {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: var(--deep-navy);
+            font-size: 1.1rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--soft-gray);
+            padding: var(--section-padding) 0;
+            position: relative;
+        }
+
+        .search-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .search-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .search-header h2 {
+            font-family: var(--font-primary);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--deep-navy);
+            margin-bottom: 1rem;
+            background: var(--neural-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-header p {
+            font-size: 1.2rem;
+            color: var(--deep-navy);
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-console {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            box-shadow: 
+                0 20px 60px rgba(15, 23, 42, 0.1),
+                0 0 0 1px rgba(220, 38, 38, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-console::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--heartbeat-gradient);
+        }
+
+        .console-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        .console-status {
+            width: 12px;
+            height: 12px;
+            background: var(--healing-green);
+            border-radius: 50%;
+            animation: statusBlink 2s ease-in-out infinite;
+        }
+
+        @keyframes statusBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .console-title {
+            font-family: var(--font-primary);
+            font-weight: 600;
+            color: var(--deep-navy);
+            font-size: 1.1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--deep-navy);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .label-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--neural-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: white;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid rgba(15, 23, 42, 0.1);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .urgency-group {
+            grid-column: 1 / -1;
+        }
+
+        .urgency-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .urgency-option {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .urgency-radio {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .urgency-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem;
+            border: 2px solid rgba(15, 23, 42, 0.1);
+            border-radius: 12px;
+            transition: var(--transition);
+            background: white;
+            font-weight: 500;
+        }
+
+        .urgency-indicator {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(15, 23, 42, 0.2);
+            border-radius: 50%;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .urgency-radio:checked + .urgency-label {
+            border-color: var(--primary-red);
+            background: rgba(220, 38, 38, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.15);
+        }
+
+        .urgency-radio:checked + .urgency-label .urgency-indicator {
+            border-color: var(--primary-red);
+            background: var(--heartbeat-gradient);
+        }
+
+        .urgency-radio:checked + .urgency-label .urgency-indicator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .emergency-option .urgency-radio:checked + .urgency-label {
+            border-color: var(--primary-red);
+            background: rgba(220, 38, 38, 0.1);
+            animation: emergencyPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes emergencyPulse {
+            0%, 100% { box-shadow: 0 8px 25px rgba(220, 38, 38, 0.15); }
+            50% { box-shadow: 0 12px 35px rgba(220, 38, 38, 0.25); }
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        /* Loading Section */
+        .loading-section {
+            display: none;
+            background: var(--deep-navy);
+            color: white;
+            padding: var(--section-padding) 0;
+            text-align: center;
+        }
+
+        .loading-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .scanner-display {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 3rem;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scanner-core {
+            width: 150px;
+            height: 150px;
+            background: var(--neural-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            animation: scannerPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 50px rgba(14, 165, 233, 0.5);
+            position: relative;
+        }
+
+        .scanner-core::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--pulse-pink);
+            border-radius: 50%;
+            animation: scannerSpin 1s linear infinite;
+        }
+
+        .scanner-core::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid transparent;
+            border-bottom: 2px solid var(--healing-green);
+            border-radius: 50%;
+            animation: scannerSpin 1.5s linear infinite reverse;
+        }
+
+        @keyframes scannerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes scannerSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-dots {
+            animation: loadingDots 1.5s infinite;
+        }
+
+        @keyframes loadingDots {
+            0%, 20% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        #loadingText {
+            opacity: 0.8;
+            animation: textFade 3s ease-in-out infinite;
+        }
+
+        @keyframes textFade {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .progress-container {
+            margin: 2rem auto;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--heartbeat-gradient);
+            border-radius: 50px;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+            box-shadow: 
+                0 0 10px rgba(220, 38, 38, 0.5),
+                0 0 20px rgba(220, 38, 38, 0.3);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 2s ease-in-out infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .scanner-rings {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .scanner-ring {
+            position: absolute;
+            border: 3px solid transparent;
+            border-radius: 50%;
+            animation: ringRotate 3s linear infinite;
+        }
+
+        .scanner-ring:nth-child(1) {
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border-top-color: var(--pulse-pink);
+            animation-duration: 3s;
+        }
+
+        .scanner-ring:nth-child(2) {
+            top: 40px;
+            left: 40px;
+            right: 40px;
+            bottom: 40px;
+            border-right-color: var(--healing-green);
+            animation-duration: 4s;
+            animation-direction: reverse;
+        }
+
+        .scanner-ring:nth-child(3) {
+            top: 60px;
+            left: 60px;
+            right: 60px;
+            bottom: 60px;
+            border-bottom-color: var(--warning-amber);
+            animation-duration: 5s;
+        }
+
+        @keyframes ringRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .loading-step {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 200px;
+            transition: var(--transition);
+            opacity: 0.5;
+        }
+
+        .loading-step.active {
+            opacity: 1;
+            background: rgba(220, 38, 38, 0.2);
+            border-color: var(--primary-red);
+            transform: scale(1.05);
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            background: white;
+            padding: var(--section-padding) 0;
+        }
+
+        .results-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* New Search Button */
+        .new-search-container {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 2px solid rgba(15, 23, 42, 0.1);
+        }
+
+        .btn-new-search {
+            background: var(--neural-gradient);
+            color: white;
+            border: none;
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.3);
+        }
+
+        .btn-new-search:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(14, 165, 233, 0.4);
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 2px solid rgba(15, 23, 42, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.1);
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--healing-gradient);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.1);
+            border-color: var(--neural-blue);
+        }
+
+        /* Result Card Styles */
+        .emergency-card::before {
+            background: var(--heartbeat-gradient);
+        }
+
+        .rehabilitation-card::before {
+            background: var(--neural-gradient);
+        }
+
+        .local-resources-card::before {
+            background: var(--healing-gradient);
+        }
+
+        .emergency-protocol-card::before {
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+        }
+
+        .facility-details h4 {
+            color: var(--deep-navy);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .facility-info {
+            background: rgba(248, 250, 252, 0.8);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .facility-info p {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-category {
+            background: rgba(248, 250, 252, 0.6);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .service-category h5 {
+            color: var(--deep-navy);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .service-category ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .service-category li {
+            padding: 0.25rem 0;
+            color: var(--deep-navy);
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .service-category li::before {
+            content: "✓ ";
+            color: var(--healing-green);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .contact-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .btn-emergency {
+            background: var(--heartbeat-gradient);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .btn-emergency:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .resource-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .resource-section h4 {
+            color: var(--deep-navy);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .resource-item {
+            background: rgba(248, 250, 252, 0.8);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .resource-item h5 {
+            color: var(--deep-navy);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-item p {
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+            color: var(--deep-navy);
+            opacity: 0.8;
+        }
+
+        /* Info Section */
+        .info-section {
+            background: var(--soft-gray);
+            padding: var(--section-padding) 0;
+        }
+
+        .info-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .info-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--neural-gradient);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--neural-blue);
+            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.15);
+        }
+
+        .info-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--neural-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 2rem;
+            animation: iconFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .info-title {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--deep-navy);
+            margin-bottom: 1rem;
+        }
+
+        .info-description {
+            color: var(--deep-navy);
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--deep-navy);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--pulse-pink);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--pulse-pink);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+        }
+
+        .disclaimer {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Enhanced Mobile Styles */
+        @media (max-width: 768px) {
+            :root {
+                --section-padding: 3rem;
+            }
+
+            /* Mobile Typography */
+            body {
+                font-size: 16px;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 8vw, 2.5rem) !important;
+            }
+
+            h2 {
+                font-size: clamp(1.5rem, 6vw, 2rem) !important;
+            }
+
+            /* Mobile Emergency Alert */
+            .emergency-content {
+                padding: 0 1rem;
+                font-size: 0.9rem;
+            }
+
+            .emergency-icon {
+                font-size: 1.2rem;
+            }
+
+            .emergency-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            /* Mobile Navigation */
+            .navbar {
+                padding: 1rem 0;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .logo {
+                justify-content: center;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+                width: 100%;
+            }
+
+            .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            /* Mobile Hero */
+            .hero {
+                min-height: auto;
+                padding: 3rem 0;
+            }
+
+            .hero-container {
+                padding: 0 1rem;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .hero-text p {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            /* Mobile Hero Visual */
+            .hero-visual {
+                height: 300px;
+            }
+
+            .medical-scanner {
+                width: 250px;
+                height: 250px;
+            }
+
+            .brain-core {
+                width: 120px;
+                height: 120px;
+                font-size: 2.5rem;
+            }
+
+            /* Mobile Stats */
+            .stats-container {
+                padding: 0 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .stat-label {
+                font-size: 0.9rem;
+            }
+
+            /* Mobile Search Section */
+            .search-container {
+                padding: 0 1rem;
+            }
+
+            .search-header {
+                margin-bottom: 2rem;
+            }
+
+            .search-header p {
+                font-size: 1rem;
+            }
+
+            .search-console {
+                padding: 2rem 1.5rem;
+                border-radius: 16px;
+            }
+
+            .console-header {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .console-title {
+                font-size: 0.9rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .form-input,
+            .form-select,
+            .form-textarea {
+                padding: 1rem;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .urgency-options {
+                grid-template-columns: 1fr;
+            }
+
+            .urgency-label {
+                padding: 1rem;
+            }
+
+            .search-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+
+            .search-actions button {
+                width: 100%;
+            }
+
+            /* Mobile Loading */
+            .loading-container {
+                padding: 0 1rem;
+            }
+
+            .scanner-display {
+                width: 200px;
+                height: 200px;
+                margin-bottom: 2rem;
+            }
+
+            .scanner-core {
+                width: 100px;
+                height: 100px;
+                font-size: 2rem;
+            }
+
+            .loading-steps {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .loading-step {
+                min-width: auto;
+            }
+
+            /* Mobile Results */
+            .results-container {
+                padding: 0 1rem;
+            }
+
+            .result-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .facility-details h4 {
+                font-size: 1.2rem;
+            }
+
+            .facility-info {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-options {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .contact-options button,
+            .contact-options a {
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Mobile Info Section */
+            .info-container {
+                padding: 0 1rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .info-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .info-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .info-title {
+                font-size: 1.3rem;
+            }
+
+            /* Mobile Footer */
+            .footer-container {
+                padding: 0 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .disclaimer {
+                font-size: 0.85rem;
+                padding: 1rem;
+            }
+
+            /* Mobile Modal */
+            .modal-content {
+                width: 95%;
+                max-height: 90vh;
+                border-radius: 16px;
+            }
+
+            .modal-header {
+                padding: 1.5rem;
+            }
+
+            .modal-header h4 {
+                font-size: 1.3rem;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+
+            .emergency-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Mobile New Search Button */
+            .new-search-container {
+                margin-top: 2rem;
+                padding-top: 2rem;
+            }
+
+            .btn-new-search {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        .modal-header h4 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--deep-navy);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--deep-navy);
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .emergency-country {
+            background: var(--soft-gray);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-red);
+        }
+
+        .country-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--deep-navy);
+            font-size: 1.1rem;
+        }
+
+        .emergency-numbers {
+            font-size: 0.95rem;
+            color: var(--deep-navy);
+            opacity: 0.8;
+        }
+
+        .emergency-number {
+            font-weight: 600;
+            color: var(--primary-red);
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .visible { display: block !important; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--soft-gray);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--heartbeat-gradient);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neural-gradient);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Error pulse animation for validation feedback */
+        @keyframes errorPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Emergency Alert -->
+    <div class="emergency-alert" id="emergencyAlert" role="alert" aria-live="assertive">
+        <div class="emergency-content">
+            <span class="emergency-icon">🫀</span>
+            <strong>STROKE EMERGENCY?</strong>
+            Call Emergency Services Immediately:
+            <span id="emergencyNumber">911</span>
+            <button class="emergency-btn" onclick="showEmergencyNumbers()">
+                Global Numbers
+            </button>
+            <button class="emergency-close" onclick="closeEmergencyAlert()" aria-label="Close emergency alert">×</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">
+                <div class="logo-icon">🧠</div>
+                <div class="logo-text">CereFlow</div>
+            </a>
+            <div class="nav-links">
+                <a href="#search" class="nav-link">Find Resources</a>
+                <a href="#about" class="nav-link">How It Works</a>
+                <a href="#emergency" class="nav-link">Emergency Info</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>
+                        Revolutionary 
+                        <span class="highlight">Stroke Care</span>
+                        Access Platform
+                    </h1>
+                    <p>
+                        Advanced medical intelligence instantly connects stroke patients to life-saving resources worldwide. 
+                        From emergency care to rehabilitation - we map your path to recovery.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn-primary" onclick="scrollToSearch()">
+                            <span>🎯</span>
+                            Find Care Now
+                        </button>
+                        <button class="btn-secondary" onclick="showEmergencyNumbers()">
+                            Emergency Help
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="medical-scanner">
+                        <div class="brain-core">🧠</div>
+                        <div class="scan-lines"></div>
+                        <div class="medical-particles">
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">195</span>
+                    <span class="stat-label">Countries Covered</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Medical Access</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">AI</span>
+                    <span class="stat-label">Powered Analysis</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Lives Supported</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section" id="search">
+        <div class="search-container">
+            <div class="search-header">
+                <h2>Medical Resource Scanner</h2>
+                <p>Advanced diagnostic system analyzes your location and medical needs to provide personalized stroke care recommendations</p>
+            </div>
+            <div class="search-console">
+                <div class="console-header">
+                    <div class="console-status"></div>
+                    <div class="console-title">CEREFLOW MEDICAL CONSOLE v2.0</div>
+                </div>
+                <form id="strokeSearchForm" class="search-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="location" class="form-label">
+                                <div class="label-icon">📍</div>
+                                Patient Location
+                            </label>
+                            <input 
+                                type="text" 
+                                id="location" 
+                                name="location" 
+                                class="form-input" 
+                                placeholder="Enter city, state/province, country"
+                                required
+                            >
+                        </div>
+
+                        <!-- UPDATED: Multi-select Medical Needs -->
+                        <div class="form-group urgency-group">
+                            <label class="form-label">
+                                <div class="label-icon">🏥</div>
+                                Medical Needs (Select all that apply)
+                            </label>
+                            <div class="urgency-options">
+                                <div class="urgency-option">
+                                    <input type="checkbox" name="needTypes" value="emergency" id="need-emergency" class="urgency-radio">
+                                    <label for="need-emergency" class="urgency-label">
+                                        <div class="urgency-indicator"></div>
+                                        <div>
+                                            <div>🚨 Emergency Stroke Care</div>
+                                            <small>Immediate stroke treatment</small>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="urgency-option">
+                                    <input type="checkbox" name="needTypes" value="rehabilitation" id="need-rehab" class="urgency-radio">
+                                    <label for="need-rehab" class="urgency-label">
+                                        <div class="urgency-indicator"></div>
+                                        <div>
+                                            <div>🏥 Rehabilitation Programs</div>
+                                            <small>Inpatient/outpatient rehabilitation</small>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="urgency-option">
+                                    <input type="checkbox" name="needTypes" value="speech-therapy" id="need-speech" class="urgency-radio">
+                                    <label for="need-speech" class="urgency-label">
+                                        <div class="urgency-indicator"></div>
+                                        <div>
+                                            <div>🗣️ Speech Therapy</div>
+                                            <small>Language and communication recovery</small>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="urgency-option">
+                                    <input type="checkbox" name="needTypes" value="physical-therapy" id="need-physical" class="urgency-radio">
+                                    <label for="need-physical" class="urgency-label">
+                                        <div class="urgency-indicator"></div>
+                                        <div>
+                                            <div>💪 Physical Therapy</div>
+                                            <small>Movement and mobility recovery</small>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="urgency-option">
+                                    <input type="checkbox" name="needTypes" value="occupational-therapy" id="need-occupational" class="urgency-radio">
+                                    <label for="need-occupational" class="urgency-label">
+                                        <div class="urgency-indicator"></div>
+                                        <div>
+                                            <div>🖐️ Occupational Therapy</div>
+                                            <small>Daily living skills recovery</small>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="urgency-option">
+                                    <input type="checkbox" name="needTypes" value="support-groups" id="need-support" class="urgency-radio">
+                                    <label for="need-support" class="urgency-label">
+                                        <div class="urgency-indicator"></div>
+                                        <div>
+                                            <div>👥 Support Groups</div>
+                                            <small>Peer support and counseling</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="language" class="form-label">
+                                <div class="label-icon">🌐</div>
+                                Language Preference
+                            </label>
+                            <select id="language" name="language" class="form-select">
+                                <option value="local">🌍 Local Language (Auto-detect)</option>
+                                <option value="en">🇺🇸 English</option>
+                                <option value="es">🇪🇸 Spanish</option>
+                                <option value="fr">🇫🇷 French</option>
+                                <option value="de">🇩🇪 German</option>
+                                <option value="it">🇮🇹 Italian</option>
+                                <option value="pt">🇵🇹 Portuguese</option>
+                                <option value="zh">🇨🇳 Chinese</option>
+                                <option value="ja">🇯🇵 Japanese</option>
+                                <option value="ar">🇸🇦 Arabic</option>
+                                <option value="other">🌏 Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="search-actions">
+                        <button type="submit" class="btn-primary">
+                            <span>🔍</span>
+                            Analyze & Find Resources
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="clearForm()">
+                            Reset Scanner
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Section -->
+    <section class="loading-section" id="loadingSection">
+        <div class="loading-container">
+            <div class="scanner-display">
+                <div class="scanner-core">🧠</div>
+                <div class="scanner-rings">
+                    <div class="scanner-ring"></div>
+                    <div class="scanner-ring"></div>
+                    <div class="scanner-ring"></div>
+                </div>
+            </div>
+            <h2 id="loadingTitle">Medical Analysis in Progress<span class="loading-dots">...</span></h2>
+            <p id="loadingText">Advanced AI is processing your medical needs and scanning global healthcare networks</p>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0% Complete</div>
+            </div>
+            
+            <div class="loading-steps">
+                <div class="loading-step active">
+                    <span class="step-icon">📍</span>
+                    <div class="step-title">Location Analysis</div>
+                    <div class="step-description">Mapping your geographic area</div>
+                </div>
+                <div class="loading-step">
+                    <span class="step-icon">🏥</span>
+                    <div class="step-title">Healthcare Scanning</div>
+                    <div class="step-description">Finding medical facilities</div>
+                </div>
+                <div class="loading-step">
+                    <span class="step-icon">🎯</span>
+                    <div class="step-title">Personalization</div>
+                    <div class="step-description">Customizing recommendations</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section" id="resultsSection">
+        <div class="results-container">
+            <div class="results-header">
+                <h2>Medical Analysis Complete</h2>
+                <p>Personalized stroke care resources found for your location and needs</p>
+            </div>
+            <div class="results-grid" id="resultsGrid">
+                <!-- Results will be dynamically populated by API calls -->
+            </div>
+            <div class="new-search-container">
+                <button class="btn-new-search" onclick="startNewSearch()">
+                    <span>🔍</span>
+                    Start New Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section" id="about">
+        <div class="info-container">
+            <div class="info-header">
+                <h2>Revolutionary Medical Technology</h2>
+                <p>Combining advanced AI with compassionate care to transform stroke recovery worldwide</p>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">🧠</div>
+                    <h3 class="info-title">Neural Network Analysis</h3>
+                    <p class="info-description">
+                        Advanced AI processes medical databases, geographic data, and patient needs to provide precise, 
+                        life-saving recommendations in critical moments.
+                    </p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🌍</div>
+                    <h3 class="info-title">Global Medical Network</h3>
+                    <p class="info-description">
+                        Comprehensive coverage spanning all 195 countries, from major medical centers to specialized 
+                        stroke units in remote locations worldwide.
+                    </p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">⚡</div>
+                    <h3 class="info-title">Instant Medical Intelligence</h3>
+                    <p class="info-description">
+                        Real-time analysis of emergency protocols, facility capabilities, insurance compatibility, 
+                        and personalized care pathways delivered in seconds.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>🧠 CereFlow Medical</h4>
+                    <p>
+                        Revolutionary stroke care platform powered by advanced medical AI. 
+                        Connecting patients to life-saving resources across the globe.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4>Emergency Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showEmergencyNumbers()">Global Emergency Numbers</a></li>
+                        <li><a href="https://www.world-stroke.org" target="_blank">World Stroke Organization</a></li>
+                        <li><a href="https://www.stroke.org" target="_blank">American Stroke Association</a></li>
+                        <li><a href="https://www.stroke.org.uk" target="_blank">Stroke Association UK</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Medical Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://www.heartandstroke.ca" target="_blank">Heart & Stroke Canada</a></li>
+                        <li><a href="https://strokefoundation.org.au" target="_blank">Stroke Foundation Australia</a></li>
+                        <li><a href="https://eso-stroke.org" target="_blank">European Stroke Organisation</a></li>
+                        <li><a href="#search">Find Local Resources</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Platform Info</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showDisclaimer()">Medical Disclaimer</a></li>
+                        <li><a href="#" onclick="showPrivacy()">Privacy Policy</a></li>
+                        <li><a href="#" onclick="showEmergencyNumbers()">Emergency Procedures</a></li>
+                        <li><a href="mailto:medical@cereflow.com">Medical Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="disclaimer">
+                    <strong>⚠️ MEDICAL DISCLAIMER:</strong>
+                    CereFlow provides informational resources only and is not a substitute for professional medical advice, 
+                    diagnosis, or treatment. For stroke emergencies, call emergency services immediately. 
+                    Always consult healthcare professionals for medical decisions.
+                </div>
+                <p>&copy; 2024 CereFlow Medical Platform. Revolutionizing global stroke care access.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Emergency Numbers Modal -->
+    <div id="emergencyModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="emergencyModalTitle">
+        <div class="modal-overlay" onclick="closeModal('emergencyModal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="emergencyModalTitle">Global Emergency Numbers</h4>
+                <button class="modal-close" onclick="closeModal('emergencyModal')" aria-label="Close modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="emergencyGrid" class="emergency-grid">
+                    <!-- Emergency numbers will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // EMERGENCY NUMBERS DATA
+        const EMERGENCY_NUMBERS = {
+            'US': { emergency: '911', stroke: '1-800-STROKES' },
+            'CA': { emergency: '911', stroke: '1-833-4-STROKE' },
+            'UK': { emergency: '999', stroke: '999' },
+            'AU': { emergency: '000', stroke: '000' },
+            'DE': { emergency: '112', stroke: '112' },
+            'FR': { emergency: '112', stroke: '15' },
+            'ES': { emergency: '112', stroke: '112' },
+            'IT': { emergency: '112', stroke: '118' },
+            'JP': { emergency: '119', stroke: '119' },
+            'IN': { emergency: '108', stroke: '108' },
+            'BR': { emergency: '192', stroke: '192' },
+            'MX': { emergency: '911', stroke: '911' },
+            'ZA': { emergency: '10111', stroke: '10177' },
+            'SG': { emergency: '995', stroke: '995' },
+            'KR': { emergency: '119', stroke: '119' }
+        };
+
+        // MAIN FORM SUBMISSION AND SEARCH FUNCTIONALITY
+        document.getElementById('strokeSearchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Form submitted - starting medical needs validation');
+            
+            // Show loading section
+            document.querySelector('.search-section').style.display = 'none';
+            document.getElementById('loadingSection').style.display = 'block';
+            
+            // Start progress tracking immediately
+            startProgressTracking();
+            
+            // Animate loading steps
+            animateLoadingSteps();
+            
+            // Scroll to loading section
+            setTimeout(() => {
+                document.getElementById('loadingSection').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 100);
+            
+            // Call the actual API and show results after reasonable loading time
+            setTimeout(() => {
+                showResults();
+            }, 2500); // Reduced from 5000ms to 2500ms
+        });
+
+        function animateLoadingSteps() {
+            const steps = document.querySelectorAll('.loading-step');
+            const loadingTitle = document.getElementById('loadingTitle');
+            const loadingText = document.getElementById('loadingText');
+            let currentStep = 0;
+            
+            // Dynamic loading messages
+            const loadingMessages = [
+                {
+                    title: "Medical Analysis in Progress<span class='loading-dots'>...</span>",
+                    text: "🔍 Analyzing your location and medical requirements"
+                },
+                {
+                    title: "Healthcare Scanning Active<span class='loading-dots'>...</span>",
+                    text: "🏥 Scanning global medical databases and facilities"
+                },
+                {
+                    title: "Personalizing Results<span class='loading-dots'>...</span>",
+                    text: "🎯 Customizing recommendations for your specific needs"
+                },
+                {
+                    title: "Finalizing Analysis<span class='loading-dots'>...</span>",
+                    text: "✨ Preparing your personalized medical resource report"
+                }
+            ];
+            
+            const stepInterval = setInterval(() => {
+                if (currentStep > 0) {
+                    steps[currentStep - 1].classList.remove('active');
+                }
+                if (currentStep < steps.length) {
+                    steps[currentStep].classList.add('active');
+                    
+                    // Update loading messages
+                    if (loadingMessages[currentStep]) {
+                        loadingTitle.innerHTML = loadingMessages[currentStep].title;
+                        loadingText.innerHTML = loadingMessages[currentStep].text;
+                    }
+                    
+                    currentStep++;
+                } else {
+                    clearInterval(stepInterval);
+                }
+            }, 800); // Reduced from 1500ms to 800ms to match shorter loading time
+        }
+
+        function showResults() {
+            // Hide loading and show results
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('resultsSection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            
+            // Make the actual API call
+            populateResults();
+        }
+
+        // ENHANCED: MAIN API FUNCTION WITH LOADING DETECTION
+        async function populateResults() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            // Get selected medical needs (multi-select checkboxes) - ENHANCED
+            const needTypes = [];
+            const needCheckboxes = document.querySelectorAll('input[name="needTypes"]:checked');
+            console.log('Found checked checkboxes:', needCheckboxes.length);
+            
+            needCheckboxes.forEach(checkbox => {
+                console.log('Adding need type:', checkbox.value);
+                needTypes.push(checkbox.value);
+            });
+            
+            console.log('Final needTypes array:', needTypes);
+            
+            // Validate at least one need type is selected - ENHANCED
+            if (needTypes.length === 0) {
+                console.log('Validation failed: No medical needs selected');
+                alert('Please select at least one medical need from the checkboxes above.');
+                
+                // Show search section again and scroll to medical needs
+                document.getElementById('loadingSection').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'none';
+                document.querySelector('.search-section').style.display = 'block';
+                
+                // Add visual feedback - highlight medical needs section
+                const urgencyGroup = document.querySelector('.urgency-group');
+                urgencyGroup.style.border = '2px solid #dc2626';
+                urgencyGroup.style.borderRadius = '12px';
+                urgencyGroup.style.animation = 'errorPulse 0.5s ease-in-out 3';
+                
+                // Scroll to medical needs section
+                urgencyGroup.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                
+                // Remove visual feedback after 3 seconds
+                setTimeout(() => {
+                    urgencyGroup.style.border = '';
+                    urgencyGroup.style.animation = '';
+                }, 3000);
+                
+                return;
+            }
+            
+            // Get form data (NEW FORMAT FOR MULTI-SELECT)
+            const formData = {
+                location: document.getElementById('location').value,
+                needTypes: needTypes,  // CHANGED: Now sends array instead of single needType
+                language: document.getElementById('language').value
+            };
+            
+            console.log('Making API call with data:', formData);
+            console.log('Location:', formData.location);
+            console.log('Selected medical needs:', formData.needTypes);
+            console.log('Language preference:', formData.language);
+            
+            try {
+                // Call your backend API
+                const response = await fetch('http://localhost:3000/api/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                console.log('API Response:', data);
+                
+                // Complete progress tracking
+                completeProgressTracking();
+                
+                if (data.success && data.facilities && data.facilities.length > 0) {
+                    // Display real facilities from AI
+                    displayRealFacilities(data);
+                } else {
+                    // Show fallback if no facilities found
+                    displayFallback(data);
+                }
+                
+            } catch (error) {
+                console.error('API Error:', error);
+                completeProgressTracking();
+                displayError(error);
+            }
+        }
+
+        // FIXED: Progress tracking functions
+        function startProgressTracking() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            let progress = 0;
+            
+            // Start progress immediately
+            progressFill.style.width = '0%';
+            progressText.textContent = '0% Complete';
+            
+            // Simulate realistic progress during API call
+            const progressInterval = setInterval(() => {
+                // More realistic progress increment
+                const increment = Math.random() * 8 + 2; // Between 2-10% increments
+                progress += increment;
+                
+                if (progress > 95) progress = 95; // Cap at 95% until completion
+                
+                progressFill.style.width = progress + '%';
+                progressText.textContent = Math.round(progress) + '% Complete';
+                
+                // Update loading text based on progress
+                updateLoadingMessage(progress);
+                
+                if (progress >= 95) {
+                    clearInterval(progressInterval);
+                }
+            }, 150); // Faster updates every 150ms
+            
+            // Store interval for cleanup
+            window.currentProgressInterval = progressInterval;
+        }
+        
+        function completeProgressTracking() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const loadingTitle = document.getElementById('loadingTitle');
+            const loadingText = document.getElementById('loadingText');
+            
+            // Clear any existing interval
+            if (window.currentProgressInterval) {
+                clearInterval(window.currentProgressInterval);
+            }
+            
+            // Complete the progress bar smoothly
+            progressFill.style.width = '100%';
+            progressText.textContent = '100% Complete';
+            
+            // Show completion message
+            loadingTitle.innerHTML = "Analysis Complete ✅";
+            loadingText.innerHTML = "🎯 Personalized stroke care resources found for your location and needs";
+            
+            // Brief pause to show completion before transitioning
+            setTimeout(() => {
+                loadingText.innerHTML = "🔄 Displaying your results...";
+            }, 800);
+        }
+        
+        function updateLoadingMessage(progress) {
+            const loadingText = document.getElementById('loadingText');
+            const loadingTitle = document.getElementById('loadingTitle');
+            
+            // More granular progress messages with better feedback
+            if (progress < 15) {
+                loadingText.innerHTML = "🔍 Initializing medical analysis system...";
+                loadingTitle.innerHTML = "Starting Analysis<span class='loading-dots'>...</span>";
+            } else if (progress < 35) {
+                loadingText.innerHTML = "📍 Analyzing your location and medical requirements...";
+                loadingTitle.innerHTML = "Location Analysis<span class='loading-dots'>...</span>";
+            } else if (progress < 55) {
+                loadingText.innerHTML = "🏥 Scanning global medical databases and facilities...";
+                loadingTitle.innerHTML = "Database Search<span class='loading-dots'>...</span>";
+            } else if (progress < 75) {
+                loadingText.innerHTML = "🎯 Customizing recommendations for your specific needs...";
+                loadingTitle.innerHTML = "Personalizing Results<span class='loading-dots'>...</span>";
+            } else if (progress < 90) {
+                loadingText.innerHTML = "✨ Finalizing your personalized medical resource report...";
+                loadingTitle.innerHTML = "Generating Report<span class='loading-dots'>...</span>";
+            } else if (progress < 95) {
+                loadingText.innerHTML = "🔄 Preparing results display...";
+                loadingTitle.innerHTML = "Almost Ready<span class='loading-dots'>...</span>";
+            } else {
+                loadingText.innerHTML = "✅ Medical analysis complete! Loading your results...";
+                loadingTitle.innerHTML = "Analysis Complete<span class='loading-dots'>...</span>";
+            }
+        }
+
+        // NEW SEARCH FUNCTION
+        function startNewSearch() {
+            // Hide results section
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            // Show search section
+            document.querySelector('.search-section').style.display = 'block';
+            
+            // Clear the form
+            clearForm();
+            
+            // Scroll to search section
+            scrollToSearch();
+        }
+
+        // CLOSE EMERGENCY ALERT AND ADJUST NAVBAR
+        function closeEmergencyAlert() {
+            const emergencyAlert = document.getElementById('emergencyAlert');
+            const navbar = document.querySelector('.navbar');
+            
+            // Hide the emergency alert
+            emergencyAlert.classList.add('hidden');
+            
+            // Adjust navbar position
+            navbar.classList.add('adjust-position');
+            
+            // Save preference in localStorage
+            localStorage.setItem('emergencyAlertClosed', 'true');
+        }
+
+        // CHECK IF EMERGENCY ALERT WAS PREVIOUSLY CLOSED
+        window.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('emergencyAlertClosed') === 'true') {
+                document.getElementById('emergencyAlert').classList.add('hidden');
+                document.querySelector('.navbar').classList.add('adjust-position');
+            }
+        });
+
+        // SHOW EMERGENCY NUMBERS MODAL
+        function showEmergencyNumbers() {
+            const modal = document.getElementById('emergencyModal');
+            const grid = document.getElementById('emergencyGrid');
+            
+            // Clear existing content
+            grid.innerHTML = '';
+            
+            // Populate emergency numbers
+            Object.entries(EMERGENCY_NUMBERS).forEach(([country, info]) => {
+                const countryElement = document.createElement('div');
+                countryElement.className = 'emergency-country';
+                
+                countryElement.innerHTML = `
+                    <div class="country-name">${getCountryName(country)}</div>
+                    <div class="emergency-numbers">
+                        Emergency: <span class="emergency-number">${info.emergency}</span><br>
+                        Stroke Line: <span class="emergency-number">${info.stroke}</span>
+                    </div>
+                `;
+                
+                grid.appendChild(countryElement);
+            });
+            
+            showModal('emergencyModal');
+        }
+
+        function getCountryName(countryCode) {
+            const countryNames = {
+                'US': 'United States',
+                'CA': 'Canada', 
+                'UK': 'United Kingdom',
+                'AU': 'Australia',
+                'DE': 'Germany',
+                'FR': 'France',
+                'ES': 'Spain',
+                'IT': 'Italy',
+                'JP': 'Japan',
+                'IN': 'India',
+                'BR': 'Brazil',
+                'MX': 'Mexico',
+                'ZA': 'South Africa',
+                'SG': 'Singapore',
+                'KR': 'South Korea'
+            };
+            
+            return countryNames[countryCode] || countryCode;
+        }
+
+        // MODAL FUNCTIONS
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            
+            modal.classList.add('visible');
+            modal.setAttribute('aria-hidden', 'false');
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            
+            modal.classList.remove('visible');
+            modal.setAttribute('aria-hidden', 'true');
+            
+            // Restore body scroll
+            document.body.style.overflow = '';
+        }
+
+        // SCROLL TO SEARCH
+        function scrollToSearch() {
+            // Check if results are currently visible
+            const resultsSection = document.getElementById('resultsSection');
+            const searchSection = document.querySelector('.search-section');
+            
+            if (resultsSection.style.display === 'block' || searchSection.style.display === 'none') {
+                // Results are shown or search is hidden, reload the page
+                window.location.reload();
+            } else {
+                // Normal scroll to search
+                document.getElementById('search').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // CLEAR FORM - ENHANCED
+        function clearForm() {
+            console.log('Clearing form...');
+            document.getElementById('strokeSearchForm').reset();
+            
+            // Reset all medical need checkboxes specifically
+            document.querySelectorAll('input[name="needTypes"]').forEach(checkbox => {
+                checkbox.checked = false;
+                console.log('Unchecked:', checkbox.value);
+            });
+            
+            console.log('Form cleared - all checkboxes unchecked');
+            
+            // Remove any error styling that might be present
+            const urgencyGroup = document.querySelector('.urgency-group');
+            if (urgencyGroup) {
+                urgencyGroup.style.border = '';
+                urgencyGroup.style.animation = '';
+            }
+        }
+
+        // SHOW DISCLAIMER
+        function showDisclaimer() {
+            alert('Medical Disclaimer: This website is for informational purposes only and does not provide medical advice. For stroke emergencies, call your local emergency number immediately.');
+        }
+
+        // SHOW PRIVACY
+        function showPrivacy() {
+            alert('Privacy Policy: CereFlow does not collect or store personal information. All searches are performed locally in your browser.');
+        }
+
+        // DISPLAY FUNCTIONS FOR API RESULTS
+        function displayRealFacilities(data) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            let facilitiesHTML = '';
+            
+            // Generate cards for each facility from AI response
+            data.facilities.forEach((facility, index) => {
+                const cardColor = index === 0 ? 'emergency-card' : 
+                                 facility.type === 'rehabilitation_center' ? 'rehabilitation-card' : 
+                                 'local-resources-card';
+                
+                facilitiesHTML += `
+                    <div class="result-card ${cardColor}">
+                        <h3>${facility.emergency_capable ? '🚨' : '🏥'} ${facility.name}</h3>
+                        <div class="facility-details">
+                            <h4>${facility.name}</h4>
+                            <div class="facility-info">
+                                <p><strong>📍 Address:</strong> ${facility.address}</p>
+                                ${facility.phone ? `<p><strong>📞 Phone:</strong> ${facility.phone}</p>` : ''}
+                                ${facility.website ? `<p><strong>🌐 Website:</strong> <a href="${facility.website}" target="_blank">${facility.website}</a></p>` : ''}
+                                ${facility.distance_from_search ? `<p><strong>⏱️ Distance:</strong> ${facility.distance_from_search}</p>` : ''}
+                                ${facility.hours ? `<p><strong>🕒 Hours:</strong> ${facility.hours}</p>` : ''}
+                            </div>
+                            
+                            <div class="services-grid">
+                                ${facility.services && facility.services.length > 0 ? `
+                                    <div class="service-category">
+                                        <h5>🏥 Services Available</h5>
+                                        <ul>
+                                            ${facility.services.map(service => `<li>${service}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            
+                            <div class="contact-options">
+                                ${facility.phone ? `<a href="tel:${facility.phone}" class="btn-primary">📞 Call Now</a>` : ''}
+                                ${facility.website ? `<a href="${facility.website}" target="_blank" class="btn-secondary">🌐 Visit Website</a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsGrid.innerHTML = facilitiesHTML;
+            
+            // Ensure new search button is visible at bottom of results
+            const newSearchBtn = document.querySelector('.new-search-container');
+            if (newSearchBtn) {
+                newSearchBtn.style.display = 'block';
+            }
+        }
+
+        // DISPLAY FALLBACK WHEN NO RESULTS
+        function displayFallback(data) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            resultsGrid.innerHTML = `
+                <div class="result-card local-resources-card" style="grid-column: 1 / -1;">
+                    <h3>📍 No Specific Facilities Found</h3>
+                    <div class="facility-details">
+                        <h4>Search Recommendations</h4>
+                        <div class="facility-info">
+                            <p>We couldn't find specific facilities matching your criteria in ${document.getElementById('location').value}.</p>
+                            <p>Here are some recommendations:</p>
+                        </div>
+                        
+                        <div class="resource-section">
+                            <h4>🔍 Try These Search Terms</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>✓ "Stroke rehabilitation center near me"</li>
+                                <li>✓ "Physical therapy stroke recovery"</li>
+                                <li>✓ "Speech therapy after stroke"</li>
+                                <li>✓ "Neurological rehabilitation clinic"</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="resource-section">
+                            <h4>📞 Contact Local Resources</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>✓ Call your local hospital for referrals</li>
+                                <li>✓ Contact your insurance provider for in-network facilities</li>
+                                <li>✓ Ask your primary care physician for recommendations</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="contact-options">
+                            <button class="btn-emergency" onclick="showEmergencyNumbers()">
+                                View Emergency Numbers
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Ensure new search button is visible
+            const newSearchBtn = document.querySelector('.new-search-container');
+            if (newSearchBtn) {
+                newSearchBtn.style.display = 'block';
+            }
+        }
+
+        // DISPLAY ERROR MESSAGE
+        function displayError(error) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            resultsGrid.innerHTML = `
+                <div class="result-card emergency-card" style="grid-column: 1 / -1;">
+                    <h3>⚠️ Search Error</h3>
+                    <div class="facility-details">
+                        <h4>Unable to Complete Search</h4>
+                        <div class="facility-info">
+                            <p>We encountered an error while searching for facilities.</p>
+                            <p><strong>Error Details:</strong> ${error.message || 'Unknown error occurred'}</p>
+                        </div>
+                        
+                        <div class="resource-section">
+                            <h4>What You Can Do</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>✓ Check your internet connection</li>
+                                <li>✓ Try searching again in a few moments</li>
+                                <li>✓ Verify the location spelling</li>
+                                <li>✓ Contact support if the issue persists</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="contact-options">
+                            <button class="btn-primary" onclick="scrollToSearch()">
+                                Try Again
+                            </button>
+                            <button class="btn-emergency" onclick="showEmergencyNumbers()">
+                                Emergency Numbers
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Hide loading and show results
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('resultsSection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            
+            // Ensure new search button is visible
+            const newSearchBtn = document.querySelector('.new-search-container');
+            if (newSearchBtn) {
+                newSearchBtn.style.display = 'block';
+            }
+        }
+        
+        // Clear form function for Reset Scanner button
+        function clearForm() {
+            const form = document.getElementById('strokeSearchForm');
+            if (form) {
+                form.reset();
+                
+                // Clear any custom selections
+                const checkboxes = form.querySelectorAll('input[type=\"checkbox\"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // Reset any visual states
+                const urgencyOptions = form.querySelectorAll('.urgency-option');
+                urgencyOptions.forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // Hide results and loading sections
+                document.getElementById('loadingSection').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'none';
+                
+                // Show search section
+                document.querySelector('.search-section').style.display = 'block';
+                
+                // Scroll back to search
+                document.querySelector('.search-section').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                console.log('Form cleared and reset');
+            }
+        }
+    </script>
+</body>
+</html>

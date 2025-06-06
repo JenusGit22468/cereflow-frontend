@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CereFlow - Global Stroke Care Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --medical-blue: #0066cc;
+            --healing-teal: #00b8a9;
+            --warm-coral: #ff6b7a;
+            --calm-lavender: #8b7cf8;
+            --soft-mint: #4ecdc4;
+            --gentle-orange: #ffa726;
+            --pure-white: #ffffff;
+            --light-gray: #f8fafc;
+            --medium-gray: #e2e8f0;
+            --text-dark: #1a202c;
+            --text-medium: #4a5568;
+            --text-light: #718096;
+            
+            --healing-gradient: linear-gradient(135deg, var(--healing-teal), var(--soft-mint));
+            --care-gradient: linear-gradient(135deg, var(--medical-blue), var(--calm-lavender));
+            --warm-gradient: linear-gradient(135deg, var(--warm-coral), var(--gentle-orange));
+            
+            --font-primary: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --smooth-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --gentle-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --floating-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Floating Medical Orbs */
+        .healing-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: floatOrb 20s infinite linear;
+        }
+
+        .orb:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            background: var(--healing-gradient);
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            background: var(--care-gradient);
+            left: 70%;
+            animation-delay: 5s;
+        }
+
+        .orb:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            background: var(--warm-gradient);
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Revolutionary Emergency Bar */
+        .emergency-lifeline {
+            background: var(--warm-gradient);
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: var(--gentle-shadow);
+        }
+
+        .emergency-lifeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: emergencyPulse 3s infinite;
+        }
+
+        @keyframes emergencyPulse {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .lifeline-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .lifeline-pulse {
+            font-size: 1.5rem;
+            animation: heartbeatPulse 2s infinite;
+        }
+
+        @keyframes heartbeatPulse {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+        }
+
+        /* Floating Navigation */
+        .floating-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--gentle-shadow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .healing-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .logo-symbol {
+            width: 50px;
+            height: 50px;
+            background: var(--healing-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: gentleRotate 8s ease-in-out infinite;
+            box-shadow: var(--gentle-shadow);
+            position: relative;
+        }
+
+        .logo-symbol::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 2px solid var(--healing-teal);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: logoRipple 3s ease-in-out infinite;
+        }
+
+        @keyframes gentleRotate {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(10deg) scale(1.05); }
+        }
+
+        @keyframes logoRipple {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+        }
+
+        .logo-text {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--healing-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .care-button {
+            background: var(--care-gradient);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--smooth-transition);
+            box-shadow: var(--gentle-shadow);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .care-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: var(--floating-shadow);
+        }
+
+        /* Revolutionary Hero */
+        .hero-sanctuary {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, 
+                rgba(0, 184, 169, 0.05) 0%, 
+                rgba(139, 124, 248, 0.05) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-sanctuary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="%2300b8a9" opacity="0.1"/><circle cx="80" cy="40" r="1" fill="%230066cc" opacity="0.1"/><circle cx="60" cy="80" r="1.5" fill="%23ff6b7a" opacity="0.1"/></svg>') repeat;
+            background-size: 200px 200px;
+            animation: healingPattern 30s linear infinite;
+        }
+
+        @keyframes healingPattern {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(200px) translateY(200px); }
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-healing {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .healing-message h1 {
+            font-family: var(--font-primary);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+        }
+
+        .healing-highlight {
+            background: var(--healing-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .healing-highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--healing-gradient);
+            border-radius: 2px;
+            animation: underlineGrow 2s ease-out;
+        }
+
+        @keyframes underlineGrow {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .healing-message p {
+            font-size: 1.25rem;
+            color: var(--text-medium);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .healing-actions {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .primary-care-btn {
+            background: var(--healing-gradient);
+            border: none;
+            color: white;
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--smooth-transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--floating-shadow);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-care-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--smooth-transition);
+        }
+
+        .primary-care-btn:hover::before {
+            left: 100%;
+        }
+
+        .primary-care-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 184, 169, 0.4);
+        }
+
+        .secondary-care-btn {
+            background: transparent;
+            border: 2px solid var(--medical-blue);
+            color: var(--medical-blue);
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--smooth-transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .secondary-care-btn:hover {
+            background: var(--medical-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--floating-shadow);
+        }
+
+        /* Revolutionary Medical Visualization */
+        .care-visualization {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 0 auto;
+        }
+
+        .healing-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: var(--care-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            animation: healingPulse 4s ease-in-out infinite;
+            box-shadow: var(--floating-shadow);
+            position: relative;
+        }
+
+        .healing-center::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border: 3px solid var(--healing-teal);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: healingRipple1 3s ease-in-out infinite;
+        }
+
+        .healing-center::after {
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: -40px;
+            right: -40px;
+            bottom: -40px;
+            border: 2px solid var(--calm-lavender);
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: healingRipple2 4s ease-in-out infinite;
+        }
+
+        @keyframes healingPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        @keyframes healingRipple1 {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+        }
+
+        @keyframes healingRipple2 {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.3); opacity: 0.05; }
+        }
+
+        .care-nodes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .care-node {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            animation: nodeFloat 6s ease-in-out infinite;
+            box-shadow: var(--gentle-shadow);
+        }
+
+        .care-node:nth-child(1) {
+            top: 10%;
+            left: 50%;
+            background: var(--warm-coral);
+            animation-delay: 0s;
+        }
+
+        .care-node:nth-child(2) {
+            top: 30%;
+            right: 15%;
+            background: var(--healing-teal);
+            animation-delay: 1s;
+        }
+
+        .care-node:nth-child(3) {
+            bottom: 30%;
+            right: 10%;
+            background: var(--calm-lavender);
+            animation-delay: 2s;
+        }
+
+        .care-node:nth-child(4) {
+            bottom: 10%;
+            left: 30%;
+            background: var(--gentle-orange);
+            animation-delay: 3s;
+        }
+
+        .care-node:nth-child(5) {
+            top: 50%;
+            left: 10%;
+            background: var(--soft-mint);
+            animation-delay: 4s;
+        }
+
+        @keyframes nodeFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+
+        /* Revolutionary Care Finder */
+        .care-finder {
+            padding: 6rem 0;
+            background: var(--pure-white);
+            position: relative;
+        }
+
+        .finder-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .finder-header h2 {
+            font-family: var(--font-primary);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        .finder-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--healing-gradient);
+            border-radius: 2px;
+        }
+
+        .finder-header p {
+            font-size: 1.2rem;
+            color: var(--text-medium);
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 2rem;
+        }
+
+        .care-interface {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--pure-white);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--floating-shadow);
+            position: relative;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .care-interface::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--healing-gradient);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .interface-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            background: var(--healing-teal);
+            border-radius: 50%;
+            animation: statusPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--healing-teal);
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .status-text {
+            font-family: var(--font-primary);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .care-form {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .input-sanctuary {
+            position: relative;
+        }
+
+        .input-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .label-icon {
+            font-size: 1.2rem;
+            color: var(--healing-teal);
+        }
+
+        .care-input,
+        .care-select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--medium-gray);
+            border-radius: 16px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--smooth-transition);
+            background: var(--pure-white);
+        }
+
+        .care-input:focus,
+        .care-select:focus {
+            outline: none;
+            border-color: var(--healing-teal);
+            box-shadow: 0 0 0 4px rgba(0, 184, 169, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Revolutionary Care Options */
+        .care-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .care-option {
+            position: relative;
+            cursor: pointer;
+            transition: var(--smooth-transition);
+        }
+
+        .care-checkbox {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .care-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            border: 2px solid var(--medium-gray);
+            border-radius: 20px;
+            transition: var(--smooth-transition);
+            background: var(--pure-white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .care-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 184, 169, 0.1), transparent);
+            transition: var(--smooth-transition);
+        }
+
+        .care-checkbox:checked + .care-card {
+            border-color: var(--healing-teal);
+            background: linear-gradient(135deg, rgba(0, 184, 169, 0.05), rgba(78, 205, 196, 0.05));
+            transform: translateY(-3px);
+            box-shadow: var(--floating-shadow);
+        }
+
+        .care-checkbox:checked + .care-card::before {
+            left: 100%;
+        }
+
+        .care-indicator {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 50%;
+            position: relative;
+            transition: var(--smooth-transition);
+            flex-shrink: 0;
+        }
+
+        .care-checkbox:checked + .care-card .care-indicator {
+            border-color: var(--healing-teal);
+            background: var(--healing-gradient);
+            box-shadow: 0 0 10px rgba(0, 184, 169, 0.3);
+        }
+
+        .care-checkbox:checked + .care-card .care-indicator::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .care-symbol {
+            font-size: 2rem;
+            color: var(--healing-teal);
+            transition: var(--smooth-transition);
+            flex-shrink: 0;
+        }
+
+        .care-checkbox:checked + .care-card .care-symbol {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        .care-details h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .care-details p {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            line-height: 1.4;
+        }
+
+        .finder-controls {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .find-care-btn {
+            background: var(--healing-gradient);
+            border: none;
+            color: white;
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--smooth-transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--floating-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .find-care-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--smooth-transition);
+        }
+
+        .find-care-btn:hover::before {
+            left: 100%;
+        }
+
+        .find-care-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 184, 169, 0.4);
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: 2px solid var(--text-medium);
+            color: var(--text-medium);
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--smooth-transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .reset-btn:hover {
+            background: var(--text-medium);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Revolutionary Loading Experience */
+        .healing-portal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .portal-sanctuary {
+            text-align: center;
+            max-width: 500px;
+            padding: 2rem;
+        }
+
+        .healing-animation {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .healing-core {
+            width: 120px;
+            height: 120px;
+            background: var(--healing-gradient);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            animation: healingRotate 3s ease-in-out infinite;
+            box-shadow: var(--floating-shadow);
+        }
+
+        .healing-rings {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .healing-ring {
+            position: absolute;
+            border: 3px solid transparent;
+            border-radius: 50%;
+            animation: ringRotate 4s linear infinite;
+        }
+
+        .healing-ring:nth-child(1) {
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border-top-color: var(--healing-teal);
+            border-right-color: var(--soft-mint);
+        }
+
+        .healing-ring:nth-child(2) {
+            top: 40px;
+            left: 40px;
+            right: 40px;
+            bottom: 40px;
+            border-bottom-color: var(--calm-lavender);
+            border-left-color: var(--medical-blue);
+            animation-direction: reverse;
+            animation-duration: 3s;
+        }
+
+        @keyframes healingRotate {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.1); }
+        }
+
+        @keyframes ringRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .portal-title {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .portal-message {
+            font-size: 1rem;
+            color: var(--text-medium);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .healing-progress {
+            width: 100%;
+            height: 8px;
+            background: var(--medium-gray);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .progress-flow {
+            height: 100%;
+            background: var(--healing-gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .progress-flow::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .portal-timer {
+            color: var(--healing-teal);
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .healing-stages {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .healing-stage {
+            background: var(--medium-gray);
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            transition: var(--smooth-transition);
+            opacity: 0.5;
+        }
+
+        .healing-stage.active {
+            background: var(--healing-gradient);
+            color: white;
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: var(--gentle-shadow);
+        }
+
+        /* Revolutionary Results */
+        .care-results {
+            padding: 6rem 0;
+            background: var(--light-gray);
+            display: none;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .results-header h2 {
+            font-family: var(--font-primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .results-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .care-facility {
+            background: var(--pure-white);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--floating-shadow);
+            border: 1px solid var(--medium-gray);
+            transition: var(--smooth-transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .care-facility::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--healing-gradient);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .care-facility:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .facility-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .facility-symbol {
+            font-size: 3rem;
+            color: var(--healing-teal);
+            animation: symbolFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes symbolFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .facility-info h3 {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .quality-badge {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            background: var(--healing-gradient);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .facility-data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--light-gray);
+            border-radius: 16px;
+        }
+
+        .data-point {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .data-symbol {
+            color: var(--healing-teal);
+            font-size: 1.1rem;
+        }
+
+        .care-services {
+            margin: 2rem 0;
+        }
+
+        .care-services h4 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .services-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .service-bubble {
+            background: rgba(0, 184, 169, 0.1);
+            border: 1px solid var(--healing-teal);
+            color: var(--healing-teal);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .facility-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 2px solid var(--healing-teal);
+            color: var(--healing-teal);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--smooth-transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: var(--healing-teal);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.primary {
+            background: var(--healing-gradient);
+            border-color: transparent;
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: var(--floating-shadow);
+        }
+
+        .new-search {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 2px solid var(--medium-gray);
+        }
+
+        /* Emergency Care Modal */
+        .emergency-portal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .emergency-sanctuary {
+            background: var(--pure-white);
+            border-radius: 24px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--floating-shadow);
+            position: relative;
+        }
+
+        .emergency-header {
+            background: var(--warm-gradient);
+            color: white;
+            padding: 2rem;
+            border-radius: 24px 24px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .emergency-title {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .emergency-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .emergency-close:hover {
+            opacity: 1;
+        }
+
+        .emergency-content {
+            padding: 2rem;
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .emergency-country {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--warm-coral);
+            transition: var(--smooth-transition);
+        }
+
+        .emergency-country:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--gentle-shadow);
+        }
+
+        .country-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .emergency-numbers {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+        }
+
+        .emergency-code {
+            color: var(--warm-coral);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-healing {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .care-visualization {
+                width: 300px;
+                height: 300px;
+            }
+
+            .healing-center {
+                width: 120px;
+                height: 120px;
+                font-size: 2.5rem;
+            }
+
+            .care-interface {
+                padding: 2rem 1.5rem;
+            }
+
+            .care-matrix {
+                grid-template-columns: 1fr;
+            }
+
+            .finder-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .find-care-btn,
+            .reset-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .healing-stages {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .facility-data {
+                grid-template-columns: 1fr;
+            }
+
+            .facility-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating Healing Orbs -->
+    <div class="healing-orbs" id="healingOrbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- Emergency Lifeline -->
+    <div class="emergency-lifeline" onclick="showEmergencyPortal()">
+        <div class="lifeline-content">
+            <span class="lifeline-pulse">🚨</span>
+            <strong>STROKE EMERGENCY?</strong>
+            Call 911 immediately for life-saving care
+            <span style="opacity: 0.9;">• Global numbers available</span>
+        </div>
+    </div>
+
+    <!-- Floating Navigation -->
+    <nav class="floating-nav">
+        <div class="nav-container">
+            <a href="#" class="healing-logo">
+                <div class="logo-symbol">🧠</div>
+                <div class="logo-text">CereFlow</div>
+            </a>
+            <button class="care-button" onclick="showEmergencyPortal()">
+                🆘 Emergency Help
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Sanctuary -->
+    <section class="hero-sanctuary">
+        <div class="hero-container">
+            <div class="hero-healing">
+                <div class="healing-message">
+                    <h1>
+                        Find <span class="healing-highlight">Stroke Care</span><br>
+                        Anywhere in the World
+                    </h1>
+                    <p>
+                        Revolutionary platform connecting stroke patients with medical facilities globally. 
+                        From emergency treatment to rehabilitation - we help you find the care you need, when you need it.
+                    </p>
+                    <div class="healing-actions">
+                        <button class="primary-care-btn" onclick="scrollToFinder()">
+                            <span>🔍</span>
+                            Find Medical Care
+                        </button>
+                        <button class="secondary-care-btn" onclick="showEmergencyPortal()">
+                            <span>📞</span>
+                            Emergency Help
+                        </button>
+                    </div>
+                </div>
+                <div class="care-visualization">
+                    <div class="healing-center">🧠</div>
+                    <div class="care-nodes">
+                        <div class="care-node">🏥</div>
+                        <div class="care-node">🩺</div>
+                        <div class="care-node">💊</div>
+                        <div class="care-node">🫀</div>
+                        <div class="care-node">🔬</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Care Finder -->
+    <section class="care-finder" id="finder">
+        <div class="hero-container">
+            <div class="finder-header">
+                <h2>Medical Care Finder</h2>
+                <p>Tell us your location and the type of care you need, and we'll connect you with the best medical facilities</p>
+            </div>
+            
+            <div class="care-interface">
+                <div class="interface-status">
+                    <div class="status-indicator"></div>
+                    <div class="status-text">CereFlow Medical Network • Online & Ready</div>
+                </div>
+                
+                <form class="care-form" id="careForm">
+                    <div class="input-sanctuary">
+                        <label class="input-label">
+                            <span class="label-icon">📍</span>
+                            Your Location
+                        </label>
+                        <input 
+                            type="text" 
+                            id="location" 
+                            class="care-input" 
+                            placeholder="Enter your city, state, or country (e.g., Jackson, TN)"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-sanctuary">
+                        <label class="input-label">
+                            <span class="label-icon">🏥</span>
+                            Types of Care Needed (Select all that apply)
+                        </label>
+                        <div class="care-matrix">
+                            <div class="care-option">
+                                <input type="checkbox" id="emergency" name="needTypes" value="emergency" class="care-checkbox">
+                                <label for="emergency" class="care-card">
+                                    <div class="care-indicator"></div>
+                                    <span class="care-symbol">🚨</span>
+                                    <div class="care-details">
+                                        <h4>Emergency Stroke Care</h4>
+                                        <p>Immediate medical attention and stroke treatment</p>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="care-option">
+                                <input type="checkbox" id="rehabilitation" name="needTypes" value="rehabilitation" class="care-checkbox">
+                                <label for="rehabilitation" class="care-card">
+                                    <div class="care-indicator"></div>
+                                    <span class="care-symbol">🏥</span>
+                                    <div class="care-details">
+                                        <h4>Rehabilitation Programs</h4>
+                                        <p>Inpatient and outpatient recovery programs</p>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="care-option">
+                                <input type="checkbox" id="speech-therapy" name="needTypes" value="speech-therapy" class="care-checkbox">
+                                <label for="speech-therapy" class="care-card">
+                                    <div class="care-indicator"></div>
+                                    <span class="care-symbol">🗣️</span>
+                                    <div class="care-details">
+                                        <h4>Speech Therapy</h4>
+                                        <p>Language and communication recovery</p>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="care-option">
+                                <input type="checkbox" id="physical-therapy" name="needTypes" value="physical-therapy" class="care-checkbox">
+                                <label for="physical-therapy" class="care-card">
+                                    <div class="care-indicator"></div>
+                                    <span class="care-symbol">💪</span>
+                                    <div class="care-details">
+                                        <h4>Physical Therapy</h4>
+                                        <p>Movement and mobility recovery</p>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="care-option">
+                                <input type="checkbox" id="occupational-therapy" name="needTypes" value="occupational-therapy" class="care-checkbox">
+                                <label for="occupational-therapy" class="care-card">
+                                    <div class="care-indicator"></div>
+                                    <span class="care-symbol">🖐️</span>
+                                    <div class="care-details">
+                                        <h4>Occupational Therapy</h4>
+                                        <p>Daily living skills and independence</p>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="care-option">
+                                <input type="checkbox" id="support-groups" name="needTypes" value="support-groups" class="care-checkbox">
+                                <label for="support-groups" class="care-card">
+                                    <div class="care-indicator"></div>
+                                    <span class="care-symbol">👥</span>
+                                    <div class="care-details">
+                                        <h4>Support Groups</h4>
+                                        <p>Peer support and counseling services</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-sanctuary">
+                        <label class="input-label">
+                            <span class="label-icon">🌍</span>
+                            Language Preference
+                        </label>
+                        <select id="language" class="care-select">
+                            <option value="local">🌍 Local Language (Auto-detect)</option>
+                            <option value="en">🇺🇸 English</option>
+                            <option value="es">🇪🇸 Spanish</option>
+                            <option value="fr">🇫🇷 French</option>
+                            <option value="de">🇩🇪 German</option>
+                            <option value="zh">🇨🇳 Chinese</option>
+                            <option value="other">🌏 Other</option>
+                        </select>
+                    </div>
+
+                    <div class="finder-controls">
+                        <button type="submit" class="find-care-btn">
+                            <span>🔍</span>
+                            Find Medical Facilities
+                        </button>
+                        <button type="button" class="reset-btn" onclick="resetCareFinder()">
+                            <span>🔄</span>
+                            Start Over
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Healing Portal (Loading) -->
+    <div class="healing-portal" id="healingPortal">
+        <div class="portal-sanctuary">
+            <div class="healing-animation">
+                <div class="healing-core">🧠</div>
+                <div class="healing-rings">
+                    <div class="healing-ring"></div>
+                    <div class="healing-ring"></div>
+                </div>
+            </div>
+            <h2 class="portal-title" id="portalTitle">Searching for Medical Care</h2>
+            <p class="portal-message" id="portalMessage">We're searching medical databases worldwide to find the best care facilities for your needs. This process takes 30-60 seconds.</p>
+            
+            <div class="healing-progress">
+                <div class="progress-flow" id="progressFlow"></div>
+            </div>
+            <p class="portal-timer" id="portalTimer">Estimated time: 45 seconds</p>
+            
+            <div class="healing-stages">
+                <div class="healing-stage active" id="stage1">📍 Finding Location</div>
+                <div class="healing-stage" id="stage2">🏥 Scanning Facilities</div>
+                <div class="healing-stage" id="stage3">🤖 AI Analysis</div>
+                <div class="healing-stage" id="stage4">📋 Preparing Results</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Care Results -->
+    <section class="care-results" id="careResults">
+        <div class="results-container">
+            <div class="results-header">
+                <h2 id="resultsTitle">Medical Facilities Found</h2>
+                <p id="resultsSubtitle">Personalized recommendations based on your needs</p>
+            </div>
+            <div class="results-grid" id="resultsGrid">
+                <!-- Results populated by search -->
+            </div>
+            <div class="new-search">
+                <button class="find-care-btn" onclick="newCareSearch()">
+                    <span>🔍</span>
+                    Start New Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Portal -->
+    <div class="emergency-portal" id="emergencyPortal">
+        <div class="emergency-sanctuary">
+            <div class="emergency-header">
+                <h3 class="emergency-title">🚨 Global Emergency Numbers</h3>
+                <button class="emergency-close" onclick="closeEmergencyPortal()">&times;</button>
+            </div>
+            <div class="emergency-content">
+                <div class="emergency-grid" id="emergencyGrid">
+                    <!-- Emergency numbers populated by script -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Emergency Numbers
+        const EMERGENCY_NUMBERS = {
+            'United States': { emergency: '911', ambulance: '911' },
+            'Canada': { emergency: '911', ambulance: '911' },
+            'United Kingdom': { emergency: '999', ambulance: '999' },
+            'Australia': { emergency: '000', ambulance: '000' },
+            'Germany': { emergency: '112', ambulance: '112' },
+            'France': { emergency: '112', ambulance: '15' },
+            'Spain': { emergency: '112', ambulance: '112' },
+            'Italy': { emergency: '112', ambulance: '118' },
+            'Japan': { emergency: '119', ambulance: '119' },
+            'India': { emergency: '108', ambulance: '108' },
+            'Brazil': { emergency: '192', ambulance: '192' },
+            'Mexico': { emergency: '911', ambulance: '911' },
+            'South Africa': { emergency: '10111', ambulance: '10177' },
+            'Singapore': { emergency: '995', ambulance: '995' },
+            'South Korea': { emergency: '119', ambulance: '119' }
+        };
+
+        // Floating Orbs Animation
+        function initializeHealingOrbs() {
+            const container = document.getElementById('healingOrbs');
+            
+            setInterval(() => {
+                const orb = document.createElement('div');
+                orb.className = 'orb';
+                orb.style.left = Math.random() * 100 + '%';
+                orb.style.animationDelay = Math.random() * 2 + 's';
+                
+                // Random healing colors
+                const gradients = [
+                    'var(--healing-gradient)',
+                    'var(--care-gradient)', 
+                    'var(--warm-gradient)'
+                ];
+                orb.style.background = gradients[Math.floor(Math.random() * gradients.length)];
+                
+                // Random sizes
+                const sizes = [60, 80, 100, 120];
+                const size = sizes[Math.floor(Math.random() * sizes.length)];
+                orb.style.width = size + 'px';
+                orb.style.height = size + 'px';
+                
+                container.appendChild(orb);
+                
+                setTimeout(() => {
+                    if (orb.parentNode) {
+                        orb.parentNode.removeChild(orb);
+                    }
+                }, 20000);
+            }, 800);
+        }
+
+        // Care System Variables
+        let healingProgressInterval;
+        let healingStageInterval;
+
+        // Care Form Submission
+        document.getElementById('careForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate care selection
+            const selectedCare = document.querySelectorAll('input[name="needTypes"]:checked');
+            if (selectedCare.length === 0) {
+                alert('Please select at least one type of care you need.');
+                return;
+            }
+
+            // Collect care data
+            const careData = {
+                location: document.getElementById('location').value,
+                needTypes: Array.from(selectedCare).map(care => care.value),
+                language: document.getElementById('language').value
+            };
+
+            console.log('Finding care with data:', careData);
+
+            // Show healing portal
+            showHealingPortal();
+
+            try {
+                // Connect to medical network
+                const response = await fetch('http://localhost:3000/api/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(careData)
+                });
+
+                const medicalData = await response.json();
+                console.log('Medical network response:', medicalData);
+
+                // Hide portal and show results
+                hideHealingPortal();
+                showCareResults(medicalData);
+
+            } catch (medicalError) {
+                console.error('Medical network error:', medicalError);
+                hideHealingPortal();
+                showCareError(medicalError);
+            }
+        });
+
+        function showHealingPortal() {
+            document.getElementById('healingPortal').style.display = 'flex';
+            
+            // Initialize healing variables
+            let progress = 0;
+            let timeRemaining = 60;
+            let currentStage = 0;
+            
+            const healingStages = [
+                { id: 'stage1', title: '📍 Finding Location', duration: 15 },
+                { id: 'stage2', title: '🏥 Scanning Facilities', duration: 25 },
+                { id: 'stage3', title: '🤖 AI Analysis', duration: 15 },
+                { id: 'stage4', title: '📋 Preparing Results', duration: 5 }
+            ];
+
+            // Progress healing simulation
+            healingProgressInterval = setInterval(() => {
+                progress += Math.random() * 3 + 2;
+                timeRemaining -= 1;
+                
+                if (progress > 95) progress = 95;
+                if (timeRemaining < 5) timeRemaining = 5;
+                
+                document.getElementById('progressFlow').style.width = progress + '%';
+                document.getElementById('portalTimer').textContent = `Estimated time: ${timeRemaining} seconds`;
+                
+                // Update healing messages
+                if (progress < 25) {
+                    document.getElementById('portalMessage').textContent = 'Analyzing your location and understanding your medical needs...';
+                } else if (progress < 50) {
+                    document.getElementById('portalMessage').textContent = 'Searching medical facilities and hospitals worldwide...';
+                } else if (progress < 75) {
+                    document.getElementById('portalMessage').textContent = 'Our AI is analyzing facilities to find the best matches for you...';
+                } else {
+                    document.getElementById('portalMessage').textContent = 'Preparing your personalized list of medical facilities...';
+                }
+            }, 1000);
+
+            // Stage healing progression
+            healingStageInterval = setInterval(() => {
+                if (currentStage < healingStages.length) {
+                    // Deactivate previous stage
+                    if (currentStage > 0) {
+                        document.getElementById(healingStages[currentStage - 1].id).classList.remove('active');
+                    }
+                    
+                    // Activate current stage
+                    document.getElementById(healingStages[currentStage].id).classList.add('active');
+                    document.getElementById('portalTitle').textContent = healingStages[currentStage].title;
+                    
+                    currentStage++;
+                }
+            }, 8000);
+        }
+
+        function hideHealingPortal() {
+            document.getElementById('healingPortal').style.display = 'none';
+            clearInterval(healingProgressInterval);
+            clearInterval(healingStageInterval);
+            
+            // Complete healing progress
+            document.getElementById('progressFlow').style.width = '100%';
+            document.getElementById('portalTimer').textContent = 'Search Complete!';
+        }
+
+        function showCareResults(data) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            const careResults = document.getElementById('careResults');
+            
+            careResults.style.display = 'block';
+            careResults.scrollIntoView({ behavior: 'smooth' });
+
+            if (data.success && data.facilities && data.facilities.length > 0) {
+                // Update results display
+                document.getElementById('resultsSubtitle').textContent = 
+                    `Found ${data.facilities.length} medical facilities near ${data.query.location}`;
+
+                // Generate care facilities
+                let facilitiesHTML = '';
+                data.facilities.forEach(facility => {
+                    facilitiesHTML += createCareFacility(facility);
+                });
+                resultsGrid.innerHTML = facilitiesHTML;
+            } else {
+                // Show no care found message
+                showNoCareFound();
+            }
+        }
+
+        function createCareFacility(facility) {
+            const qualityLevel = facility.medical_relevance === 'High' ? 'Excellent Match' : 'Good Match';
+            
+            return `
+                <div class="care-facility">
+                    <div class="facility-header">
+                        <span class="facility-symbol">🏥</span>
+                        <div class="facility-info">
+                            <h3>${facility.name}</h3>
+                            <span class="quality-badge">${qualityLevel} for Your Needs</span>
+                        </div>
+                    </div>
+
+                    <div class="facility-data">
+                        <div class="data-point">
+                            <span class="data-symbol">📍</span>
+                            <span>${facility.address}</span>
+                        </div>
+                        ${facility.phone ? `
+                        <div class="data-point">
+                            <span class="data-symbol">📞</span>
+                            <span>${facility.phone}</span>
+                        </div>
+                        ` : ''}
+                        ${facility.distance && facility.distance.miles ? `
+                        <div class="data-point">
+                            <span class="data-symbol">📏</span>
+                            <span>${facility.distance.miles} miles away</span>
+                        </div>
+                        ` : ''}
+                        ${facility.rating ? `
+                        <div class="data-point">
+                            <span class="data-symbol">⭐</span>
+                            <span>${facility.rating}/5 rating (${facility.userRatingCount} reviews)</span>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    ${facility.likely_services && facility.likely_services.length > 0 ? `
+                    <div class="care-services">
+                        <h4>Available Services</h4>
+                        <div class="services-flow">
+                            ${facility.likely_services.map(service => 
+                                `<span class="service-bubble">${service}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    ${facility.notes ? `
+                    <div class="care-services">
+                        <h4>Medical Information</h4>
+                        <p style="color: var(--text-medium); line-height: 1.6; margin-top: 0.5rem;">${facility.notes}</p>
+                    </div>
+                    ` : ''}
+
+                    <div class="facility-actions">
+                        ${facility.phone ? `
+                        <a href="tel:${facility.phone}" class="action-btn primary">
+                            📞 Call Now
+                        </a>
+                        ` : ''}
+                        ${facility.website ? `
+                        <a href="${facility.website}" target="_blank" class="action-btn">
+                            🌐 Visit Website
+                        </a>
+                        ` : ''}
+                        ${facility.directions && facility.directions.google ? `
+                        <a href="${facility.directions.google.driving}" target="_blank" class="action-btn">
+                            🗺️ Get Directions
+                        </a>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function showNoCareFound() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            resultsGrid.innerHTML = `
+                <div class="care-facility">
+                    <div class="facility-header">
+                        <span class="facility-symbol">❌</span>
+                        <div class="facility-info">
+                            <h3>No Medical Facilities Found</h3>
+                            <span class="quality-badge">Search Suggestions</span>
+                        </div>
+                    </div>
+                    
+                    <div class="care-services">
+                        <h4>What You Can Do:</h4>
+                        <div style="margin-top: 1rem; color: var(--text-medium); line-height: 1.6;">
+                            <p>• Try searching with a larger city or different location</p>
+                            <p>• Contact your local hospital for referrals and recommendations</p>
+                            <p>• Check with your insurance provider for covered facilities</p>
+                            <p>• Ask your doctor for medical facility recommendations</p>
+                        </div>
+                    </div>
+                    
+                    <div class="facility-actions">
+                        <button class="action-btn primary" onclick="showEmergencyPortal()">
+                            🚨 Emergency Numbers
+                        </button>
+                        <button class="action-btn" onclick="newCareSearch()">
+                            🔄 Try Different Search
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showCareError(error) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            const careResults = document.getElementById('careResults');
+            
+            careResults.style.display = 'block';
+            careResults.scrollIntoView({ behavior: 'smooth' });
+
+            resultsGrid.innerHTML = `
+                <div class="care-facility">
+                    <div class="facility-header">
+                        <span class="facility-symbol">⚠️</span>
+                        <div class="facility-info">
+                            <h3>Search Error</h3>
+                            <span class="quality-badge">Technical Issue</span>
+                        </div>
+                    </div>
+                    
+                    <div class="care-services">
+                        <h4>What Happened:</h4>
+                        <p style="color: var(--text-medium); margin: 1rem 0; line-height: 1.6;">${error.message || 'We encountered a technical problem while searching for medical facilities.'}</p>
+                        <p style="color: var(--text-medium);">Please check your internet connection and try again.</p>
+                    </div>
+                    
+                    <div class="facility-actions">
+                        <button class="action-btn primary" onclick="newCareSearch()">
+                            🔄 Try Again
+                        </button>
+                        <button class="action-btn" onclick="showEmergencyPortal()">
+                            🚨 Emergency Help
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showEmergencyPortal() {
+            const portal = document.getElementById('emergencyPortal');
+            const grid = document.getElementById('emergencyGrid');
+            
+            let gridHTML = '';
+            Object.entries(EMERGENCY_NUMBERS).forEach(([country, numbers]) => {
+                gridHTML += `
+                    <div class="emergency-country">
+                        <div class="country-name">${country}</div>
+                        <div class="emergency-numbers">
+                            Emergency: <span class="emergency-code">${numbers.emergency}</span><br>
+                            Medical: <span class="emergency-code">${numbers.ambulance}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = gridHTML;
+            portal.style.display = 'flex';
+        }
+
+        function closeEmergencyPortal() {
+            document.getElementById('emergencyPortal').style.display = 'none';
+        }
+
+        function scrollToFinder() {
+            document.getElementById('finder').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetCareFinder() {
+            document.getElementById('careForm').reset();
+            document.querySelectorAll('input[name="needTypes"]').forEach(care => care.checked = false);
+        }
+
+        function newCareSearch() {
+            document.getElementById('careResults').style.display = 'none';
+            resetCareFinder();
+            scrollToFinder();
+        }
+
+        // Close emergency portal when clicking outside
+        document.getElementById('emergencyPortal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEmergencyPortal();
+            }
+        });
+
+        // Initialize healing orbs system
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeHealingOrbs();
+        });
+    </script>
+</body>
+</html>
