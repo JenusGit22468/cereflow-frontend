@@ -1683,20 +1683,39 @@
         let healingProgressInterval;
         let healingStageInterval;
 
-        // Care Form Submission
+        // Care Form Submission - Fixed for Mobile
         document.getElementById('careForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            
+            // Prevent double submission (mobile issue)
+            if (this.submitting) {
+                return;
+            }
+            this.submitting = true;
+            
+            // Add delay to ensure mobile form is fully loaded
+            await new Promise(resolve => setTimeout(resolve, 100));
             
             // Validate care selection
             const selectedCare = document.querySelectorAll('input[name="needTypes"]:checked');
             if (selectedCare.length === 0) {
                 alert('Please select at least one type of care you need.');
+                this.submitting = false;
+                return;
+            }
+
+            // Validate location
+            const locationValue = document.getElementById('location').value.trim();
+            if (!locationValue) {
+                alert('Please enter your location.');
+                this.submitting = false;
                 return;
             }
 
             // Collect care data
             const careData = {
-                location: document.getElementById('location').value,
+                location: locationValue,
                 needTypes: Array.from(selectedCare).map(care => care.value),
                 language: document.getElementById('language').value
             };
@@ -1707,14 +1726,24 @@
             showHealingPortal();
 
             try {
-                // Connect to medical network
+                // Connect to medical network with timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+                
                 const response = await fetch('http://localhost:3000/api/search', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(careData)
+                    body: JSON.stringify(careData),
+                    signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
 
                 const medicalData = await response.json();
                 console.log('Medical network response:', medicalData);
@@ -1726,7 +1755,21 @@
             } catch (medicalError) {
                 console.error('Medical network error:', medicalError);
                 hideHealingPortal();
-                showCareError(medicalError);
+                
+                // Better error handling for mobile
+                let errorMessage = 'Network connection problem. Please check your internet connection and try again.';
+                
+                if (medicalError.name === 'AbortError') {
+                    errorMessage = 'Request timed out. Please try again with a different location.';
+                } else if (medicalError.message.includes('Failed to fetch')) {
+                    errorMessage = 'Cannot connect to medical database. Please check your internet connection.';
+                } else if (medicalError.message) {
+                    errorMessage = medicalError.message;
+                }
+                
+                showCareError({ message: errorMessage });
+            } finally {
+                this.submitting = false;
             }
         });
 
@@ -2013,9 +2056,37 @@
             }
         });
 
-        // Initialize healing orbs system
+        // Initialize healing orbs system and prevent mobile auto-submit
         document.addEventListener('DOMContentLoaded', function() {
             initializeHealingOrbs();
+            
+            // Prevent mobile form auto-submission issues
+            const form = document.getElementById('careForm');
+            const buttons = form.querySelectorAll('button');
+            
+            // Ensure only submit button triggers form
+            buttons.forEach(button => {
+                if (button.type !== 'submit') {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                }
+            });
+            
+            // Prevent iOS zoom on input focus
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    document.querySelector('meta[name=viewport]').setAttribute('content', 
+                        'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+                });
+                
+                input.addEventListener('blur', function() {
+                    document.querySelector('meta[name=viewport]').setAttribute('content', 
+                        'width=device-width, initial-scale=1.0');
+                });
+            });
         });
     </script>
 </body>
