@@ -976,8 +976,6 @@
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
-            white-space: nowrap;
-            flex-shrink: 0;
         }
 
         /* Language Support Badges */
@@ -1239,374 +1237,31 @@
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            /* Mobile Menu Toggle */
-            .mobile-menu-toggle {
-                display: block;
-                background: none;
-                border: none;
-                font-size: 1.5rem;
-                color: var(--white);
-                cursor: pointer;
-                padding: 0.5rem;
-            }
-
             .nav-links {
                 display: none;
-                position: fixed;
-                top: 80px;
-                left: 0;
-                right: 0;
-                background: rgba(10, 10, 15, 0.98);
-                flex-direction: column;
-                padding: 2rem;
-                gap: 1rem;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-                max-height: calc(100vh - 80px);
-                overflow-y: auto;
-                z-index: 999;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .nav-link {
-                width: 100%;
-                text-align: center;
-                padding: 1rem;
-                border-radius: 10px;
-            }
-
-            .emergency-cta {
-                width: 100%;
-                text-align: center;
-            }
-
-            /* Hero adjustments */
-            .hero {
-                padding-top: 100px;
             }
 
             .hero-content {
                 grid-template-columns: 1fr;
                 text-align: center;
-                gap: 3rem;
-                padding: 0 1rem;
-            }
-
-            .hero-text h1 {
-                font-size: clamp(2rem, 8vw, 3.5rem);
-            }
-
-            .hero-text p {
-                font-size: 1.1rem;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-                gap: 1rem;
-            }
-
-            .btn {
-                padding: 0.875rem 2rem;
-                font-size: 0.95rem;
-                width: 100%;
-                max-width: 280px;
             }
 
             .hero-visual {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 2rem;
+                display: none;
             }
 
-            .brain-image-container {
-                width: 280px;
-                height: 280px;
-                margin: 0 auto;
-            }
-
-            /* Timer Section Mobile */
-            .timer-section {
-                padding: 3rem 1rem;
-            }
-
-            .timer-title {
-                font-size: 2rem;
-            }
-
-            .timer-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-
-            .timer-card {
-                padding: 1.5rem 1rem;
-            }
-
-            .timer-number {
-                font-size: 2.5rem;
-            }
-
-            .source-banner {
-                font-size: 0.8rem;
-                padding: 0.6rem 1rem;
-                margin-top: 2rem;
-            }
-
-            /* FAST Protocol Mobile */
-            .fast-section {
-                padding: 3rem 1rem;
-            }
-
-            .section-title {
-                font-size: 2.2rem;
-            }
-
+            .timer-grid,
             .fast-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .fast-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .fast-letter {
-                font-size: 3rem;
-            }
-
-            /* Facts Section Mobile */
-            .facts-section {
-                padding: 3rem 1rem;
-            }
-
-            .fact-card {
-                padding: 2.5rem 1.5rem;
-                gap: 2rem;
-            }
-
-            .fact-title {
-                font-size: 2rem;
-            }
-
-            .fact-number {
-                font-size: 3rem;
-            }
-
-            /* Finder Section Mobile */
-            .finder-section {
-                padding: 3rem 1rem;
-            }
-
-            .finder-card {
-                padding: 2rem 1.5rem;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .service-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
             }
 
-            .service-label {
-                font-size: 0.85rem;
-                padding: 0.75rem 0.5rem;
-            }
-
-            .service-label i {
-                font-size: 1.5rem;
-                margin-bottom: 0.25rem;
-            }
-
-            /* Results Modal Mobile */
-            .results-modal {
-                padding: 2rem 1rem;
-                max-height: 100vh;
-                border-radius: 20px 20px 0 0;
-            }
-
-            .facility-item {
-                padding: 1.5rem;
-            }
-
-            .facility-name {
-                font-size: 1.25rem;
-            }
-
-            .quality-badge {
-                font-size: 0.75rem;
-                padding: 0.4rem 0.75rem;
-                white-space: nowrap;
-            }
-
-            /* Footer Mobile */
             .footer-content {
                 grid-template-columns: 1fr;
                 text-align: center;
-                gap: 2rem;
-            }
-
-            .footer-brand h3 {
-                font-size: 1.5rem;
-            }
-
-            .citations {
-                padding: 2rem 1rem;
-            }
-
-            .citation-banner {
-                padding: 1rem;
-            }
-
-            .citation-icon {
-                width: 40px;
-                height: 40px;
-            }
-        }
-
-        /* Extra small devices */
-        @media (max-width: 480px) {
-            /* Navigation */
-            .logo {
-                font-size: 1.4rem;
-            }
-
-            .logo-icon {
-                width: 32px;
-                height: 32px;
-            }
-
-            /* Hero */
-            .hero-text h1 {
-                font-size: 1.75rem;
-                margin-bottom: 1rem;
-            }
-
-            .hero-text p {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: none;
-            }
-
-            .brain-image-container {
-                width: 220px;
-                height: 220px;
-            }
-
-            /* Timer cards 2x2 grid on very small screens */
-            .timer-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            /* Service grid - 2 columns on small screens */
-            .service-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            /* Facility buttons */
-            .facility-item > div:last-child {
-                flex-direction: column;
-            }
-
-            .facility-item .btn-primary,
-            .facility-item .btn-secondary {
-                width: 100%;
-                font-size: 0.85rem;
-            }
-
-            /* Pagination */
-            .pagination-controls {
-                gap: 0.5rem;
-            }
-
-            .pagination-controls button {
-                font-size: 0.85rem;
-                padding: 0.4rem 0.8rem;
-            }
-
-            .page-info {
-                font-size: 0.85rem;
-            }
-        }
-
-        /* Mobile Menu Toggle (hidden by default) */
-        .mobile-menu-toggle {
-            display: none;
-        }
-
-        /* Enhanced Mobile Touch Targets */
-        @media (max-width: 768px) {
-            /* Ensure all interactive elements have proper touch target size */
-            button, a, input, select, textarea, .service-label {
-                min-height: 44px;
-                min-width: 44px;
-            }
-
-            /* Better form inputs for mobile */
-            .modern-input {
-                font-size: 16px; /* Prevents zoom on iOS */
-                padding: 1.25rem 1.5rem;
-            }
-
-            /* Improved touch feedback */
-            .btn, .contact-btn, .nav-link, .service-label {
-                -webkit-tap-highlight-color: rgba(255, 51, 102, 0.1);
-                touch-action: manipulation;
-            }
-
-            /* Better scrolling */
-            .nav-links, .results-modal {
-                -webkit-overflow-scrolling: touch;
-                overscroll-behavior-y: contain;
-            }
-
-            /* Larger close button for modals */
-            .close-results {
-                width: 56px;
-                height: 56px;
-                font-size: 2rem;
-            }
-
-            /* Better spacing for facility buttons */
-            .facility-item > div:last-child {
-                gap: 1rem;
-            }
-
-            /* Improved pagination touch targets */
-            .pagination-controls button {
-                min-height: 48px;
-                padding: 0.75rem 1.5rem;
-            }
-        }
-
-        /* Touch device optimizations - disable hover effects on touch devices */
-        .touch-device .fast-card:hover::before,
-        .touch-device .timer-card:hover,
-        .touch-device .facility-item:hover {
-            transform: none;
-            box-shadow: inherit;
-        }
-
-        /* Maintain hover effects for non-touch devices (desktop) */
-        @media (hover: hover) and (pointer: fine) {
-            .fast-card:hover::before {
-                width: 300px;
-                height: 300px;
-            }
-
-            .timer-card:hover,
-            .facility-item:hover {
-                transform: translateY(-5px);
             }
         }
 
@@ -1655,17 +1310,14 @@
                 </div>
                 Ctrl+Z Stroke
             </a>
-            <div class="nav-links" id="navLinks">
-                <a href="#fast" class="nav-link" onclick="closeMobileMenu()">F.A.S.T Protocol</a>
-                <a href="#finder" class="nav-link" onclick="closeMobileMenu()">Find Care</a>
-                <a href="#resources" class="nav-link" onclick="closeMobileMenu()">Resources</a>
-                <a href="#emergency" class="emergency-cta" onclick="closeMobileMenu()">
+            <div class="nav-links">
+                <a href="#fast" class="nav-link">F.A.S.T Protocol</a>
+                <a href="#finder" class="nav-link">Find Care</a>
+                <a href="#resources" class="nav-link">Resources</a>
+                <a href="#emergency" class="emergency-cta">
                     <i class="fas fa-phone-alt"></i> Emergency
                 </a>
             </div>
-            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars" id="menuIcon"></i>
-            </button>
         </div>
     </nav>
 
@@ -1989,60 +1641,6 @@
             }, 1000);
         });
 
-        // Mobile performance optimizations
-        if ('ontouchstart' in window) {
-            // Disable hover effects on touch devices
-            document.documentElement.classList.add('touch-device');
-            
-            // Improve scroll performance
-            document.addEventListener('touchstart', function() {}, {passive: true});
-            document.addEventListener('touchmove', function() {}, {passive: true});
-            
-            // Prevent double-tap zoom on buttons
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function(event) {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
-        }
-
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const navLinks = document.getElementById('navLinks');
-            const menuIcon = document.getElementById('menuIcon');
-            
-            navLinks.classList.toggle('active');
-            
-            if (navLinks.classList.contains('active')) {
-                menuIcon.classList.remove('fa-bars');
-                menuIcon.classList.add('fa-times');
-            } else {
-                menuIcon.classList.remove('fa-times');
-                menuIcon.classList.add('fa-bars');
-            }
-        }
-
-        function closeMobileMenu() {
-            const navLinks = document.getElementById('navLinks');
-            const menuIcon = document.getElementById('menuIcon');
-            
-            navLinks.classList.remove('active');
-            menuIcon.classList.remove('fa-times');
-            menuIcon.classList.add('fa-bars');
-        }
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            const navLinks = document.getElementById('navLinks');
-            const mobileToggle = document.querySelector('.mobile-menu-toggle');
-            
-            if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
-                closeMobileMenu();
-            }
-        });
 
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
@@ -2080,55 +1678,6 @@
         let currentPage = 1;
         let resultsPerPage = 10;
         let currentSortBy = 'relevance';
-
-        // Add this sorting function to prioritize emergency facilities correctly
-        function sortFacilitiesByRelevance(facilities) {
-            return facilities.sort((a, b) => {
-                const name_a = a.name?.toLowerCase() || '';
-                const name_b = b.name?.toLowerCase() || '';
-                
-                // For EMERGENCY searches: Hospital ERs first, then specialists
-                let score_a = 0;
-                let score_b = 0;
-                
-                // Emergency rooms and hospitals get highest priority
-                if (name_a.includes('emergency') || name_a.includes('hospital')) score_a = 10;
-                if (name_b.includes('emergency') || name_b.includes('hospital')) score_b = 10;
-                
-                // Stroke specialists get high priority but less than ER
-                if (name_a.includes('stroke') && name_a.includes('neurolog')) score_a = 8;
-                if (name_b.includes('stroke') && name_b.includes('neurolog')) score_b = 8;
-                
-                // Regular neurologists get medium priority
-                if (name_a.includes('neurolog') && !name_a.includes('stroke')) score_a = 6;
-                if (name_b.includes('neurolog') && !name_b.includes('stroke')) score_b = 6;
-                
-                // Medical centers get medium priority
-                if (name_a.includes('medical center')) score_a = 5;
-                if (name_b.includes('medical center')) score_b = 5;
-                
-                // Sort by emergency priority first
-                if (score_a !== score_b) {
-                    return score_b - score_a; // Higher score first
-                }
-                
-                // Then by medical relevance
-                const relevanceScore = { 'High': 3, 'Medium': 2, 'Low': 1 };
-                const aRelevance = relevanceScore[a.medical_relevance] || 1;
-                const bRelevance = relevanceScore[b.medical_relevance] || 1;
-                
-                if (aRelevance !== bRelevance) {
-                    return bRelevance - aRelevance;
-                }
-                
-                // Finally by distance
-                if (a.distance && b.distance) {
-                    return a.distance.miles - b.distance.miles;
-                }
-                
-                return 0;
-            });
-        }
 
         setInterval(() => {
             secondsOnPage++;
@@ -2237,8 +1786,7 @@
                 }
                 
                 // Store all facilities for pagination/sorting
-                // Store all facilities and sort by relevance (matching backend)
-                allFacilities = sortFacilitiesByRelevance(data.facilities);
+                allFacilities = data.facilities;
                 currentPage = 1;
                 
                 // Update summary
@@ -2443,8 +1991,19 @@
                     return 0;
                 });
             } else if (sortBy === 'relevance') {
-                // Use the same sophisticated logic as sortFacilitiesByRelevance
-                allFacilities = sortFacilitiesByRelevance(allFacilities);
+                allFacilities.sort((a, b) => {
+                    const relevanceScore = { 'High': 3, 'Medium': 2, 'Low': 1 };
+                    const aScore = relevanceScore[a.medical_relevance] || 1;
+                    const bScore = relevanceScore[b.medical_relevance] || 1;
+                    
+                    if (aScore !== bScore) return bScore - aScore;
+                    
+                    // If relevance equal, sort by distance
+                    if (a.distance && b.distance) {
+                        return a.distance.miles - b.distance.miles;
+                    }
+                    return 0;
+                });
             }
         }
 
@@ -2455,22 +2014,15 @@
             document.getElementById('paginationControls').style.display = 'none';
         }
 
-        // Smooth scrolling with mobile improvements
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    // Close mobile menu if open
-                    closeMobileMenu();
-                    
-                    // Calculate offset for fixed header
-                    const headerHeight = document.getElementById('navbar').offsetHeight;
-                    const targetPosition = target.getBoundingClientRect().top + window.scrollY - headerHeight;
-                    
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
                     });
                 }
             });
