@@ -1023,7 +1023,7 @@
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <div class="emergency-text">
-                        <h3 class="emergency-title" data-translate="emergency.title">🚨 Emergency: Call Emergency Services Immediately</h3>
+                        <h3 class="emergency-title" data-translate="emergency.title">🚨 Emergency: Call 911 Immediately</h3>
                         <p class="emergency-description" data-translate="emergency.description">
                             If you suspect someone is having a stroke, call emergency services immediately. Every minute counts - during a stroke, the brain loses 1.9 million neurons per minute. Time is brain. Act F.A.S.T.
                         </p>
@@ -1126,7 +1126,7 @@
                         <li data-translate="info.time.item3"><strong>6-24 Hours:</strong> Extended window for some patients</li>
                         <li data-translate="info.time.item4"><strong>90 Minutes:</strong> Optimal treatment time for best outcomes</li>
                         <li data-translate="info.time.item5"><strong>Golden Hour:</strong> First hour is most critical</li>
-                        <li data-translate="info.time.item6"><strong>Call Emergency Services:</strong> Fastest way to get expert stroke care</li>
+                        <li data-translate="info.time.item6"><strong>Call 911:</strong> Fastest way to get expert stroke care</li>
                     </ul>
                 </div>
 
@@ -1165,7 +1165,7 @@
 
                 <div class="fast-cards">
                     <div class="fast-card">
-                        <span class="fast-letter notranslate">B</span>
+                        <span class="fast-letter">B</span>
                         <h3 class="fast-title" data-translate="fast.b.title">Balance</h3>
                         <p class="fast-description" data-translate="fast.b.description">
                             Sudden loss of balance, coordination, or dizziness. Is the person having trouble walking or staying upright?
@@ -1173,7 +1173,7 @@
                     </div>
                     
                     <div class="fast-card">
-                        <span class="fast-letter notranslate">E</span>
+                        <span class="fast-letter">E</span>
                         <h3 class="fast-title" data-translate="fast.e.title">Eyes</h3>
                         <p class="fast-description" data-translate="fast.e.description">
                             Sudden vision loss or changes in one or both eyes. Double vision or visual field cuts.
@@ -1181,7 +1181,7 @@
                     </div>
                     
                     <div class="fast-card">
-                        <span class="fast-letter notranslate">F</span>
+                        <span class="fast-letter">F</span>
                         <h3 class="fast-title" data-translate="fast.f.title">Face</h3>
                         <p class="fast-description" data-translate="fast.f.description">
                             Ask the person to smile. Does one side of the face droop? Is the smile uneven or lopsided?
@@ -1189,7 +1189,7 @@
                     </div>
                     
                     <div class="fast-card">
-                        <span class="fast-letter notranslate">A</span>
+                        <span class="fast-letter">A</span>
                         <h3 class="fast-title" data-translate="fast.a.title">Arms</h3>
                         <p class="fast-description" data-translate="fast.a.description">
                             Ask the person to raise both arms. Does one arm drift downward? Is there weakness or numbness?
@@ -1197,7 +1197,7 @@
                     </div>
                     
                     <div class="fast-card">
-                        <span class="fast-letter notranslate">S</span>
+                        <span class="fast-letter">S</span>
                         <h3 class="fast-title" data-translate="fast.s.title">Speech</h3>
                         <p class="fast-description" data-translate="fast.s.description">
                             Ask the person to repeat a simple phrase. Is speech slurred, garbled, or hard to understand?
@@ -1205,10 +1205,10 @@
                     </div>
                     
                     <div class="fast-card">
-                        <span class="fast-letter notranslate">T</span>
+                        <span class="fast-letter">T</span>
                         <h3 class="fast-title" data-translate="fast.t.title">Time</h3>
                         <p class="fast-description" data-translate="fast.t.description">
-                            If any signs are present, note the time and call Emergency Services immediately. Every minute matters!
+                            If any signs are present, note the time and call 911 immediately. Every minute matters!
                         </p>
                     </div>
                 </div>
@@ -1418,20 +1418,25 @@
             const panel = document.getElementById('translationControls');
             panel.classList.toggle('active');
             
-            // Always populate when opening the panel
-            if (panel.classList.contains('active')) {
+            console.log('Panel active:', panel.classList.contains('active'));
+            console.log('Language list innerHTML:', document.getElementById('languageList').innerHTML);
+            
+            if (panel.classList.contains('active') && !document.getElementById('languageList').innerHTML) {
+                console.log('Calling populateLanguageList()');
                 populateLanguageList();
             }
         }
 
         // Populate language list
         function populateLanguageList() {
+            console.log('populateLanguageList called');
             const list = document.getElementById('languageList');
-            if (!list) return;
+            console.log('Language list element:', list);
+            console.log('Languages array length:', languages.length);
             
             list.innerHTML = '';
             
-            languages.forEach(lang => {
+            languages.forEach((lang, index) => {
                 const option = document.createElement('button');
                 option.className = 'language-option';
                 if (lang.code === currentLanguage) option.classList.add('active');
@@ -1446,7 +1451,13 @@
                 
                 option.onclick = () => translateToLanguage(lang.code, lang.name);
                 list.appendChild(option);
+                
+                if (index < 5) {
+                    console.log('Added language:', lang.name);
+                }
             });
+            
+            console.log('Total options added:', list.children.length);
         }
 
         // Filter languages based on search
@@ -1455,14 +1466,20 @@
             const options = document.querySelectorAll('.language-option');
             let visibleOptions = [];
             
+            console.log('Filtering with search term:', search);
+            console.log('Found', options.length, 'language options');
+            
             options.forEach(option => {
                 const text = option.textContent.toLowerCase();
                 const isVisible = text.includes(search);
                 option.style.display = isVisible ? 'flex' : 'none';
                 if (isVisible) {
                     visibleOptions.push(option);
+                    console.log('Visible option:', text);
                 }
             });
+            
+            console.log('Total visible options:', visibleOptions.length);
             
             // If only one result, highlight it
             if (visibleOptions.length === 1) {
@@ -1477,20 +1494,28 @@
         // Handle search input keydown
         function handleSearchKeydown(event) {
             if (event.key === 'Enter') {
+                const search = document.getElementById('languageSearch').value.toLowerCase();
                 const options = document.querySelectorAll('.language-option');
                 let firstVisible = null;
+                
+                console.log('Search term:', search);
+                console.log('Total options:', options.length);
                 
                 // Find first visible option
                 for (let option of options) {
                     if (option.style.display !== 'none') {
                         firstVisible = option;
+                        console.log('Found visible option:', option.textContent);
                         break;
                     }
                 }
                 
                 // Click the first visible option
                 if (firstVisible) {
+                    console.log('Clicking option:', firstVisible.textContent);
                     firstVisible.click();
+                } else {
+                    console.log('No visible option found');
                 }
             }
         }
@@ -1566,7 +1591,6 @@
             
             setTimeout(() => {
                 const assessmentDiv = document.createElement('div');
-                assessmentDiv.id = 'strokeAssessment';
                 assessmentDiv.style.cssText = 'background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;';
                 assessmentDiv.innerHTML = `
                     <div style="background: linear-gradient(135deg, var(--gray-600), var(--black)); border-radius: 24px; padding: 40px; max-width: 600px; width: 100%; color: var(--pure-white); box-shadow: var(--shadow-xl); border: 1px solid rgba(255,255,255,0.1);">
@@ -1593,7 +1617,6 @@
 
         // Assessment questions
         function startAssessmentQuestions() {
-            console.log('startAssessmentQuestions called');
             const questions = [
                 {
                     question: "FACE: Ask the person to smile. What would indicate a possible stroke?",
@@ -1615,9 +1638,9 @@
                 },
                 {
                     question: "TIME: If you see any of these signs, what should you do?",
-                    options: ["Wait to see if it gets worse", "Drive them to hospital yourself", "Call emergency services immediately", "Give them aspirin first"],
+                    options: ["Wait to see if it gets worse", "Drive them to hospital yourself", "Call 911 immediately", "Give them aspirin first"],
                     correct: 2,
-                    explanation: "Call emergency services immediately! Emergency services can provide life-saving treatment en route and get the person to a stroke center fastest."
+                    explanation: "Call 911 immediately! Emergency services can provide life-saving treatment en route and get the person to a stroke center fastest."
                 }
             ];
 
@@ -1697,7 +1720,7 @@
                         <div style="font-size: 64px; margin-bottom: 16px;">🧠</div>
                         <h3 style="color: ${color}; margin-bottom: 16px;">Assessment Complete!</h3>
                         <div style="background: rgba(255,255,255,0.1); padding: 24px; border-radius: 12px; margin-bottom: 24px;">
-                            <div style="font-size: 48px; font-weight: 1100; color: ${color}; margin-bottom: 8px;">
+                            <div style="font-size: 48px; font-weight: 900; color: ${color}; margin-bottom: 8px;">
                                 ${score}/${questions.length}
                             </div>
                             <div style="font-size: 20px; margin-bottom: 16px;">
@@ -1722,13 +1745,9 @@
 
         // Close assessment
         window.closeAssessment = function() {
-            console.log('closeAssessment called');
-            const assessment = document.getElementById('strokeAssessment');
-            if (assessment) {
-                console.log('Removing assessment');
+            const assessment = document.querySelector('[style*="position: fixed"]');
+            if (assessment && assessment.style.background.includes('rgba(0,0,0,0.95)')) {
                 assessment.remove();
-            } else {
-                console.log('Assessment not found');
             }
         };
 
@@ -1864,7 +1883,6 @@
         window.filterLanguages = filterLanguages;
         window.handleSearchKeydown = handleSearchKeydown;
         window.startStrokeAssessment = startStrokeAssessment;
-        window.startAssessmentQuestions = startAssessmentQuestions;
         window.showStatus = showStatus;
     </script>
 </body>
