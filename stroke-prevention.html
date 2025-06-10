@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stroke Prevention Guide - Ctrl+Z Stroke</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF3366;
+            --secondary: #1A1A2E;
+            --accent: #16213E;
+            --highlight: #0F3460;
+            --text-light: #E94560;
+            --bg-dark: #0A0A0F;
+            --bg-card: #12121A;
+            --white: #FFFFFF;
+            --gray: #94A3B8;
+            --success: #10B981;
+            --warning: #F59E0B;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-dark);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--text-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--white);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem 5%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Header Section */
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.05), rgba(26, 26, 46, 0.3));
+            border-radius: 30px;
+            border: 1px solid rgba(255, 51, 102, 0.2);
+        }
+
+        .page-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--text-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Introduction Section */
+        .intro-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .intro-section h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .intro-section p {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+
+        .highlight-stat {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toc h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .toc-item {
+            color: var(--gray);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .toc-item:hover {
+            background: rgba(255, 51, 102, 0.1);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .toc-item i {
+            color: var(--primary);
+            width: 20px;
+        }
+
+        /* Section Styles */
+        .content-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--text-light));
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title .section-number {
+            background: var(--primary);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .subsection {
+            margin-bottom: 2rem;
+        }
+
+        .subsection h4 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .subsection h5 {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .subsection p, .subsection li {
+            color: var(--gray);
+            margin-bottom: 0.75rem;
+        }
+
+        .subsection ul {
+            padding-left: 1.5rem;
+        }
+
+        .subsection li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Risk Factor Cards */
+        .risk-factors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .risk-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .risk-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .risk-card.non-modifiable {
+            border-left: 4px solid var(--warning);
+        }
+
+        .risk-card.modifiable {
+            border-left: 4px solid var(--success);
+        }
+
+        .risk-card h5 {
+            color: var(--white);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .risk-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .risk-card li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+        }
+
+        .risk-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Recommendations Box */
+        .recommendations {
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.1), rgba(255, 51, 102, 0.05));
+            border: 1px solid rgba(255, 51, 102, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .recommendations h5 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .recommendations ul {
+            padding-left: 1.5rem;
+        }
+
+        .recommendations li {
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        /* Screening Table */
+        .screening-table {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        td {
+            color: var(--gray);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* BE FAST Section */
+        .be-fast {
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.15), rgba(26, 26, 46, 0.5));
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .be-fast h4 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .be-fast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .be-fast-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .be-fast-item h5 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .be-fast-item p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* References */
+        .references {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .references h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .references ol {
+            padding-left: 1.5rem;
+        }
+
+        .references li {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .references a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .references a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem 2%;
+                margin-top: 80px;
+            }
+
+            .page-header {
+                padding: 2rem 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .content-section {
+                padding: 2rem 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .risk-factors {
+                grid-template-columns: 1fr;
+            }
+
+            .be-fast-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-undo" style="color: white; transform: rotate(-45deg);"></i>
+                </div>
+                Ctrl+Z Stroke
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="stroke-prevention.html" class="nav-link active">Prevention</a>
+                <a href="index.html#fast" class="nav-link">F.A.S.T Protocol</a>
+                <a href="index.html#finder" class="nav-link">Find Care</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Stroke Prevention Guide</h1>
+            <p class="page-subtitle">Evidence-based strategies to reduce your risk and protect your brain health</p>
+        </div>
+
+        <!-- Introduction -->
+        <div class="intro-section">
+            <h2><i class="fas fa-shield-alt"></i> Introduction</h2>
+            <p>Stroke is a leading cause of death and long-term disability worldwide. However, <strong>up to 80% of strokes are preventable</strong> through lifestyle changes, medical management, and early risk detection (AHA, 2024). This guide provides evidence-based strategies to reduce your risk of ischemic and hemorrhagic strokes.</p>
+            <div class="highlight-stat">
+                <i class="fas fa-chart-line"></i> Up to 80% of strokes can be prevented with proper risk management
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h3>Quick Navigation</h3>
+            <div class="toc-grid">
+                <a href="#risk-factors" class="toc-item">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Know Your Risk Factors
+                </a>
+                <a href="#blood-pressure" class="toc-item">
+                    <i class="fas fa-heartbeat"></i>
+                    Blood Pressure Management
+                </a>
+                <a href="#diabetes" class="toc-item">
+                    <i class="fas fa-tint"></i>
+                    Blood Sugar Control
+                </a>
+                <a href="#cholesterol" class="toc-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Cholesterol Management
+                </a>
+                <a href="#smoking" class="toc-item">
+                    <i class="fas fa-ban"></i>
+                    Stop Smoking
+                </a>
+                <a href="#weight" class="toc-item">
+                    <i class="fas fa-weight"></i>
+                    Healthy Weight
+                </a>
+                <a href="#exercise" class="toc-item">
+                    <i class="fas fa-running"></i>
+                    Physical Activity
+                </a>
+                <a href="#diet" class="toc-item">
+                    <i class="fas fa-apple-alt"></i>
+                    Heart-Healthy Diet
+                </a>
+                <a href="#alcohol" class="toc-item">
+                    <i class="fas fa-glass-whiskey"></i>
+                    Limit Alcohol
+                </a>
+                <a href="#heart-conditions" class="toc-item">
+                    <i class="fas fa-heart"></i>
+                    Manage Heart Conditions
+                </a>
+                <a href="#sleep-stress" class="toc-item">
+                    <i class="fas fa-bed"></i>
+                    Sleep & Stress
+                </a>
+                <a href="#screening" class="toc-item">
+                    <i class="fas fa-stethoscope"></i>
+                    Regular Screening
+                </a>
+            </div>
+        </div>
+
+        <!-- Risk Factors Section -->
+        <div class="content-section" id="risk-factors">
+            <h3 class="section-title">
+                <span class="section-number">1</span>
+                Know Your Risk Factors
+            </h3>
+            
+            <div class="risk-factors">
+                <div class="risk-card non-modifiable">
+                    <h5><i class="fas fa-lock"></i> Non-Modifiable Risk Factors</h5>
+                    <ul>
+                        <li>Age (risk increases after 55)</li>
+                        <li>Sex (women have higher lifetime risk)</li>
+                        <li>Race/ethnicity (Black, Hispanic, and Native American individuals have higher risk)</li>
+                        <li>Family history of stroke or TIA</li>
+                    </ul>
+                </div>
+                
+                <div class="risk-card modifiable">
+                    <h5><i class="fas fa-edit"></i> Modifiable Risk Factors</h5>
+                    <ul>
+                        <li>High blood pressure (Hypertension)</li>
+                        <li>High cholesterol</li>
+                        <li>Type 2 diabetes</li>
+                        <li>Obesity</li>
+                        <li>Smoking</li>
+                        <li>Excessive alcohol use</li>
+                        <li>Physical inactivity</li>
+                        <li>Poor diet</li>
+                        <li>Sleep apnea</li>
+                        <li>Atrial fibrillation (AFib)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blood Pressure Section -->
+        <div class="content-section" id="blood-pressure">
+            <h3 class="section-title">
+                <span class="section-number">2</span>
+                Monitor and Manage Blood Pressure
+            </h3>
+            
+            <p>High blood pressure is the single most important risk factor for stroke (AHA, 2024).</p>
+            
+            <div class="recommendations">
+                <h5>Target: Maintain &lt;120/80 mmHg</h5>
+                <ul>
+                    <li>Limit sodium to &lt;1,500 mg/day (CDC, 2024)</li>
+                    <li>Exercise 150 minutes/week</li>
+                    <li>Use medications if lifestyle changes are insufficient (e.g., ACE inhibitors, thiazide diuretics)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Diabetes Section -->
+        <div class="content-section" id="diabetes">
+            <h3 class="section-title">
+                <span class="section-number">3</span>
+                Control Blood Sugar (Diabetes Management)
+            </h3>
+            
+            <p>Diabetes doubles the risk of stroke (ADA, 2023).</p>
+            
+            <div class="recommendations">
+                <h5>Recommendations:</h5>
+                <ul>
+                    <li>Aim for HbA1c &lt;7%</li>
+                    <li>Monitor glucose regularly</li>
+                    <li>Use metformin or insulin as prescribed</li>
+                    <li>Avoid sugary drinks and high-GI foods</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Cholesterol Section -->
+        <div class="content-section" id="cholesterol">
+            <h3 class="section-title">
+                <span class="section-number">4</span>
+                Lower Cholesterol Levels
+            </h3>
+            
+            <p>High LDL cholesterol leads to atherosclerosis, increasing stroke risk.</p>
+            
+            <div class="recommendations">
+                <h5>Recommendations:</h5>
+                <ul>
+                    <li>LDL target: &lt;100 mg/dL, or &lt;70 mg/dL for high-risk patients</li>
+                    <li>Use statins if lifestyle changes aren't enough</li>
+                    <li>Eat foods high in fiber and omega-3s</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Smoking Section -->
+        <div class="content-section" id="smoking">
+            <h3 class="section-title">
+                <span class="section-number">5</span>
+                Stop Smoking
+            </h3>
+            
+            <p>Smoking doubles stroke risk (CDC, 2024).</p>
+            
+            <div class="recommendations">
+                <h5>Strategies:</h5>
+                <ul>
+                    <li>Use nicotine replacement therapy (NRT) or medications like bupropion or varenicline</li>
+                    <li>Access behavioral counseling or quitlines (e.g., 1-800-QUIT-NOW)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Weight Section -->
+        <div class="content-section" id="weight">
+            <h3 class="section-title">
+                <span class="section-number">6</span>
+                Maintain a Healthy Weight
+            </h3>
+            
+            <p>Obesity, especially central obesity, is strongly linked to stroke risk.</p>
+            
+            <div class="recommendations">
+                <h5>Recommendations:</h5>
+                <ul>
+                    <li>Aim for BMI &lt;25 and waist circumference &lt;35" for women / &lt;40" for men</li>
+                    <li>Reduce caloric intake by 500–1,000 kcal/day for weight loss</li>
+                    <li>Combine aerobic and resistance exercise</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Exercise Section -->
+        <div class="content-section" id="exercise">
+            <h3 class="section-title">
+                <span class="section-number">7</span>
+                Stay Physically Active
+            </h3>
+            
+            <p>Regular exercise reduces blood pressure, improves cholesterol, and prevents obesity.</p>
+            
+            <div class="recommendations">
+                <h5>Minimum Guidelines:</h5>
+                <ul>
+                    <li>150 minutes/week of moderate-intensity aerobic activity</li>
+                    <li>2+ days/week of muscle-strengthening activities (WHO, 2020)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Diet Section -->
+        <div class="content-section" id="diet">
+            <h3 class="section-title">
+                <span class="section-number">8</span>
+                Eat a Heart-Healthy Diet
+            </h3>
+            
+            <p>A Mediterranean or DASH-style diet reduces stroke risk by up to 30% (Estruch et al., 2013).</p>
+            
+            <div class="recommendations">
+                <h5>Key Components:</h5>
+                <ul>
+                    <li>Fruits and vegetables (5+ servings/day)</li>
+                    <li>Whole grains, legumes, nuts</li>
+                    <li>Fish (especially oily fish, 2x/week)</li>
+                    <li>Olive oil instead of butter</li>
+                    <li>Minimize red and processed meat</li>
+                    <li>Avoid added sugars and trans fats</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Alcohol Section -->
+        <div class="content-section" id="alcohol">
+            <h3 class="section-title">
+                <span class="section-number">9</span>
+                Limit Alcohol Intake
+            </h3>
+            
+            <p>Heavy drinking increases both ischemic and hemorrhagic stroke risk.</p>
+            
+            <div class="recommendations">
+                <h5>Recommendations:</h5>
+                <ul>
+                    <li>Men: ≤2 drinks/day</li>
+                    <li>Women: ≤1 drink/day</li>
+                    <li>Binge drinking is especially dangerous</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Heart Conditions Section -->
+        <div class="content-section" id="heart-conditions">
+            <h3 class="section-title">
+                <span class="section-number">10</span>
+                Manage Heart Conditions (e.g., AFib)
+            </h3>
+            
+            <p>AFib increases the risk of stroke fivefold (AHA, 2024).</p>
+            
+            <div class="recommendations">
+                <h5>Recommendations:</h5>
+                <ul>
+                    <li>Use anticoagulants like apixaban or warfarin as prescribed</li>
+                    <li>Regular ECG screening for high-risk individuals</li>
+                    <li>Manage comorbid hypertension and hyperthyroidism</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Sleep and Stress Section -->
+        <div class="content-section" id="sleep-stress">
+            <h3 class="section-title">
+                <span class="section-number">11</span>
+                Sleep and Stress Management
+            </h3>
+            
+            <div class="recommendations">
+                <h5>Recommendations:</h5>
+                <ul>
+                    <li>Treat obstructive sleep apnea (use CPAP)</li>
+                    <li>Reduce chronic stress through therapy, meditation, or support groups</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Screening Section -->
+        <div class="content-section" id="screening">
+            <h3 class="section-title">
+                <span class="section-number">12</span>
+                Screen Regularly
+            </h3>
+            
+            <p>Even asymptomatic people should screen based on age and risk profile.</p>
+            
+            <div class="screening-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Risk Factor</th>
+                            <th>Screening Tool</th>
+                            <th>Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Blood pressure</td>
+                            <td>Cuff monitor</td>
+                            <td>Every 1–2 years</td>
+                        </tr>
+                        <tr>
+                            <td>Cholesterol</td>
+                            <td>Lipid panel</td>
+                            <td>Every 4–6 years (more if high-risk)</td>
+                        </tr>
+                        <tr>
+                            <td>Diabetes</td>
+                            <td>HbA1c or fasting glucose</td>
+                            <td>Every 3 years (more if BMI ≥25)</td>
+                        </tr>
+                        <tr>
+                            <td>Atrial Fibrillation</td>
+                            <td>ECG</td>
+                            <td>Yearly if >65 or symptomatic</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Medications Section -->
+        <div class="content-section">
+            <h3 class="section-title">
+                <span class="section-number">13</span>
+                Take Medications as Prescribed
+            </h3>
+            
+            <div class="recommendations">
+                <h5>Common Medications:</h5>
+                <ul>
+                    <li><strong>Antihypertensives:</strong> For blood pressure</li>
+                    <li><strong>Statins:</strong> For cholesterol</li>
+                    <li><strong>Anticoagulants:</strong> For AFib or prior stroke</li>
+                    <li><strong>Antiplatelets (aspirin):</strong> Only if prescribed—not recommended for everyone (USPSTF, 2022)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- BE FAST Section -->
+        <div class="be-fast">
+            <h4>Know the Warning Signs of Stroke: BE FAST</h4>
+            <div class="be-fast-grid">
+                <div class="be-fast-item">
+                    <h5>B</h5>
+                    <p><strong>Balance:</strong> Loss of balance</p>
+                </div>
+                <div class="be-fast-item">
+                    <h5>E</h5>
+                    <p><strong>Eyes:</strong> Blurred or double vision</p>
+                </div>
+                <div class="be-fast-item">
+                    <h5>F</h5>
+                    <p><strong>Face:</strong> Facial drooping</p>
+                </div>
+                <div class="be-fast-item">
+                    <h5>A</h5>
+                    <p><strong>Arms:</strong> Arm weakness</p>
+                </div>
+                <div class="be-fast-item">
+                    <h5>S</h5>
+                    <p><strong>Speech:</strong> Slurred speech</p>
+                </div>
+                <div class="be-fast-item">
+                    <h5>T</h5>
+                    <p><strong>Time:</strong> Time to call 911</p>
+                </div>
+            </div>
+            <p>Early recognition and treatment can prevent long-term damage.</p>
+        </div>
+
+        <!-- Conclusion Section -->
+        <div class="content-section">
+            <h3 class="section-title">
+                <span class="section-number">14</span>
+                Conclusion
+            </h3>
+            
+            <p>Preventing stroke involves long-term commitment to monitoring, healthy lifestyle changes, and appropriate medical treatment. By addressing modifiable risk factors, individuals can drastically reduce their risk and improve quality of life.</p>
+            
+            <div class="highlight-stat">
+                <i class="fas fa-heart"></i> Small changes in lifestyle can lead to significant reductions in stroke risk
+            </div>
+        </div>
+
+        <!-- References -->
+        <div class="references">
+            <h3>References</h3>
+            <ol>
+                <li>American Heart Association (AHA). (2024). 2024 Heart Disease and Stroke Statistics: A Report of US and Global Data. Circulation, 149(8), e347–e913. <a href="https://doi.org/10.1161/CIR.0000000000001209" target="_blank">https://doi.org/10.1161/CIR.0000000000001209</a></li>
+                
+                <li>Centers for Disease Control and Prevention (CDC). (2024). Stroke Facts. <a href="https://www.cdc.gov/stroke/data-research/facts-stats/index.html" target="_blank">https://www.cdc.gov/stroke/data-research/facts-stats/index.html</a></li>
+                
+                <li>World Health Organization (WHO). (2020). WHO Guidelines on Physical Activity and Sedentary Behaviour. <a href="https://www.who.int/publications/i/item/9789240015128" target="_blank">https://www.who.int/publications/i/item/9789240015128</a></li>
+                
+                <li>Estruch, R., et al. (2013). Primary Prevention of Cardiovascular Disease with a Mediterranean Diet. New England Journal of Medicine, 368, 1279–1290. <a href="https://doi.org/10.1056/NEJMoa1200303" target="_blank">https://doi.org/10.1056/NEJMoa1200303</a></li>
+                
+                <li>American Diabetes Association (ADA). (2023). Standards of Medical Care in Diabetes—2023. Diabetes Care, 46(Supplement_1), S191–S204. <a href="https://doi.org/10.2337/dc23-S011" target="_blank">https://doi.org/10.2337/dc23-S011</a></li>
+                
+                <li>US Preventive Services Task Force (USPSTF). (2022). Aspirin Use to Prevent Cardiovascular Disease: Preventive Medication. <a href="https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/aspirin-use-to-prevent-cardiovascular-disease-preventive-medication" target="_blank">https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/aspirin-use-to-prevent-cardiovascular-disease-preventive-medication</a></li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Back to top functionality
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                if (href && href !== '#') {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const headerHeight = document.querySelector('nav').offsetHeight;
+                        const targetPosition = target.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
