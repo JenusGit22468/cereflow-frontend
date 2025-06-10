@@ -1,0 +1,3126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Emergency Contacts - Ctrl+Z Stroke</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --pure-white: #FFFFFF;
+            --gray-100: #F5F5F7;
+            --gray-200: #E8E8ED;
+            --gray-300: #D2D2D7;
+            --gray-400: #86868B;
+            --gray-500: #515154;
+            --gray-600: #1D1D1F;
+            --red: #FF375F;
+            --red-light: #FF6B8A;
+            --blue: #0071E3;
+            --green: #30D158;
+            --blur: saturate(180%) blur(20px);
+            --transition: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: var(--black);
+            color: var(--pure-white);
+            line-height: 1.47;
+            letter-spacing: -0.022em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-size: 21px;
+            font-weight: 600;
+            color: var(--pure-white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .keyboard-keys {
+            display: inline-flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .key {
+            background: linear-gradient(145deg, var(--red) 0%, #E6315A 100%);
+            border: 1px solid #FF6B8A;
+            border-bottom: 3px solid #CC2D4C;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--pure-white);
+            box-shadow: 0 4px 12px rgba(255, 55, 95, 0.4);
+        }
+
+        .plus-symbol {
+            color: var(--gray-400);
+            font-size: 16px;
+            margin: 0 6px;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--pure-white) 0%, var(--gray-300) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--gray-300);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--pure-white);
+        }
+
+        .nav-emergency {
+            background: var(--red);
+            color: var(--pure-white);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-emergency:hover {
+            background: var(--red-light);
+            transform: scale(1.02);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+            background: radial-gradient(ellipse at center top, rgba(255, 55, 95, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 22px;
+        }
+
+        .hero-eyebrow {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--red);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero-headline {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, var(--pure-white) 0%, var(--gray-300) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subheadline {
+            font-size: 21px;
+            font-weight: 400;
+            color: var(--gray-400);
+            line-height: 1.4;
+            margin-bottom: 40px;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 0 auto 40px;
+            max-width: 600px;
+            backdrop-filter: var(--blur);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 0 20px 0 50px;
+            font-size: 17px;
+            color: var(--pure-white);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--red);
+            box-shadow: 0 0 0 4px rgba(255, 55, 95, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 16px;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--gray-600);
+            border-radius: 12px;
+            margin-top: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-result-item {
+            padding: 16px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-result-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .country-flag {
+            font-size: 20px;
+        }
+
+        .country-info {
+            flex: 1;
+        }
+
+        .country-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--pure-white);
+            margin-bottom: 2px;
+        }
+
+        .country-emergency {
+            font-size: 14px;
+            color: var(--red);
+            font-weight: 500;
+        }
+
+        /* Map Container */
+        .map-container {
+            padding: 0 22px 60px;
+        }
+
+        .map-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        #worldMap {
+            height: 800px;
+            width: 100%;
+            background: #ffffff;
+        }
+
+        /* Custom Leaflet Styling */
+        .leaflet-control-container {
+            display: none;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: var(--gray-600);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaflet-popup-content {
+            margin: 20px;
+            font-family: inherit;
+        }
+
+        .leaflet-popup-tip {
+            background: var(--gray-600);
+        }
+
+        .popup-content {
+            min-width: 280px;
+        }
+
+        .popup-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .popup-flag {
+            font-size: 24px;
+        }
+
+        .popup-country {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--pure-white);
+        }
+
+        .emergency-numbers {
+            display: grid;
+            gap: 12px;
+        }
+
+        .emergency-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .emergency-item:hover {
+            background: rgba(255, 55, 95, 0.1);
+            transform: scale(1.02);
+        }
+
+        .emergency-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--gray-300);
+            font-weight: 500;
+        }
+
+        .emergency-icon {
+            color: var(--red);
+            font-size: 16px;
+        }
+
+        .emergency-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--pure-white);
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        .emergency-call-button {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .call-button {
+            width: 100%;
+            padding: 12px 20px;
+            background: var(--red);
+            border: none;
+            border-radius: 12px;
+            color: var(--pure-white);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .call-button:hover {
+            background: var(--red-light);
+            transform: scale(1.02);
+        }
+
+        /* Statistics */
+        .stats-section {
+            padding: 60px 22px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .stats-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--red);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1000;
+            border-radius: 24px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 55, 95, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--red);
+            animation: spin 1s ease infinite;
+        }
+
+        .loading-text {
+            color: var(--gray-300);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Instructions */
+        .instructions {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 113, 227, 0.05);
+            border: 1px solid rgba(0, 113, 227, 0.1);
+            border-radius: 16px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .instructions-text {
+            font-size: 16px;
+            color: var(--gray-300);
+            line-height: 1.6;
+        }
+
+        .instructions-icon {
+            color: var(--blue);
+            margin-right: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-headline {
+                font-size: 40px;
+            }
+
+            .hero-subheadline {
+                font-size: 18px;
+            }
+
+            .search-section {
+                margin: 0 20px 30px;
+                padding: 20px;
+            }
+
+            .map-container {
+                padding: 0 20px 40px;
+            }
+
+            #worldMap {
+                height: 500px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .popup-content {
+                min-width: 240px;
+            }
+
+            .popup-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="nav-logo">
+                <span class="keyboard-keys">
+                    <span class="key">Ctrl</span>
+                    <span class="plus-symbol">+</span>
+                    <span class="key">Z</span>
+                </span>
+                <span class="logo-text">Stroke</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link">Home</a></li>
+                <li><a href="#" class="nav-link">F.A.S.T Protocol</a></li>
+                <li><a href="#" class="nav-link">Find Care</a></li>
+                <li><a href="tel:911" class="nav-emergency">Emergency</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <span class="hero-eyebrow">Global Emergency Network</span>
+                <h1 class="hero-headline">Emergency Contacts Worldwide</h1>
+                <p class="hero-subheadline">
+                    Instant access to emergency numbers for every country. Because stroke emergencies don't respect borders.
+                </p>
+                
+                <!-- Search Section -->
+                <div class="search-section">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input 
+                            type="text" 
+                            class="search-input" 
+                            id="countrySearch" 
+                            placeholder="Search for a country or emergency number..."
+                            autocomplete="off"
+                        >
+                        <div class="search-results" id="searchResults"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructions -->
+        <div class="map-container">
+            <div class="instructions">
+                <p class="instructions-text">
+                    <i class="fas fa-hand-pointer instructions-icon"></i>
+                    Click or hover over any country to view emergency contact numbers. Use the search above for quick access.
+                </p>
+            </div>
+
+            <!-- Map -->
+            <div class="map-wrapper">
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Loading world map...</div>
+                </div>
+                <div id="worldMap"></div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <section class="stats-section">
+            <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 16px; color: var(--pure-white);">Global Emergency Network</h2>
+            <p style="font-size: 18px; color: var(--gray-400); margin-bottom: 40px;">Comprehensive coverage across all continents</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="countriesCount">195</div>
+                    <div class="stat-label">Countries Covered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="languagesCount">50+</div>
+                    <div class="stat-label">Languages Supported</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="timezonesCovered">24</div>
+                    <div class="stat-label">Time Zones</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+        // Emergency contacts data for major countries
+        const emergencyContacts = {
+            "US": {
+                name: "United States",
+                flag: "🇺🇸",
+                emergency: "911",
+                police: "911",
+                fire: "911",
+                medical: "911",
+                coords: [39.8283, -98.5795]
+            },
+    
+            "DZ": {
+                "name": "Algeria",
+                "flag": "🇩🇿",
+                "emergency": "14",
+                "police": "1548",
+                "fire": "14",
+                "medical": "14",
+                "coords": [28.0339, 1.6596]
+            },
+            "AO": {
+                "name": "Angola",
+                "flag": "🇦🇴",
+                "emergency": "112",
+                "police": "113",
+                "fire": "115",
+                "medical": "112/116",
+                "coords": [-11.2027, 17.8739]
+            },
+            "BJ": {
+                "name": "Benin",
+                "flag": "🇧🇯",
+                "emergency": "112",
+                "police": "117",
+                "fire": "118",
+                "medical": "112",
+                "coords": [9.3077, 2.3158]
+            },
+            "BW": {
+                "name": "Botswana",
+                "flag": "🇧🇼",
+                "emergency": "999",
+                "police": "999",
+                "fire": "998",
+                "medical": "997",
+                "coords": [-22.3285, 24.6849]
+            },
+            "BF": {
+                "name": "Burkina Faso",
+                "flag": "🇧🇫",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "112",
+                "coords": [12.2383, -1.5616]
+            },
+            "BI": {
+                "name": "Burundi",
+                "flag": "🇧🇮",
+                "emergency": "112",
+                "police": "117",
+                "fire": "118",
+                "medical": "112",
+                "coords": [-3.3731, 29.9189]
+            },
+            "CM": {
+                "name": "Cameroon",
+                "flag": "🇨🇲",
+                "emergency": "112",
+                "police": "117",
+                "fire": "118",
+                "medical": "119",
+                "coords": [7.3697, 12.3547]
+            },
+            "CV": {
+                "name": "Cape Verde",
+                "flag": "🇨🇻",
+                "emergency": "132",
+                "police": "132",
+                "fire": "131",
+                "medical": "130",
+                "coords": [16.5388, -23.0418]
+            },
+            "CF": {
+                "name": "Central African Republic",
+                "flag": "🇨🇫",
+                "emergency": "117",
+                "police": "117",
+                "fire": "118",
+                "medical": "1220",
+                "coords": [6.6111, 20.9394]
+            },
+            "TD": {
+                "name": "Chad",
+                "flag": "🇹🇩",
+                "emergency": "17",
+                "police": "17",
+                "fire": "18",
+                "medical": "2251-4242",
+                "coords": [15.4542, 18.7322]
+            },
+            "KM": {
+                "name": "Comoros",
+                "flag": "🇰🇲",
+                "emergency": "17",
+                "police": "17",
+                "fire": "18",
+                "medical": "772-03-73",
+                "coords": [-11.6455, 43.3333]
+            },
+            "CG": {
+                "name": "Republic of Congo",
+                "flag": "🇨🇬",
+                "emergency": "117",
+                "police": "117",
+                "fire": "118",
+                "medical": "117",
+                "coords": [-0.2280, 15.8277]
+            },
+            "CD": {
+                "name": "Democratic Republic of Congo",
+                "flag": "🇨🇩",
+                "emergency": "112",
+                "police": "112",
+                "fire": "118",
+                "medical": "112",
+                "coords": [-4.0383, 21.7587]
+            },
+            "DJ": {
+                "name": "Djibouti",
+                "flag": "🇩🇯",
+                "emergency": "17",
+                "police": "17",
+                "fire": "18",
+                "medical": "19",
+                "coords": [11.8251, 42.5903]
+            },
+            "EG": {
+                "name": "Egypt",
+                "flag": "🇪🇬",
+                "emergency": "112",
+                "police": "122",
+                "fire": "180",
+                "medical": "123",
+                "coords": [26.8206, 30.8025]
+            },
+            "GQ": {
+                "name": "Equatorial Guinea",
+                "flag": "🇬🇶",
+                "emergency": "114",
+                "police": "114",
+                "fire": "112",
+                "medical": "115",
+                "coords": [1.6508, 10.2679]
+            },
+            "ER": {
+                "name": "Eritrea",
+                "flag": "🇪🇷",
+                "emergency": "113",
+                "police": "113",
+                "fire": "116",
+                "medical": "114",
+                "coords": [15.1794, 39.7823]
+            },
+            "SZ": {
+                "name": "Eswatini",
+                "flag": "🇸🇿",
+                "emergency": "999",
+                "police": "999",
+                "fire": "933",
+                "medical": "977",
+                "coords": [-26.5225, 31.4659]
+            },
+            "ET": {
+                "name": "Ethiopia",
+                "flag": "🇪🇹",
+                "emergency": "911",
+                "police": "991",
+                "fire": "939",
+                "medical": "907",
+                "coords": [9.1450, 40.4897]
+            },
+            "GA": {
+                "name": "Gabon",
+                "flag": "🇬🇦",
+                "emergency": "1730",
+                "police": "1730",
+                "fire": "18",
+                "medical": "1300",
+                "coords": [-0.8037, 11.6094]
+            },
+            "GM": {
+                "name": "Gambia",
+                "flag": "🇬🇲",
+                "emergency": "117",
+                "police": "117",
+                "fire": "118",
+                "medical": "116",
+                "coords": [13.4432, -15.3101]
+            },
+            "GH": {
+                "name": "Ghana",
+                "flag": "🇬🇭",
+                "emergency": "112",
+                "police": "191",
+                "fire": "192",
+                "medical": "193",
+                "coords": [7.9465, -1.0232]
+            },
+            "GN": {
+                "name": "Guinea",
+                "flag": "🇬🇳",
+                "emergency": "117",
+                "police": "117",
+                "fire": "442-020",
+                "medical": "18",
+                "coords": [9.9456, -9.6966]
+            },
+            "GW": {
+                "name": "Guinea-Bissau",
+                "flag": "🇬🇼",
+                "emergency": "112",
+                "police": "117",
+                "fire": "118",
+                "medical": "119",
+                "coords": [11.8037, -15.1804]
+            },
+            "CI": {
+                "name": "Ivory Coast",
+                "flag": "🇨🇮",
+                "emergency": "110",
+                "police": "110/111/170",
+                "fire": "180",
+                "medical": "185",
+                "coords": [7.5400, -5.5471]
+            },
+            "KE": {
+                "name": "Kenya",
+                "flag": "🇰🇪",
+                "emergency": "112",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [-0.0236, 37.9062]
+            },
+            "LS": {
+                "name": "Lesotho",
+                "flag": "🇱🇸",
+                "emergency": "123",
+                "police": "123",
+                "fire": "122",
+                "medical": "121",
+                "coords": [-29.6100, 28.2336]
+            },
+            "LR": {
+                "name": "Liberia",
+                "flag": "🇱🇷",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [6.4281, -9.4295]
+            },
+            "LY": {
+                "name": "Libya",
+                "flag": "🇱🇾",
+                "emergency": "1515",
+                "police": "1515",
+                "fire": "1515",
+                "medical": "193",
+                "coords": [26.3351, 17.2283]
+            },
+            "MG": {
+                "name": "Madagascar",
+                "flag": "🇲🇬",
+                "emergency": "117",
+                "police": "117",
+                "fire": "118",
+                "medical": "124",
+                "coords": [-18.7669, 46.8691]
+            },
+            "MW": {
+                "name": "Malawi",
+                "flag": "🇲🇼",
+                "emergency": "997",
+                "police": "997",
+                "fire": "999",
+                "medical": "998",
+                "coords": [-13.2543, 34.3015]
+            },
+            "ML": {
+                "name": "Mali",
+                "flag": "🇲🇱",
+                "emergency": "17",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [17.5707, -3.9962]
+            },
+            "MR": {
+                "name": "Mauritania",
+                "flag": "🇲🇷",
+                "emergency": "117",
+                "police": "117",
+                "fire": "118",
+                "medical": "101",
+                "coords": [21.0079, -10.9408]
+            },
+            "MU": {
+                "name": "Mauritius",
+                "flag": "🇲🇺",
+                "emergency": "112",
+                "police": "999",
+                "fire": "995",
+                "medical": "114",
+                "coords": [-20.3484, 57.5522]
+            },
+            "YT": {
+                "name": "Mayotte",
+                "flag": "🇾🇹",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [-12.8275, 45.1662]
+            },
+            "MA": {
+                "name": "Morocco",
+                "flag": "🇲🇦",
+                "emergency": "19",
+                "police": "19",
+                "fire": "15",
+                "medical": "15",
+                "coords": [31.7917, -7.0926]
+            },
+            "MZ": {
+                "name": "Mozambique",
+                "flag": "🇲🇿",
+                "emergency": "119",
+                "police": "119",
+                "fire": "198",
+                "medical": "117",
+                "coords": [-18.6657, 35.5296]
+            },
+            "NA": {
+                "name": "Namibia",
+                "flag": "🇳🇦",
+                "emergency": "10111",
+                "police": "10111",
+                "fire": "10111",
+                "medical": "10111",
+                "coords": [-22.9576, 18.4904]
+            },
+            "NE": {
+                "name": "Niger",
+                "flag": "🇳🇪",
+                "emergency": "17",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [17.6078, 8.0817]
+            },
+            "NG": {
+                "name": "Nigeria",
+                "flag": "🇳🇬",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [9.0820, 8.6753]
+            },
+            "RE": {
+                "name": "Réunion",
+                "flag": "🇷🇪",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [-21.1151, 55.5364]
+            },
+            "RW": {
+                "name": "Rwanda",
+                "flag": "🇷🇼",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "912",
+                "coords": [-1.9403, 29.8739]
+            },
+            "SH": {
+                "name": "Saint Helena",
+                "flag": "🇸🇭",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [-15.9650, -5.7089]
+            },
+            "ST": {
+                "name": "Sao Tome and Principe",
+                "flag": "🇸🇹",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [0.1864, 6.6131]
+            },
+            "SN": {
+                "name": "Senegal",
+                "flag": "🇸🇳",
+                "emergency": "17",
+                "police": "17",
+                "fire": "18",
+                "medical": "1515",
+                "coords": [14.4974, -14.4524]
+            },
+            "SC": {
+                "name": "Seychelles",
+                "flag": "🇸🇨",
+                "emergency": "112",
+                "police": "133",
+                "fire": "999",
+                "medical": "151",
+                "coords": [-4.6796, 55.4920]
+            },
+            "SL": {
+                "name": "Sierra Leone",
+                "flag": "🇸🇱",
+                "emergency": "019",
+                "police": "019",
+                "fire": "019",
+                "medical": "999",
+                "coords": [8.4606, -11.7799]
+            },
+            "SO": {
+                "name": "Somalia",
+                "flag": "🇸🇴",
+                "emergency": "888",
+                "police": "888",
+                "fire": "555",
+                "medical": "999",
+                "coords": [5.1521, 46.1996]
+            },
+            "ZA": {
+                "name": "South Africa",
+                "flag": "🇿🇦",
+                "emergency": "10111",
+                "police": "10111",
+                "fire": "10111",
+                "medical": "10177",
+                "coords": [-30.5595, 22.9375]
+            },
+            "SS": {
+                "name": "South Sudan",
+                "flag": "🇸🇸",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [6.8770, 31.3070]
+            },
+            "SD": {
+                "name": "Sudan",
+                "flag": "🇸🇩",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [12.8628, 30.2176]
+            },
+            "TZ": {
+                "name": "Tanzania",
+                "flag": "🇹🇿",
+                "emergency": "112",
+                "police": "999",
+                "fire": "115",
+                "medical": "114",
+                "coords": [-6.3690, 34.8888]
+            },
+            "TG": {
+                "name": "Togo",
+                "flag": "🇹🇬",
+                "emergency": "117",
+                "police": "117",
+                "fire": "118",
+                "medical": "8200",
+                "coords": [8.6195, 0.8248]
+            },
+            "TN": {
+                "name": "Tunisia",
+                "flag": "🇹🇳",
+                "emergency": "197",
+                "police": "197",
+                "fire": "198",
+                "medical": "190",
+                "coords": [33.8869, 9.5375]
+            },
+            "UG": {
+                "name": "Uganda",
+                "flag": "🇺🇬",
+                "emergency": "112",
+                "police": "999",
+                "fire": "999",
+                "medical": "911",
+                "coords": [1.3733, 32.2903]
+            },
+            "EH": {
+                "name": "Western Sahara",
+                "flag": "🇪🇭",
+                "emergency": "150",
+                "police": "150",
+                "fire": "150",
+                "medical": "150",
+                "coords": [24.2155, -12.8858]
+            },
+            "ZM": {
+                "name": "Zambia",
+                "flag": "🇿🇲",
+                "emergency": "999",
+                "police": "911",
+                "fire": "993",
+                "medical": "992",
+                "coords": [-13.1339, 27.8493]
+            },
+            "ZW": {
+                "name": "Zimbabwe",
+                "flag": "🇿🇼",
+                "emergency": "999",
+                "police": "995",
+                "fire": "993",
+                "medical": "994",
+                "coords": [-19.0154, 29.1549]
+            },
+            "AI": {
+                "name": "Anguilla",
+                "flag": "🇦🇮",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [18.2206, -63.0686]
+            },
+            "AG": {
+                "name": "Antigua and Barbuda",
+                "flag": "🇦🇬",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [17.0608, -61.7964]
+            },
+            "AW": {
+                "name": "Aruba",
+                "flag": "🇦🇼",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [12.5211, -69.9683]
+            },
+            "BS": {
+                "name": "Bahamas",
+                "flag": "🇧🇸",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [25.0343, -77.3963]
+            },
+            "BB": {
+                "name": "Barbados",
+                "flag": "🇧🇧",
+                "emergency": "211",
+                "police": "211",
+                "fire": "311",
+                "medical": "511",
+                "coords": [13.1939, -59.5432]
+            },
+            "BM": {
+                "name": "Bermuda",
+                "flag": "🇧🇲",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [32.3078, -64.7505]
+            },
+            "VG": {
+                "name": "British Virgin Islands",
+                "flag": "🇻🇬",
+                "emergency": "911",
+                "police": "311",
+                "fire": "911",
+                "medical": "911",
+                "coords": [18.4207, -64.6400]
+            },
+            "BQ": {
+                "name": "Caribbean Netherlands",
+                "flag": "🇧🇶",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [12.1784, -68.2385]
+            },
+            "KY": {
+                "name": "Cayman Islands",
+                "flag": "🇰🇾",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [19.3133, -81.2546]
+            },
+            "CU": {
+                "name": "Cuba",
+                "flag": "🇨🇺",
+                "emergency": "106",
+                "police": "106",
+                "fire": "105",
+                "medical": "104",
+                "coords": [21.5218, -77.7812]
+            },
+            "CW": {
+                "name": "Curacao",
+                "flag": "🇨🇼",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "912",
+                "coords": [12.1696, -68.9900]
+            },
+            "DM": {
+                "name": "Dominica",
+                "flag": "🇩🇲",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [15.4150, -61.3710]
+            },
+            "DO": {
+                "name": "Dominican Republic",
+                "flag": "🇩🇴",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [18.7357, -70.1627]
+            },
+            "GD": {
+                "name": "Grenada",
+                "flag": "🇬🇩",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [12.2628, -61.6042]
+            },
+            "GP": {
+                "name": "Guadeloupe",
+                "flag": "🇬🇵",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [16.2650, -61.5510]
+            },
+            "HT": {
+                "name": "Haiti",
+                "flag": "🇭🇹",
+                "emergency": "114",
+                "police": "122",
+                "fire": "115",
+                "medical": "116",
+                "coords": [18.9712, -72.2852]
+            },
+            "JM": {
+                "name": "Jamaica",
+                "flag": "🇯🇲",
+                "emergency": "119",
+                "police": "119",
+                "fire": "110",
+                "medical": "110",
+                "coords": [18.1096, -77.2975]
+            },
+            "MQ": {
+                "name": "Martinique",
+                "flag": "🇲🇶",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [14.6415, -61.0242]
+            },
+            "MS": {
+                "name": "Montserrat",
+                "flag": "🇲🇸",
+                "emergency": "911",
+                "police": "999",
+                "fire": "911",
+                "medical": "911",
+                "coords": [16.7425, -62.1874]
+            },
+            "PR": {
+                "name": "Puerto Rico",
+                "flag": "🇵🇷",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [18.2208, -66.5901]
+            },
+            "BL": {
+                "name": "Saint Barthélemy",
+                "flag": "🇧🇱",
+                "emergency": "17",
+                "police": "17",
+                "fire": "18",
+                "medical": "18",
+                "coords": [17.9000, -62.8333]
+            },
+            "KN": {
+                "name": "Saint Kitts and Nevis",
+                "flag": "🇰🇳",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [17.3578, -62.7830]
+            },
+            "LC": {
+                "name": "Saint Lucia",
+                "flag": "🇱🇨",
+                "emergency": "911",
+                "police": "999",
+                "fire": "911",
+                "medical": "911",
+                "coords": [13.9094, -60.9789]
+            },
+            "MF": {
+                "name": "Saint Martin",
+                "flag": "🇲🇫",
+                "emergency": "17",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [18.0708, -63.0501]
+            },
+            "VC": {
+                "name": "Saint Vincent and the Grenadines",
+                "flag": "🇻🇨",
+                "emergency": "999",
+                "police": "999",
+                "fire": "911",
+                "medical": "911",
+                "coords": [12.9843, -61.2872]
+            },
+            "SX": {
+                "name": "Sint Maarten",
+                "flag": "🇸🇽",
+                "emergency": "911",
+                "police": "911",
+                "fire": "919",
+                "medical": "912",
+                "coords": [18.0425, -63.0548]
+            },
+            "TT": {
+                "name": "Trinidad and Tobago",
+                "flag": "🇹🇹",
+                "emergency": "999",
+                "police": "999",
+                "fire": "990",
+                "medical": "811",
+                "coords": [10.6918, -61.2225]
+            },
+            "TC": {
+                "name": "Turks and Caicos",
+                "flag": "🇹🇨",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [21.6940, -71.7979]
+            },
+            "VI": {
+                "name": "U.S. Virgin Islands",
+                "flag": "🇻🇮",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [18.3358, -64.8963]
+            },
+            "BZ": {
+                "name": "Belize",
+                "flag": "🇧🇿",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [17.1899, -88.4976]
+            },
+            "CR": {
+                "name": "Costa Rica",
+                "flag": "🇨🇷",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [9.7489, -83.7534]
+            },
+            "SV": {
+                "name": "El Salvador",
+                "flag": "🇸🇻",
+                "emergency": "911",
+                "police": "911",
+                "fire": "913",
+                "medical": "132",
+                "coords": [13.7942, -88.8965]
+            },
+            "GT": {
+                "name": "Guatemala",
+                "flag": "🇬🇹",
+                "emergency": "110",
+                "police": "120",
+                "fire": "123",
+                "medical": "128",
+                "coords": [15.7835, -90.2308]
+            },
+            "HN": {
+                "name": "Honduras",
+                "flag": "🇭🇳",
+                "emergency": "911",
+                "police": "911",
+                "fire": "198",
+                "medical": "195",
+                "coords": [15.2000, -86.2419]
+            },
+            "NI": {
+                "name": "Nicaragua",
+                "flag": "🇳🇮",
+                "emergency": "118",
+                "police": "118",
+                "fire": "911",
+                "medical": "128",
+                "coords": [12.8654, -85.2072]
+            },
+            "PA": {
+                "name": "Panama",
+                "flag": "🇵🇦",
+                "emergency": "911",
+                "police": "104",
+                "fire": "103",
+                "medical": "911",
+                "coords": [8.5380, -80.7821]
+            },
+            "CA": {
+                "name": "Canada",
+                "flag": "🇨🇦",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [56.1304, -106.3468]
+            },
+            "MX": {
+                "name": "Mexico",
+                "flag": "🇲🇽",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [23.6345, -102.5528]
+            },
+            "PM": {
+                "name": "Saint Pierre and Miquelon",
+                "flag": "🇵🇲",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [46.8852, -56.3159]
+            },
+            "US": {
+                "name": "United States of America",
+                "flag": "🇺🇸",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [37.0902, -95.7129]
+            },
+            "AR": {
+                "name": "Argentina",
+                "flag": "🇦🇷",
+                "emergency": "911",
+                "police": "101",
+                "fire": "100",
+                "medical": "107",
+                "coords": [-38.4161, -63.6167]
+            },
+            "BO": {
+                "name": "Bolivia",
+                "flag": "🇧🇴",
+                "emergency": "911",
+                "police": "110",
+                "fire": "119",
+                "medical": "118",
+                "coords": [-16.2902, -63.5887]
+            },
+            "BR": {
+                "name": "Brazil",
+                "flag": "🇧🇷",
+                "emergency": "190",
+                "police": "190",
+                "fire": "193",
+                "medical": "192",
+                "coords": [-14.2350, -51.9253]
+            },
+            "CL": {
+                "name": "Chile",
+                "flag": "🇨🇱",
+                "emergency": "133",
+                "police": "133",
+                "fire": "132",
+                "medical": "131",
+                "coords": [-35.6751, -71.5430]
+            },
+            "CO": {
+                "name": "Colombia",
+                "flag": "🇨🇴",
+                "emergency": "112",
+                "police": "112",
+                "fire": "119",
+                "medical": "125",
+                "coords": [4.5709, -74.2973]
+            },
+            "EC": {
+                "name": "Ecuador",
+                "flag": "🇪🇨",
+                "emergency": "911",
+                "police": "101",
+                "fire": "102",
+                "medical": "131",
+                "coords": [-1.8312, -78.1834]
+            },
+            "FK": {
+                "name": "Falkland Islands",
+                "flag": "🇫🇰",
+                "emergency": "112",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [-51.7963, -59.5236]
+            },
+            "GF": {
+                "name": "French Guiana",
+                "flag": "🇬🇫",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [3.9339, -53.1258]
+            },
+            "GY": {
+                "name": "Guyana",
+                "flag": "🇬🇾",
+                "emergency": "911",
+                "police": "911",
+                "fire": "912",
+                "medical": "913",
+                "coords": [4.8604, -58.9302]
+            },
+            "PY": {
+                "name": "Paraguay",
+                "flag": "🇵🇾",
+                "emergency": "911",
+                "police": "912",
+                "fire": "132",
+                "medical": "141",
+                "coords": [-23.4425, -58.4438]
+            },
+            "PE": {
+                "name": "Peru",
+                "flag": "🇵🇪",
+                "emergency": "911",
+                "police": "105",
+                "fire": "116",
+                "medical": "106",
+                "coords": [-9.1900, -75.0152]
+            },
+            "GS": {
+                "name": "South Georgia and the South Sandwich Islands",
+                "flag": "🇬🇸",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [-54.4296, -36.5879]
+            },
+            "SR": {
+                "name": "Suriname",
+                "flag": "🇸🇷",
+                "emergency": "115",
+                "police": "115",
+                "fire": "110",
+                "medical": "113",
+                "coords": [3.9193, -56.0278]
+            },
+            "UY": {
+                "name": "Uruguay",
+                "flag": "🇺🇾",
+                "emergency": "911",
+                "police": "109",
+                "fire": "104",
+                "medical": "105",
+                "coords": [-32.5228, -55.7658]
+            },
+            "VE": {
+                "name": "Venezuela",
+                "flag": "🇻🇪",
+                "emergency": "911",
+                "police": "171",
+                "fire": "171",
+                "medical": "171",
+                "coords": [6.4238, -66.5897]
+            },
+            "AQ": {
+                "name": "Antarctica",
+                "flag": "🇦🇶",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [-82.8628, 135.0000]
+            },
+            "AF": {
+                "name": "Afghanistan",
+                "flag": "🇦🇫",
+                "emergency": "119",
+                "police": "119",
+                "fire": "119",
+                "medical": "112",
+                "coords": [33.9391, 67.7100]
+            },
+            "BH": {
+                "name": "Bahrain",
+                "flag": "🇧🇭",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [26.0667, 50.5577]
+            },
+            "BD": {
+                "name": "Bangladesh",
+                "flag": "🇧🇩",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [23.6850, 90.3563]
+            },
+            "BT": {
+                "name": "Bhutan",
+                "flag": "🇧🇹",
+                "emergency": "113",
+                "police": "113",
+                "fire": "110",
+                "medical": "112",
+                "coords": [27.5142, 90.4336]
+            },
+            "IO": {
+                "name": "British Indian Ocean Territory",
+                "flag": "🇮🇴",
+                "emergency": "112",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [-6.3432, 71.8765]
+            },
+            "BN": {
+                "name": "Brunei",
+                "flag": "🇧🇳",
+                "emergency": "993",
+                "police": "993",
+                "fire": "995",
+                "medical": "991",
+                "coords": [4.5353, 114.7277]
+            },
+            "KH": {
+                "name": "Cambodia",
+                "flag": "🇰🇭",
+                "emergency": "117",
+                "police": "117",
+                "fire": "118",
+                "medical": "119",
+                "coords": [12.5657, 104.9910]
+            },
+            "CN": {
+                "name": "China",
+                "flag": "🇨🇳",
+                "emergency": "110",
+                "police": "110",
+                "fire": "119",
+                "medical": "120",
+                "coords": [35.8617, 104.1954]
+            },
+            "CX": {
+                "name": "Christmas Island",
+                "flag": "🇨🇽",
+                "emergency": "000",
+                "police": "000",
+                "fire": "000",
+                "medical": "000",
+                "coords": [-10.4475, 105.6904]
+            },
+            "CC": {
+                "name": "Cocos Islands",
+                "flag": "🇨🇨",
+                "emergency": "000",
+                "police": "000",
+                "fire": "000",
+                "medical": "000",
+                "coords": [-12.1642, 96.8710]
+            },
+            "TL": {
+                "name": "East Timor",
+                "flag": "🇹🇱",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [-8.8742, 125.7275]
+            },
+            "HK": {
+                "name": "Hong Kong",
+                "flag": "🇭🇰",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [22.3193, 114.1694]
+            },
+            "IN": {
+                "name": "India",
+                "flag": "🇮🇳",
+                "emergency": "112",
+                "police": "100",
+                "fire": "101",
+                "medical": "108",
+                "coords": [20.5937, 78.9629]
+            },
+            "ID": {
+                "name": "Indonesia",
+                "flag": "🇮🇩",
+                "emergency": "112",
+                "police": "110",
+                "fire": "113",
+                "medical": "118",
+                "coords": [-0.7893, 113.9213]
+            },
+            "IR": {
+                "name": "Iran",
+                "flag": "🇮🇷",
+                "emergency": "110",
+                "police": "110",
+                "fire": "125",
+                "medical": "115",
+                "coords": [32.4279, 53.6880]
+            },
+            "IQ": {
+                "name": "Iraq",
+                "flag": "🇮🇶",
+                "emergency": "112",
+                "police": "104",
+                "fire": "115",
+                "medical": "122",
+                "coords": [33.2232, 43.6793]
+            },
+            "IL": {
+                "name": "Israel",
+                "flag": "🇮🇱",
+                "emergency": "100",
+                "police": "100",
+                "fire": "102",
+                "medical": "101",
+                "coords": [31.0461, 34.8516]
+            },
+            "JP": {
+                "name": "Japan",
+                "flag": "🇯🇵",
+                "emergency": "110",
+                "police": "110",
+                "fire": "119",
+                "medical": "119",
+                "coords": [36.2048, 138.2529]
+            },
+            "JO": {
+                "name": "Jordan",
+                "flag": "🇯🇴",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [30.5852, 36.2384]
+            },
+            "KZ": {
+                "name": "Kazakhstan",
+                "flag": "🇰🇿",
+                "emergency": "112",
+                "police": "102",
+                "fire": "101",
+                "medical": "103",
+                "coords": [48.0196, 66.9237]
+            },
+            "KP": {
+                "name": "North Korea",
+                "flag": "🇰🇵",
+                "emergency": "110",
+                "police": "110",
+                "fire": "8119",
+                "medical": "8119",
+                "coords": [40.3399, 127.5101]
+            },
+            "KR": {
+                "name": "South Korea",
+                "flag": "🇰🇷",
+                "emergency": "112",
+                "police": "112",
+                "fire": "119",
+                "medical": "119",
+                "coords": [35.9078, 127.7669]
+            },
+            "KW": {
+                "name": "Kuwait",
+                "flag": "🇰🇼",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [29.3117, 47.4818]
+            },
+            "KG": {
+                "name": "Kyrgyzstan",
+                "flag": "🇰🇬",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [41.2044, 74.7661]
+            },
+            "LA": {
+                "name": "Laos",
+                "flag": "🇱🇦",
+                "emergency": "191",
+                "police": "191",
+                "fire": "190",
+                "medical": "195",
+                "coords": [19.8563, 102.4955]
+            },
+            "LB": {
+                "name": "Lebanon",
+                "flag": "🇱🇧",
+                "emergency": "999",
+                "police": "160",
+                "fire": "175",
+                "medical": "140",
+                "coords": [33.8547, 35.8623]
+            },
+            "MO": {
+                "name": "Macau",
+                "flag": "🇲🇴",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [22.1987, 113.5439]
+            },
+            "MY": {
+                "name": "Malaysia",
+                "flag": "🇲🇾",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [4.2105, 101.9758]
+            },
+            "MV": {
+                "name": "Maldives",
+                "flag": "🇲🇻",
+                "emergency": "911",
+                "police": "119",
+                "fire": "118",
+                "medical": "100",
+                "coords": [3.2028, 73.2207]
+            },
+            "MN": {
+                "name": "Mongolia",
+                "flag": "🇲🇳",
+                "emergency": "105",
+                "police": "102",
+                "fire": "101",
+                "medical": "103",
+                "coords": [46.8625, 103.8467]
+            },
+            "MM": {
+                "name": "Myanmar",
+                "flag": "🇲🇲",
+                "emergency": "999",
+                "police": "199",
+                "fire": "191",
+                "medical": "192",
+                "coords": [21.9162, 95.9560]
+            },
+            "NP": {
+                "name": "Nepal",
+                "flag": "🇳🇵",
+                "emergency": "100",
+                "police": "100",
+                "fire": "101",
+                "medical": "102",
+                "coords": [28.3949, 84.1240]
+            },
+            "OM": {
+                "name": "Oman",
+                "flag": "🇴🇲",
+                "emergency": "9999",
+                "police": "9999",
+                "fire": "9999",
+                "medical": "9999",
+                "coords": [21.4735, 55.9754]
+            },
+            "PK": {
+                "name": "Pakistan",
+                "flag": "🇵🇰",
+                "emergency": "15",
+                "police": "15",
+                "fire": "16",
+                "medical": "115",
+                "coords": [30.3753, 69.3451]
+            },
+            "PS": {
+                "name": "Palestine",
+                "flag": "🇵🇸",
+                "emergency": "100",
+                "police": "100",
+                "fire": "102",
+                "medical": "101",
+                "coords": [31.9522, 35.2332]
+            },
+            "PH": {
+                "name": "Philippines",
+                "flag": "🇵🇭",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [12.8797, 121.7740]
+            },
+            "QA": {
+                "name": "Qatar",
+                "flag": "🇶🇦",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [25.3548, 51.1839]
+            },
+            "SA": {
+                "name": "Saudi Arabia",
+                "flag": "🇸🇦",
+                "emergency": "911",
+                "police": "999",
+                "fire": "998",
+                "medical": "997",
+                "coords": [23.8859, 45.0792]
+            },
+            "SG": {
+                "name": "Singapore",
+                "flag": "🇸🇬",
+                "emergency": "999",
+                "police": "999",
+                "fire": "995",
+                "medical": "995",
+                "coords": [1.3521, 103.8198]
+            },
+            "LK": {
+                "name": "Sri Lanka",
+                "flag": "🇱🇰",
+                "emergency": "119",
+                "police": "119",
+                "fire": "110",
+                "medical": "110",
+                "coords": [7.8731, 80.7718]
+            },
+            "SY": {
+                "name": "Syria",
+                "flag": "🇸🇾",
+                "emergency": "112",
+                "police": "112",
+                "fire": "113",
+                "medical": "110",
+                "coords": [34.8021, 38.9968]
+            },
+            "TW": {
+                "name": "Taiwan",
+                "flag": "🇹🇼",
+                "emergency": "110",
+                "police": "110",
+                "fire": "119",
+                "medical": "119",
+                "coords": [23.6978, 120.9605]
+            },
+            "TJ": {
+                "name": "Tajikistan",
+                "flag": "🇹🇯",
+                "emergency": "112",
+                "police": "102",
+                "fire": "101",
+                "medical": "103",
+                "coords": [38.8610, 71.2761]
+            },
+            "TH": {
+                "name": "Thailand",
+                "flag": "🇹🇭",
+                "emergency": "191",
+                "police": "191",
+                "fire": "199",
+                "medical": "1669",
+                "coords": [15.8700, 100.9925]
+            },
+            "TM": {
+                "name": "Turkmenistan",
+                "flag": "🇹🇲",
+                "emergency": "03",
+                "police": "02",
+                "fire": "01",
+                "medical": "03",
+                "coords": [38.9697, 59.5563]
+            },
+            "AE": {
+                "name": "United Arab Emirates",
+                "flag": "🇦🇪",
+                "emergency": "999",
+                "police": "999",
+                "fire": "997",
+                "medical": "998",
+                "coords": [23.4241, 53.8478]
+            },
+            "UZ": {
+                "name": "Uzbekistan",
+                "flag": "🇺🇿",
+                "emergency": "102",
+                "police": "102",
+                "fire": "101",
+                "medical": "103",
+                "coords": [41.3775, 64.5853]
+            },
+            "VN": {
+                "name": "Vietnam",
+                "flag": "🇻🇳",
+                "emergency": "113",
+                "police": "113",
+                "fire": "114",
+                "medical": "115",
+                "coords": [14.0583, 108.2772]
+            },
+            "YE": {
+                "name": "Yemen",
+                "flag": "🇾🇪",
+                "emergency": "194",
+                "police": "194",
+                "fire": "191",
+                "medical": "191",
+                "coords": [15.5527, 48.5164]
+            },
+            "AX": {
+                "name": "Åland Islands",
+                "flag": "🇦🇽",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [60.1785, 19.9156]
+            },
+            "AL": {
+                "name": "Albania",
+                "flag": "🇦🇱",
+                "emergency": "129",
+                "police": "129",
+                "fire": "128",
+                "medical": "127",
+                "coords": [41.1533, 20.1683]
+            },
+            "AD": {
+                "name": "Andorra",
+                "flag": "🇦🇩",
+                "emergency": "110",
+                "police": "110",
+                "fire": "118",
+                "medical": "116",
+                "coords": [42.5463, 1.6018]
+            },
+            "AM": {
+                "name": "Armenia",
+                "flag": "🇦🇲",
+                "emergency": "112",
+                "police": "102",
+                "fire": "101",
+                "medical": "103",
+                "coords": [40.0691, 45.0382]
+            },
+            "AT": {
+                "name": "Austria",
+                "flag": "🇦🇹",
+                "emergency": "112",
+                "police": "133",
+                "fire": "122",
+                "medical": "144",
+                "coords": [47.5162, 14.5501]
+            },
+            "AZ": {
+                "name": "Azerbaijan",
+                "flag": "🇦🇿",
+                "emergency": "112",
+                "police": "102",
+                "fire": "101",
+                "medical": "103",
+                "coords": [40.1431, 47.5769]
+            },
+            "BY": {
+                "name": "Belarus",
+                "flag": "🇧🇾",
+                "emergency": "102",
+                "police": "102",
+                "fire": "101",
+                "medical": "103",
+                "coords": [53.7098, 27.9534]
+            },
+            "BE": {
+                "name": "Belgium",
+                "flag": "🇧🇪",
+                "emergency": "112",
+                "police": "101",
+                "fire": "112",
+                "medical": "112",
+                "coords": [50.5039, 4.4699]
+            },
+            "BA": {
+                "name": "Bosnia and Herzegovina",
+                "flag": "🇧🇦",
+                "emergency": "122",
+                "police": "122",
+                "fire": "123",
+                "medical": "124",
+                "coords": [43.9159, 17.6791]
+            },
+            "BG": {
+                "name": "Bulgaria",
+                "flag": "🇧🇬",
+                "emergency": "112",
+                "police": "166",
+                "fire": "160",
+                "medical": "150",
+                "coords": [42.7339, 25.4858]
+            },
+            "HR": {
+                "name": "Croatia",
+                "flag": "🇭🇷",
+                "emergency": "112",
+                "police": "192",
+                "fire": "193",
+                "medical": "194",
+                "coords": [45.1, 15.2]
+            },
+            "CY": {
+                "name": "Cyprus",
+                "flag": "🇨🇾",
+                "emergency": "112",
+                "police": "199",
+                "fire": "112",
+                "medical": "112",
+                "coords": [35.1264, 33.4299]
+            },
+            "CZ": {
+                "name": "Czech Republic",
+                "flag": "🇨🇿",
+                "emergency": "112",
+                "police": "158",
+                "fire": "150",
+                "medical": "155",
+                "coords": [49.8175, 15.4730]
+            },
+            "DK": {
+                "name": "Denmark",
+                "flag": "🇩🇰",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [56.2639, 9.5018]
+            },
+            "EE": {
+                "name": "Estonia",
+                "flag": "🇪🇪",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [58.5953, 25.0136]
+            },
+            "FO": {
+                "name": "Faroe Islands",
+                "flag": "🇫🇴",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [61.8926, -6.9118]
+            },
+            "FI": {
+                "name": "Finland",
+                "flag": "🇫🇮",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [61.9241, 25.7482]
+            },
+            "FR": {
+                "name": "France",
+                "flag": "🇫🇷",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [46.2276, 2.2137]
+            },
+            "GE": {
+                "name": "Georgia",
+                "flag": "🇬🇪",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [42.3154, 43.3569]
+            },
+            "DE": {
+                "name": "Germany",
+                "flag": "🇩🇪",
+                "emergency": "112",
+                "police": "110",
+                "fire": "112",
+                "medical": "112",
+                "coords": [51.1657, 10.4515]
+            },
+            "GI": {
+                "name": "Gibraltar",
+                "flag": "🇬🇮",
+                "emergency": "112",
+                "police": "199",
+                "fire": "190",
+                "medical": "190",
+                "coords": [36.1377, -5.3453]
+            },
+            "GR": {
+                "name": "Greece",
+                "flag": "🇬🇷",
+                "emergency": "112",
+                "police": "100",
+                "fire": "199",
+                "medical": "166",
+                "coords": [39.0742, 21.8243]
+            },
+            "GL": {
+                "name": "Greenland",
+                "flag": "🇬🇱",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [71.7069, -42.6043]
+            },
+            "GG": {
+                "name": "Guernsey",
+                "flag": "🇬🇬",
+                "emergency": "112",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [49.4657, -2.5853]
+            },
+            "HU": {
+                "name": "Hungary",
+                "flag": "🇭🇺",
+                "emergency": "112",
+                "police": "107",
+                "fire": "105",
+                "medical": "104",
+                "coords": [47.1625, 19.5033]
+            },
+            "IS": {
+                "name": "Iceland",
+                "flag": "🇮🇸",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [64.9631, -19.0208]
+            },
+            "IE": {
+                "name": "Ireland",
+                "flag": "🇮🇪",
+                "emergency": "112",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [53.4129, -8.2439]
+            },
+            "IM": {
+                "name": "Isle of Man",
+                "flag": "🇮🇲",
+                "emergency": "112",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [54.2361, -4.5481]
+            },
+            "IT": {
+                "name": "Italy",
+                "flag": "🇮🇹",
+                "emergency": "112",
+                "police": "112",
+                "fire": "115",
+                "medical": "118",
+                "coords": [41.8719, 12.5674]
+            },
+            "JE": {
+                "name": "Jersey",
+                "flag": "🇯🇪",
+                "emergency": "112",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [49.2144, -2.1312]
+            },
+            "XK": {
+                "name": "Kosovo",
+                "flag": "🇽🇰",
+                "emergency": "192",
+                "police": "192",
+                "fire": "193",
+                "medical": "194",
+                "coords": [42.6026, 20.9030]
+            },
+            "LV": {
+                "name": "Latvia",
+                "flag": "🇱🇻",
+                "emergency": "112",
+                "police": "110",
+                "fire": "112",
+                "medical": "113",
+                "coords": [56.8796, 24.6032]
+            },
+            "LT": {
+                "name": "Lithuania",
+                "flag": "🇱🇹",
+                "emergency": "112",
+                "police": "022",
+                "fire": "011",
+                "medical": "033",
+                "coords": [55.1694, 23.8813]
+            },
+            "LI": {
+                "name": "Liechtenstein",
+                "flag": "🇱🇮",
+                "emergency": "117",
+                "police": "117",
+                "fire": "118",
+                "medical": "144",
+                "coords": [47.1660, 9.5554]
+            },
+            "LU": {
+                "name": "Luxembourg",
+                "flag": "🇱🇺",
+                "emergency": "112",
+                "police": "113",
+                "fire": "112",
+                "medical": "112",
+                "coords": [49.8153, 6.1296]
+            },
+            "MT": {
+                "name": "Malta",
+                "flag": "🇲🇹",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [35.9375, 14.3754]
+            },
+            "MD": {
+                "name": "Moldova",
+                "flag": "🇲🇩",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [47.4116, 28.3699]
+            },
+            // Add these entries to your emergencyContacts object after Moldova (MD):
+
+            "MC": {
+                "name": "Monaco",
+                "flag": "🇲🇨",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "18",
+                "coords": [43.7333, 7.4167]
+            },
+            "ME": {
+                "name": "Montenegro",
+                "flag": "🇲🇪",
+                "emergency": "112",
+                "police": "122",
+                "fire": "123",
+                "medical": "124",
+                "coords": [42.7087, 19.3744]
+            },
+            "NL": {
+                "name": "Netherlands",
+                "flag": "🇳🇱",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [52.1326, 5.2913]
+            },
+            "MK": {
+                "name": "North Macedonia",
+                "flag": "🇲🇰",
+                "emergency": "112",
+                "police": "192",
+                "fire": "193",
+                "medical": "194",
+                "coords": [41.6086, 21.7453]
+            },
+            "NO": {
+                "name": "Norway",
+                "flag": "🇳🇴",
+                "emergency": "112",
+                "police": "112",
+                "fire": "110",
+                "medical": "113",
+                "coords": [60.4720, 8.4689]
+            },
+            "PL": {
+                "name": "Poland",
+                "flag": "🇵🇱",
+                "emergency": "112",
+                "police": "997",
+                "fire": "998",
+                "medical": "999",
+                "coords": [51.9194, 19.1451]
+            },
+            "PT": {
+                "name": "Portugal",
+                "flag": "🇵🇹",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [39.3999, -8.2245]
+            },
+            "RO": {
+                "name": "Romania",
+                "flag": "🇷🇴",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [45.9432, 24.9668]
+            },
+            "RU": {
+                "name": "Russia",
+                "flag": "🇷🇺",
+                "emergency": "112",
+                "police": "102",
+                "fire": "101",
+                "medical": "103",
+                "coords": [61.5240, 105.3188]
+            },
+            "SM": {
+                "name": "San Marino",
+                "flag": "🇸🇲",
+                "emergency": "113",
+                "police": "113",
+                "fire": "115",
+                "medical": "118",
+                "coords": [43.9424, 12.4578]
+            },
+            "RS": {
+                "name": "Serbia",
+                "flag": "🇷🇸",
+                "emergency": "112",
+                "police": "192",
+                "fire": "193",
+                "medical": "194",
+                "coords": [44.0165, 21.0059]
+            },
+            "SK": {
+                "name": "Slovakia",
+                "flag": "🇸🇰",
+                "emergency": "112",
+                "police": "158",
+                "fire": "150",
+                "medical": "155",
+                "coords": [48.6690, 19.6990]
+            },
+            "SI": {
+                "name": "Slovenia",
+                "flag": "🇸🇮",
+                "emergency": "112",
+                "police": "113",
+                "fire": "112",
+                "medical": "112",
+                "coords": [46.1512, 14.9955]
+            },
+            "ES": {
+                "name": "Spain",
+                "flag": "🇪🇸",
+                "emergency": "112",
+                "police": "091",
+                "fire": "080",
+                "medical": "061",
+                "coords": [40.4637, -3.7492]
+            },
+            "SE": {
+                "name": "Sweden",
+                "flag": "🇸🇪",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [60.1282, 18.6435]
+            },
+            "CH": {
+                "name": "Switzerland",
+                "flag": "🇨🇭",
+                "emergency": "112",
+                "police": "117",
+                "fire": "118",
+                "medical": "144",
+                "coords": [46.8182, 8.2275]
+            },
+            "TR": {
+                "name": "Turkey",
+                "flag": "🇹🇷",
+                "emergency": "112",
+                "police": "112",
+                "fire": "112",
+                "medical": "112",
+                "coords": [38.9637, 35.2433]
+            },
+            "UA": {
+                "name": "Ukraine",
+                "flag": "🇺🇦",
+                "emergency": "112",
+                "police": "102",
+                "fire": "101",
+                "medical": "103",
+                "coords": [48.3794, 31.1656]
+            },
+            "GB": {
+                "name": "United Kingdom",
+                "flag": "🇬🇧",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [55.3781, -3.4360]
+            },
+            "VA": {
+                "name": "Vatican City",
+                "flag": "🇻🇦",
+                "emergency": "112",
+                "police": "113",
+                "fire": "115",
+                "medical": "118",
+                "coords": [41.9029, 12.4534]
+            },
+            "AS": {
+                "name": "American Samoa",
+                "flag": "🇦🇸",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [-14.2710, -170.1322]
+            },
+            "AU": {
+                "name": "Australia",
+                "flag": "🇦🇺",
+                "emergency": "000",
+                "police": "000",
+                "fire": "000",
+                "medical": "000",
+                "coords": [-25.2744, 133.7751]
+            },
+            "CK": {
+                "name": "Cook Islands",
+                "flag": "🇨🇰",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [-21.2367, -159.7777]
+            },
+            "FJ": {
+                "name": "Fiji",
+                "flag": "🇫🇯",
+                "emergency": "911",
+                "police": "917",
+                "fire": "910",
+                "medical": "911",
+                "coords": [-17.7134, 178.0650]
+            },
+            "PF": {
+                "name": "French Polynesia",
+                "flag": "🇵🇫",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [-17.6797, -149.4068]
+            },
+            "GU": {
+                "name": "Guam",
+                "flag": "🇬🇺",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [13.4443, 144.7937]
+            },
+            "KI": {
+                "name": "Kiribati",
+                "flag": "🇰🇮",
+                "emergency": "999",
+                "police": "192",
+                "fire": "193",
+                "medical": "194",
+                "coords": [-3.3704, -168.7340]
+            },
+            "MH": {
+                "name": "Marshall Islands",
+                "flag": "🇲🇭",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [7.1315, 171.1845]
+            },
+            "FM": {
+                "name": "Micronesia",
+                "flag": "🇫🇲",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [7.4256, 150.5508]
+            },
+            "NR": {
+                "name": "Nauru",
+                "flag": "🇳🇷",
+                "emergency": "110",
+                "police": "110",
+                "fire": "112",
+                "medical": "111",
+                "coords": [-0.5228, 166.9315]
+            },
+            "NC": {
+                "name": "New Caledonia",
+                "flag": "🇳🇨",
+                "emergency": "112",
+                "police": "17",
+                "fire": "18",
+                "medical": "15",
+                "coords": [-20.9043, 165.6180]
+            },
+            "NZ": {
+                "name": "New Zealand",
+                "flag": "🇳🇿",
+                "emergency": "111",
+                "police": "111",
+                "fire": "111",
+                "medical": "111",
+                "coords": [-40.9006, 174.8860]
+            },
+            "NU": {
+                "name": "Niue",
+                "flag": "🇳🇺",
+                "emergency": "999",
+                "police": "4333",
+                "fire": "4133",
+                "medical": "4202",
+                "coords": [-19.0544, -169.8672]
+            },
+            "MP": {
+                "name": "Northern Mariana Islands",
+                "flag": "🇲🇵",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [17.3331, 145.3844]
+            },
+            "PW": {
+                "name": "Palau",
+                "flag": "🇵🇼",
+                "emergency": "911",
+                "police": "911",
+                "fire": "911",
+                "medical": "911",
+                "coords": [7.5150, 134.5825]
+            },
+            "PG": {
+                "name": "Papua New Guinea",
+                "flag": "🇵🇬",
+                "emergency": "112",
+                "police": "112",
+                "fire": "110",
+                "medical": "111",
+                "coords": [-6.3150, 143.9555]
+            },
+            "WS": {
+                "name": "Samoa",
+                "flag": "🇼🇸",
+                "emergency": "999",
+                "police": "995",
+                "fire": "994",
+                "medical": "996",
+                "coords": [-13.7590, -172.1046]
+            },
+            "SB": {
+                "name": "Solomon Islands",
+                "flag": "🇸🇧",
+                "emergency": "999",
+                "police": "999",
+                "fire": "988",
+                "medical": "111",
+                "coords": [-9.6457, 160.1562]
+            },
+            "TK": {
+                "name": "Tokelau",
+                "flag": "🇹🇰",
+                "emergency": "2116",
+                "police": "2116",
+                "fire": "2116",
+                "medical": "2112",
+                "coords": [-8.9670, -171.8559]
+            },
+            "TO": {
+                "name": "Tonga",
+                "flag": "🇹🇴",
+                "emergency": "911",
+                "police": "922",
+                "fire": "999",
+                "medical": "933",
+                "coords": [-21.1790, -175.1982]
+            },
+            "TV": {
+                "name": "Tuvalu",
+                "flag": "🇹🇻",
+                "emergency": "911",
+                "police": "911",
+                "fire": "000",
+                "medical": "999",
+                "coords": [-7.1095, 177.6493]
+            },
+            "VU": {
+                "name": "Vanuatu",
+                "flag": "🇻🇺",
+                "emergency": "111",
+                "police": "111",
+                "fire": "113",
+                "medical": "112",
+                "coords": [-15.3767, 166.9592]
+            },
+            "WF": {
+                "name": "Wallis and Futuna",
+                "flag": "🇼🇫",
+                "emergency": "15",
+                "police": "15",
+                "fire": "15",
+                "medical": "15",
+                "coords": [-13.7687, -177.1561]
+            },
+            "AC": {
+                "name": "Ascension Island",
+                "flag": "🇦🇨",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "999",
+                "coords": [-7.9467, -14.3559]
+            },
+            "TA": {
+                "name": "Tristan da Cunha",
+                "flag": "🇹🇦",
+                "emergency": "999",
+                "police": "999",
+                "fire": "999",
+                "medical": "911",
+                "coords": [-37.1052, -12.2777]
+            }
+        };
+
+        // Initialize map
+        let map;
+        let searchInput;
+        let searchResults;
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMap();
+            initializeSearch();
+        });
+
+        function initializeMap() {
+            // Create map
+            map = L.map('worldMap', {
+                center: [20, 0],
+                zoom: 2,
+                minZoom: 2,  
+                maxZoom: 18,
+                zoomControl: true,
+                attributionControl: false,
+                preferCanvas: true,
+                maxBounds: [[-90, -180], [90, 180]],
+                maxBoundsViscosity: 1.0,
+                worldCopyJump: false
+            });
+
+            // Add light tile layer for better visibility
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Add markers for countries
+            addCountryMarkers();
+
+            // Hide loading overlay
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }, 1500);
+        }
+
+        function addCountryMarkers() {
+            Object.keys(emergencyContacts).forEach(countryCode => {
+                const country = emergencyContacts[countryCode];
+                
+                // Create custom marker
+                const marker = L.circleMarker(country.coords, {
+                    radius: 8,
+                    fillColor: '#FF375F',
+                    color: '#FF6B8A',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+
+                // Add hover effects
+                marker.on('mouseover', function() {
+                    this.setStyle({
+                        radius: 12,
+                        fillOpacity: 1
+                    });
+                });
+
+                marker.on('mouseout', function() {
+                    this.setStyle({
+                        radius: 8,
+                        fillOpacity: 0.8
+                    });
+                });
+
+                // Create popup content
+                const popupContent = createPopupContent(country);
+                marker.bindPopup(popupContent, {
+                    maxWidth: 320,
+                    className: 'custom-popup',
+                    autoPan: true,
+                    autoPanPadding: [20, 20],
+                    keepInView: true
+                });
+
+                // Open popup on click
+                marker.on('click', function() {
+                    map.setView(country.coords, 4);
+                });
+            });
+        }
+
+        function createPopupContent(country) {
+            return `
+                <div class="popup-content">
+                    <div class="popup-header">
+                        <span class="popup-flag">${country.flag}</span>
+                        <span class="popup-country">${country.name}</span>
+                    </div>
+                    <div class="emergency-numbers">
+                        <div class="emergency-item">
+                            <div class="emergency-label">
+                                <i class="fas fa-exclamation-triangle emergency-icon"></i>
+                                General Emergency
+                            </div>
+                            <div class="emergency-number">${country.emergency}</div>
+                        </div>
+                        <div class="emergency-item">
+                            <div class="emergency-label">
+                                <i class="fas fa-shield-alt emergency-icon"></i>
+                                Police
+                            </div>
+                            <div class="emergency-number">${country.police}</div>
+                        </div>
+                        <div class="emergency-item">
+                            <div class="emergency-label">
+                                <i class="fas fa-fire emergency-icon"></i>
+                                Fire Department
+                            </div>
+                            <div class="emergency-number">${country.fire}</div>
+                        </div>
+                        <div class="emergency-item">
+                            <div class="emergency-label">
+                                <i class="fas fa-heartbeat emergency-icon"></i>
+                                Medical Emergency
+                            </div>
+                            <div class="emergency-number">${country.medical}</div>
+                        </div>
+                    </div>
+                    <div class="emergency-call-button">
+                        <button class="call-button" onclick="callEmergency('${country.emergency}')">
+                            <i class="fas fa-phone"></i>
+                            Call Emergency (${country.emergency})
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeSearch() {
+            searchInput = document.getElementById('countrySearch');
+            searchResults = document.getElementById('searchResults');
+
+            searchInput.addEventListener('input', handleSearch);
+            searchInput.addEventListener('focus', handleSearch);
+            
+            // Close search results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+
+        function handleSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            if (query.length === 0) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            const matches = Object.keys(emergencyContacts).filter(countryCode => {
+                const country = emergencyContacts[countryCode];
+                return country.name.toLowerCase().includes(query) ||
+                       country.emergency.includes(query) ||
+                       country.police.includes(query) ||
+                       country.fire.includes(query) ||
+                       country.medical.includes(query);
+            });
+
+            displaySearchResults(matches);
+        }
+
+        function displaySearchResults(matches) {
+            if (matches.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item" style="color: var(--gray-400); cursor: default;">No countries found</div>';
+            } else {
+                searchResults.innerHTML = matches.slice(0, 8).map(countryCode => {
+                    const country = emergencyContacts[countryCode];
+                    return `
+                        <div class="search-result-item" onclick="selectCountry('${countryCode}')">
+                            <span class="country-flag">${country.flag}</span>
+                            <div class="country-info">
+                                <div class="country-name">${country.name}</div>
+                                <div class="country-emergency">Emergency: ${country.emergency}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            searchResults.style.display = 'block';
+        }
+
+        function selectCountry(countryCode) {
+            const country = emergencyContacts[countryCode];
+            searchResults.style.display = 'none';
+            searchInput.value = country.name;
+            
+            // Fly to country and show popup
+            map.setView(country.coords, 4);
+            
+            // Find and open the marker popup
+            map.eachLayer(layer => {
+                if (layer instanceof L.CircleMarker) {
+                    const markerLatLng = layer.getLatLng();
+                    if (Math.abs(markerLatLng.lat - country.coords[0]) < 0.1 && 
+                        Math.abs(markerLatLng.lng - country.coords[1]) < 0.1) {
+                        layer.openPopup();
+                    }
+                }
+            });
+        }
+
+        function callEmergency(number) {
+            window.location.href = `tel:${number}`;
+        }
+
+        // Update statistics animation
+        function animateStats() {
+            const countriesCount = document.getElementById('countriesCount');
+            const currentCount = Object.keys(emergencyContacts).length;
+            
+            let count = 0;
+            const target = currentCount;
+            const increment = target / 50;
+            
+            const timer = setInterval(() => {
+                count += increment;
+                if (count >= target) {
+                    count = target;
+                    clearInterval(timer);
+                }
+                countriesCount.textContent = Math.floor(count);
+            }, 50);
+        }
+
+        // Start stats animation when page loads
+        setTimeout(animateStats, 2000);
+    </script>
+</body>
+</html>

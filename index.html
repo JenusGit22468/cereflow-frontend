@@ -344,6 +344,9 @@
             font-weight: 500;
             text-decoration: none;
             transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .nav-emergency:hover {
@@ -534,6 +537,152 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: var(--gray-300);
+        }
+
+        /* Analog Clock Animation */
+        .clock-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .analog-clock {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+        }
+
+        .clock-face {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Clock markings */
+        .clock-marking {
+            position: absolute;
+            width: 2px;
+            height: 8px;
+            background: var(--gray-400);
+            left: 50%;
+            transform: translateX(-50%);
+            transform-origin: center 100px;
+        }
+
+        .clock-marking:nth-child(1) { transform: translateX(-50%) rotate(0deg); }
+        .clock-marking:nth-child(2) { transform: translateX(-50%) rotate(30deg); }
+        .clock-marking:nth-child(3) { transform: translateX(-50%) rotate(60deg); }
+        .clock-marking:nth-child(4) { transform: translateX(-50%) rotate(90deg); }
+        .clock-marking:nth-child(5) { transform: translateX(-50%) rotate(120deg); }
+        .clock-marking:nth-child(6) { transform: translateX(-50%) rotate(150deg); }
+        .clock-marking:nth-child(7) { transform: translateX(-50%) rotate(180deg); }
+        .clock-marking:nth-child(8) { transform: translateX(-50%) rotate(210deg); }
+        .clock-marking:nth-child(9) { transform: translateX(-50%) rotate(240deg); }
+        .clock-marking:nth-child(10) { transform: translateX(-50%) rotate(270deg); }
+        .clock-marking:nth-child(11) { transform: translateX(-50%) rotate(300deg); }
+        .clock-marking:nth-child(12) { transform: translateX(-50%) rotate(330deg); }
+
+        .clock-marking:nth-child(1),
+        .clock-marking:nth-child(4),
+        .clock-marking:nth-child(7),
+        .clock-marking:nth-child(10) {
+            height: 12px;
+            width: 3px;
+            background: var(--gray-300);
+        }
+
+        /* Clock center */
+        .clock-center {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--red);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(255, 55, 95, 0.5);
+        }
+
+        /* Clock hands */
+        .clock-hand {
+            position: absolute;
+            background: var(--pure-white);
+            transform-origin: center bottom;
+            bottom: 50%;
+            left: 50%;
+            border-radius: 2px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .hour-hand {
+            width: 4px;
+            height: 50px;
+            transform: translateX(-50%) rotate(0deg);
+            animation: rotateHour 120s linear infinite;
+        }
+
+        .minute-hand {
+            width: 3px;
+            height: 70px;
+            transform: translateX(-50%) rotate(0deg);
+            animation: rotateMinute 10s linear infinite;
+        }
+
+        .second-hand {
+            width: 1px;
+            height: 80px;
+            background: var(--red);
+            transform: translateX(-50%) rotate(0deg);
+            animation: rotateSecond 1s steps(60) infinite;
+            box-shadow: 0 0 8px rgba(255, 55, 95, 0.5);
+        }
+
+        @keyframes rotateHour {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        @keyframes rotateMinute {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        @keyframes rotateSecond {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        /* Pulse effect around clock */
+        .clock-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--red);
+            border-radius: 50%;
+            opacity: 0;
+            animation: pulse 2s ease-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.1);
+                opacity: 0;
+            }
         }
 
         /* Stats Section */
@@ -1466,6 +1615,28 @@
                 grid-template-columns: 1fr;
             }
             
+            /* Analog clock mobile styles */
+            .analog-clock {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .clock-marking {
+                transform-origin: center 75px;
+            }
+            
+            .hour-hand {
+                height: 40px;
+            }
+            
+            .minute-hand {
+                height: 55px;
+            }
+            
+            .second-hand {
+                height: 65px;
+            }
+            
             .golden-hour-stats {
                 grid-template-columns: 1fr;
                 gap: 30px;
@@ -1552,8 +1723,8 @@
             <ul class="nav-menu">
                 <li><a href="#fast" class="nav-link">F.A.S.T Protocol</a></li>
                 <li><a href="#find-care" class="nav-link">Find Care</a></li>
-                <li><a href="#resources" class="nav-link">Resources</a></li>
-                <li><a href="tel:911" class="nav-emergency">Emergency</a></li>
+                <li><a href="https://ctrlzstroke.com/education" class="nav-link">Education</a></li>
+                <li><a href="https://ctrlzstroke.com/emergency" class="nav-emergency">Emergency</a></li>
             </ul>
             <button class="mobile-menu-button" onclick="toggleMobileMenu()">
                 <i class="fas fa-bars" id="mobileMenuIcon"></i>
@@ -1566,8 +1737,8 @@
         <div class="mobile-menu-content">
             <a href="#fast" class="mobile-menu-item" onclick="closeMobileMenu()">F.A.S.T Protocol</a>
             <a href="#find-care" class="mobile-menu-item" onclick="closeMobileMenu()">Find Care</a>
-            <a href="#resources" class="mobile-menu-item" onclick="closeMobileMenu()">Resources</a>
-            <a href="tel:911" class="mobile-menu-emergency" onclick="closeMobileMenu()">Emergency</a>
+            <a href="https://ctrlzstroke.com/education" class="mobile-menu-item" onclick="closeMobileMenu()">Education</a>
+            <a href="https://ctrlzstroke.com/emergency" class="mobile-menu-emergency" onclick="closeMobileMenu()">Emergency</a>
         </div>
     </div>
 
@@ -1603,6 +1774,37 @@
         <div class="stats-container">
             <p class="section-eyebrow" style="margin-bottom: 16px;">Real-Time Impact</p>
             <h2 class="section-headline" style="font-size: 48px; margin-bottom: 60px;">While You're Reading This Page</h2>
+            
+            <!-- Analog Clock Animation -->
+            <div class="clock-container">
+                <div class="analog-clock">
+                    <div class="clock-pulse"></div>
+                    <div class="clock-face">
+                        <!-- Hour markings -->
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        <div class="clock-marking"></div>
+                        
+                        <!-- Clock hands -->
+                        <div class="clock-hand hour-hand"></div>
+                        <div class="clock-hand minute-hand"></div>
+                        <div class="clock-hand second-hand"></div>
+                        
+                        <!-- Center dot -->
+                        <div class="clock-center"></div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-number" id="strokeCount">0</div>
@@ -1749,7 +1951,7 @@
     <!-- Find Care Section -->
     <section class="find-care" id="find-care">
         <div class="find-care-container">
-            <p class="section-eyebrow">Instant Access</p>
+            <p class="section-eyebrow">AI-Powered Search Tool</p>
             <h2 class="section-headline">Find Stroke Care Near You.</h2>
             <div class="search-card">
                 <form id="searchForm">
@@ -1952,6 +2154,7 @@
                 lastScrollY = window.scrollY;
             });
 
+            
             // Real-time counter with accurate statistics
             var seconds = 0;
             var secondsPerStroke = 40;

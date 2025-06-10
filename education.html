@@ -197,7 +197,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 8888;
             transition: all 0.3s ease;
-            transform: translateX(100%);
+            transform: translateX(400px);
             opacity: 0;
         }
 
@@ -251,6 +251,20 @@
             max-height: 300px;
             overflow-y: auto;
             margin-bottom: 12px;
+        }
+
+        .language-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .language-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .language-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
         }
 
         .language-option {
@@ -308,6 +322,7 @@
         .quick-lang-btn:hover {
             background: var(--blue);
             color: var(--pure-white);
+            border-color: var(--blue);
         }
 
         /* Hero Section - Enhanced */
@@ -587,7 +602,7 @@
         }
 
         .info-card:hover::before {
-            opacity: 1;
+            opacity: 0.5;
         }
 
         .info-icon {
@@ -693,7 +708,7 @@
         }
 
         .fast-card:hover::before {
-            opacity: 1;
+            opacity: 0.5;
         }
 
         .fast-letter {
@@ -793,6 +808,10 @@
         @media (max-width: 768px) {
             .nav-content {
                 padding: 0 16px;
+            }
+
+            .nav-menu {
+                display: none;
             }
 
             .hero {
@@ -899,13 +918,34 @@
         .status-notification.info {
             background: var(--blue);
         }
+
+        /* Google Translate Widget Styling */
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+
+        body {
+            top: 0px !important;
+        }
+
+        #google_translate_element {
+            display: none;
+        }
+
+        .goog-te-gadget {
+            display: none !important;
+        }
+
+        .goog-te-combo {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav id="navbar">
         <div class="nav-content">
-            <a href="index.html" class="nav-logo">
+            <a href="#" class="nav-logo">
                 <span class="keyboard-keys">
                     <span class="key">Ctrl</span>
                     <span class="plus-symbol">+</span>
@@ -914,11 +954,11 @@
                 <span class="logo-text">Stroke</span>
             </a>
             <ul class="nav-menu">
-                <li><a href="index.html" class="nav-link">Home</a></li>
-                <li><a href="#education" class="nav-link">Education</a></li>
-                <li><a href="#fast-protocol" class="nav-link">F.A.S.T Protocol</a></li>
-                <li><a href="#prevention" class="nav-link">Prevention</a></li>
-                <li><a href="tel:911" class="nav-emergency">🚨 Emergency</a></li>
+                <li><a href="#hero" class="nav-link" data-translate="nav.home">Home</a></li>
+                <li><a href="#education" class="nav-link" data-translate="nav.education">Education</a></li>
+                <li><a href="#fast-protocol" class="nav-link" data-translate="nav.fast">F.A.S.T Protocol</a></li>
+                <li><a href="#prevention" class="nav-link" data-translate="nav.prevention">Prevention</a></li>
+                <li><a href="tel:911" class="nav-emergency" data-translate="nav.emergency">🚨 Emergency</a></li>
             </ul>
         </div>
     </nav>
@@ -931,7 +971,7 @@
     <div class="translation-controls" id="translationControls">
         <div class="language-selector-dropdown">
             <h4 style="color: var(--pure-white); margin-bottom: 16px; font-size: 16px; font-weight: 600;">
-                <i class="fas fa-globe"></i> Translate to Any Language
+                <i class="fas fa-globe"></i> <span data-translate="translate.title">Translate to Any Language</span>
             </h4>
             
             <input type="text" class="language-search" id="languageSearch" placeholder="Search languages..." onkeyup="filterLanguages()">
@@ -944,19 +984,19 @@
                 <button class="quick-lang-btn" onclick="quickTranslate('es')">🇪🇸 ES</button>
                 <button class="quick-lang-btn" onclick="quickTranslate('fr')">🇫🇷 FR</button>
                 <button class="quick-lang-btn" onclick="quickTranslate('de')">🇩🇪 DE</button>
-                <button class="quick-lang-btn" onclick="quickTranslate('zh-cn')">🇨🇳 中文</button>
+                <button class="quick-lang-btn" onclick="quickTranslate('zh-CN')">🇨🇳 中文</button>
                 <button class="quick-lang-btn" onclick="quickTranslate('ar')">🇸🇦 AR</button>
                 <button class="quick-lang-btn" onclick="quickTranslate('hi')">🇮🇳 हिं</button>
             </div>
             
             <button onclick="resetToOriginal()" style="width: 100%; margin-top: 12px; padding: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: var(--pure-white); cursor: pointer;">
-                <i class="fas fa-undo"></i> Reset to English
+                <i class="fas fa-undo"></i> <span data-translate="translate.reset">Reset to English</span>
             </button>
         </div>
     </div>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="hero">
         <div class="hero-background"></div>
         <div class="floating-elements">
             <div class="floating-element"></div>
@@ -964,11 +1004,11 @@
             <div class="floating-element"></div>
         </div>
         <div class="hero-content">
-            <h1 class="hero-headline">
+            <h1 class="hero-headline" data-translate="hero.title">
                 Stroke Education<br>
-                <span class="hero-headline-accent">for Everyone, Everywhere</span>
+                <span class="hero-headline-accent" data-translate="hero.subtitle">for Everyone, Everywhere</span>
             </h1>
-            <p class="hero-subheadline">
+            <p class="hero-subheadline" data-translate="hero.description">
                 Comprehensive stroke awareness in 100+ languages. Professional medical content instantly translated to save lives worldwide.
             </p>
         </div>
@@ -983,8 +1023,8 @@
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <div class="emergency-text">
-                        <h3 class="emergency-title">🚨 Emergency: Call 911 Immediately</h3>
-                        <p class="emergency-description">
+                        <h3 class="emergency-title" data-translate="emergency.title">🚨 Emergency: Call 911 Immediately</h3>
+                        <p class="emergency-description" data-translate="emergency.description">
                             If you suspect someone is having a stroke, call emergency services immediately. Every minute counts - during a stroke, the brain loses 1.9 million neurons per minute. Time is brain. Act F.A.S.T.
                         </p>
                     </div>
@@ -993,9 +1033,9 @@
 
             <!-- Section Header -->
             <div class="section-header">
-                <p class="section-eyebrow">Complete Guide</p>
-                <h2 class="section-headline">Understanding Stroke</h2>
-                <p class="section-description">
+                <p class="section-eyebrow" data-translate="education.eyebrow">Complete Guide</p>
+                <h2 class="section-headline" data-translate="education.headline">Understanding Stroke</h2>
+                <p class="section-description" data-translate="education.description">
                     Comprehensive medical information sourced from leading health organizations worldwide
                 </p>
             </div>
@@ -1006,15 +1046,15 @@
                     <div class="info-icon">
                         <i class="fas fa-brain"></i>
                     </div>
-                    <h3 class="info-title">What is a Stroke?</h3>
-                    <p class="info-description">
+                    <h3 class="info-title" data-translate="info.what.title">What is a Stroke?</h3>
+                    <p class="info-description" data-translate="info.what.description">
                         A stroke occurs when blood flow to part of the brain is interrupted or reduced, preventing brain tissue from getting oxygen and nutrients. Brain cells begin to die within minutes.
                     </p>
                     <ul class="info-list">
-                        <li><strong>Ischemic Stroke (87%):</strong> Caused by blocked arteries in the brain</li>
-                        <li><strong>Hemorrhagic Stroke (13%):</strong> Caused by bleeding in or around the brain</li>
-                        <li><strong>TIA (Mini-Stroke):</strong> Temporary blockage that serves as a warning sign</li>
-                        <li><strong>Silent Stroke:</strong> No obvious symptoms but causes brain damage</li>
+                        <li data-translate="info.what.item1"><strong>Ischemic Stroke (87%):</strong> Caused by blocked arteries in the brain</li>
+                        <li data-translate="info.what.item2"><strong>Hemorrhagic Stroke (13%):</strong> Caused by bleeding in or around the brain</li>
+                        <li data-translate="info.what.item3"><strong>TIA (Mini-Stroke):</strong> Temporary blockage that serves as a warning sign</li>
+                        <li data-translate="info.what.item4"><strong>Silent Stroke:</strong> No obvious symptoms but causes brain damage</li>
                     </ul>
                 </div>
 
@@ -1022,17 +1062,17 @@
                     <div class="info-icon">
                         <i class="fas fa-heartbeat"></i>
                     </div>
-                    <h3 class="info-title">Risk Factors</h3>
-                    <p class="info-description">
+                    <h3 class="info-title" data-translate="info.risk.title">Risk Factors</h3>
+                    <p class="info-description" data-translate="info.risk.description">
                         Understanding your risk factors is crucial for prevention. Many risk factors can be controlled through lifestyle changes and medical management.
                     </p>
                     <ul class="info-list">
-                        <li><strong>High Blood Pressure:</strong> The #1 controllable risk factor</li>
-                        <li><strong>Smoking & Tobacco:</strong> Doubles stroke risk</li>
-                        <li><strong>Diabetes:</strong> Increases risk 2-4 times</li>
-                        <li><strong>High Cholesterol:</strong> Contributes to artery blockage</li>
-                        <li><strong>Obesity:</strong> Increases multiple risk factors</li>
-                        <li><strong>Physical Inactivity:</strong> Weakens cardiovascular system</li>
+                        <li data-translate="info.risk.item1"><strong>High Blood Pressure:</strong> The #1 controllable risk factor</li>
+                        <li data-translate="info.risk.item2"><strong>Smoking & Tobacco:</strong> Doubles stroke risk</li>
+                        <li data-translate="info.risk.item3"><strong>Diabetes:</strong> Increases risk 2-4 times</li>
+                        <li data-translate="info.risk.item4"><strong>High Cholesterol:</strong> Contributes to artery blockage</li>
+                        <li data-translate="info.risk.item5"><strong>Obesity:</strong> Increases multiple risk factors</li>
+                        <li data-translate="info.risk.item6"><strong>Physical Inactivity:</strong> Weakens cardiovascular system</li>
                     </ul>
                 </div>
 
@@ -1040,17 +1080,17 @@
                     <div class="info-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h3 class="info-title">Prevention Strategies</h3>
-                    <p class="info-description">
+                    <h3 class="info-title" data-translate="info.prevention.title">Prevention Strategies</h3>
+                    <p class="info-description" data-translate="info.prevention.description">
                         80% of strokes are preventable through lifestyle modifications and proper medical care. Small changes can make a significant difference.
                     </p>
                     <ul class="info-list">
-                        <li><strong>Monitor Blood Pressure:</strong> Keep it below 120/80 mmHg</li>
-                        <li><strong>Exercise Regularly:</strong> 150 minutes moderate activity per week</li>
-                        <li><strong>Healthy Diet:</strong> Mediterranean or DASH diet patterns</li>
-                        <li><strong>Don't Smoke:</strong> Quit smoking and avoid secondhand smoke</li>
-                        <li><strong>Limit Alcohol:</strong> No more than 1-2 drinks per day</li>
-                        <li><strong>Manage Stress:</strong> Practice relaxation techniques</li>
+                        <li data-translate="info.prevention.item1"><strong>Monitor Blood Pressure:</strong> Keep it below 120/80 mmHg</li>
+                        <li data-translate="info.prevention.item2"><strong>Exercise Regularly:</strong> 150 minutes moderate activity per week</li>
+                        <li data-translate="info.prevention.item3"><strong>Healthy Diet:</strong> Mediterranean or DASH diet patterns</li>
+                        <li data-translate="info.prevention.item4"><strong>Don't Smoke:</strong> Quit smoking and avoid secondhand smoke</li>
+                        <li data-translate="info.prevention.item5"><strong>Limit Alcohol:</strong> No more than 1-2 drinks per day</li>
+                        <li data-translate="info.prevention.item6"><strong>Manage Stress:</strong> Practice relaxation techniques</li>
                     </ul>
                 </div>
 
@@ -1058,17 +1098,17 @@
                     <div class="info-icon">
                         <i class="fas fa-eye"></i>
                     </div>
-                    <h3 class="info-title">Warning Signs</h3>
-                    <p class="info-description">
+                    <h3 class="info-title" data-translate="info.warning.title">Warning Signs</h3>
+                    <p class="info-description" data-translate="info.warning.description">
                         Recognizing stroke symptoms quickly can save lives and reduce disability. Learn the signs and act immediately.
                     </p>
                     <ul class="info-list">
-                        <li><strong>Face Drooping:</strong> Uneven or numb face, lopsided smile</li>
-                        <li><strong>Arm Weakness:</strong> One arm drifts downward</li>
-                        <li><strong>Speech Difficulty:</strong> Slurred or strange speech</li>
-                        <li><strong>Sudden Vision Loss:</strong> In one or both eyes</li>
-                        <li><strong>Severe Headache:</strong> Sudden, worst headache ever</li>
-                        <li><strong>Balance Problems:</strong> Sudden dizziness or coordination loss</li>
+                        <li data-translate="info.warning.item1"><strong>Face Drooping:</strong> Uneven or numb face, lopsided smile</li>
+                        <li data-translate="info.warning.item2"><strong>Arm Weakness:</strong> One arm drifts downward</li>
+                        <li data-translate="info.warning.item3"><strong>Speech Difficulty:</strong> Slurred or strange speech</li>
+                        <li data-translate="info.warning.item4"><strong>Sudden Vision Loss:</strong> In one or both eyes</li>
+                        <li data-translate="info.warning.item5"><strong>Severe Headache:</strong> Sudden, worst headache ever</li>
+                        <li data-translate="info.warning.item6"><strong>Balance Problems:</strong> Sudden dizziness or coordination loss</li>
                     </ul>
                 </div>
 
@@ -1076,17 +1116,17 @@
                     <div class="info-icon">
                         <i class="fas fa-clock"></i>
                     </div>
-                    <h3 class="info-title">Time is Brain</h3>
-                    <p class="info-description">
+                    <h3 class="info-title" data-translate="info.time.title">Time is Brain</h3>
+                    <p class="info-description" data-translate="info.time.description">
                         Every second counts during a stroke. Fast treatment can minimize brain damage and improve recovery outcomes significantly.
                     </p>
                     <ul class="info-list">
-                        <li><strong>1.9 Million:</strong> Neurons lost per minute during stroke</li>
-                        <li><strong>3-4.5 Hours:</strong> Window for clot-busting drugs</li>
-                        <li><strong>6-24 Hours:</strong> Extended window for some patients</li>
-                        <li><strong>90 Minutes:</strong> Optimal treatment time for best outcomes</li>
-                        <li><strong>Golden Hour:</strong> First hour is most critical</li>
-                        <li><strong>Call 911:</strong> Fastest way to get expert stroke care</li>
+                        <li data-translate="info.time.item1"><strong>1.9 Million:</strong> Neurons lost per minute during stroke</li>
+                        <li data-translate="info.time.item2"><strong>3-4.5 Hours:</strong> Window for clot-busting drugs</li>
+                        <li data-translate="info.time.item3"><strong>6-24 Hours:</strong> Extended window for some patients</li>
+                        <li data-translate="info.time.item4"><strong>90 Minutes:</strong> Optimal treatment time for best outcomes</li>
+                        <li data-translate="info.time.item5"><strong>Golden Hour:</strong> First hour is most critical</li>
+                        <li data-translate="info.time.item6"><strong>Call 911:</strong> Fastest way to get expert stroke care</li>
                     </ul>
                 </div>
 
@@ -1094,17 +1134,17 @@
                     <div class="info-icon">
                         <i class="fas fa-user-md"></i>
                     </div>
-                    <h3 class="info-title">Treatment & Recovery</h3>
-                    <p class="info-description">
+                    <h3 class="info-title" data-translate="info.treatment.title">Treatment & Recovery</h3>
+                    <p class="info-description" data-translate="info.treatment.description">
                         Modern stroke treatment has revolutionized outcomes. With proper care, many stroke survivors can return to normal or near-normal function.
                     </p>
                     <ul class="info-list">
-                        <li><strong>Clot Removal:</strong> Mechanical thrombectomy procedures</li>
-                        <li><strong>Medications:</strong> tPA and other clot-busting drugs</li>
-                        <li><strong>Rehabilitation:</strong> Physical, occupational, speech therapy</li>
-                        <li><strong>Stroke Centers:</strong> Specialized care facilities</li>
-                        <li><strong>Recovery Timeline:</strong> Varies from weeks to years</li>
-                        <li><strong>Neuroplasticity:</strong> Brain's ability to rewire itself</li>
+                        <li data-translate="info.treatment.item1"><strong>Clot Removal:</strong> Mechanical thrombectomy procedures</li>
+                        <li data-translate="info.treatment.item2"><strong>Medications:</strong> tPA and other clot-busting drugs</li>
+                        <li data-translate="info.treatment.item3"><strong>Rehabilitation:</strong> Physical, occupational, speech therapy</li>
+                        <li data-translate="info.treatment.item4"><strong>Stroke Centers:</strong> Specialized care facilities</li>
+                        <li data-translate="info.treatment.item5"><strong>Recovery Timeline:</strong> Varies from weeks to years</li>
+                        <li data-translate="info.treatment.item6"><strong>Neuroplasticity:</strong> Brain's ability to rewire itself</li>
                     </ul>
                 </div>
             </div>
@@ -1116,9 +1156,9 @@
         <div class="content-container">
             <div class="fast-section">
                 <div class="section-header">
-                    <p class="section-eyebrow">Recognition Protocol</p>
-                    <h2 class="section-headline">Learn B.E.F.A.S.T. - Save Lives</h2>
-                    <p class="section-description">
+                    <p class="section-eyebrow" data-translate="fast.eyebrow">Recognition Protocol</p>
+                    <h2 class="section-headline" data-translate="fast.headline">Learn B.E.F.A.S.T. - Save Lives</h2>
+                    <p class="section-description" data-translate="fast.description">
                         The enhanced stroke recognition tool that can help you identify stroke symptoms quickly and accurately
                     </p>
                 </div>
@@ -1126,48 +1166,48 @@
                 <div class="fast-cards">
                     <div class="fast-card">
                         <span class="fast-letter">B</span>
-                        <h3 class="fast-title">Balance</h3>
-                        <p class="fast-description">
+                        <h3 class="fast-title" data-translate="fast.b.title">Balance</h3>
+                        <p class="fast-description" data-translate="fast.b.description">
                             Sudden loss of balance, coordination, or dizziness. Is the person having trouble walking or staying upright?
                         </p>
                     </div>
                     
                     <div class="fast-card">
                         <span class="fast-letter">E</span>
-                        <h3 class="fast-title">Eyes</h3>
-                        <p class="fast-description">
+                        <h3 class="fast-title" data-translate="fast.e.title">Eyes</h3>
+                        <p class="fast-description" data-translate="fast.e.description">
                             Sudden vision loss or changes in one or both eyes. Double vision or visual field cuts.
                         </p>
                     </div>
                     
                     <div class="fast-card">
                         <span class="fast-letter">F</span>
-                        <h3 class="fast-title">Face</h3>
-                        <p class="fast-description">
+                        <h3 class="fast-title" data-translate="fast.f.title">Face</h3>
+                        <p class="fast-description" data-translate="fast.f.description">
                             Ask the person to smile. Does one side of the face droop? Is the smile uneven or lopsided?
                         </p>
                     </div>
                     
                     <div class="fast-card">
                         <span class="fast-letter">A</span>
-                        <h3 class="fast-title">Arms</h3>
-                        <p class="fast-description">
+                        <h3 class="fast-title" data-translate="fast.a.title">Arms</h3>
+                        <p class="fast-description" data-translate="fast.a.description">
                             Ask the person to raise both arms. Does one arm drift downward? Is there weakness or numbness?
                         </p>
                     </div>
                     
                     <div class="fast-card">
                         <span class="fast-letter">S</span>
-                        <h3 class="fast-title">Speech</h3>
-                        <p class="fast-description">
+                        <h3 class="fast-title" data-translate="fast.s.title">Speech</h3>
+                        <p class="fast-description" data-translate="fast.s.description">
                             Ask the person to repeat a simple phrase. Is speech slurred, garbled, or hard to understand?
                         </p>
                     </div>
                     
                     <div class="fast-card">
                         <span class="fast-letter">T</span>
-                        <h3 class="fast-title">Time</h3>
-                        <p class="fast-description">
+                        <h3 class="fast-title" data-translate="fast.t.title">Time</h3>
+                        <p class="fast-description" data-translate="fast.t.description">
                             If any signs are present, note the time and call 911 immediately. Every minute matters!
                         </p>
                     </div>
@@ -1181,38 +1221,63 @@
         <div class="content-container">
             <div class="stats-section">
                 <div class="section-header">
-                    <p class="section-eyebrow">Global Impact</p>
-                    <h2 class="section-headline">Stroke by the Numbers</h2>
-                    <p class="section-description">
+                    <p class="section-eyebrow" data-translate="stats.eyebrow">Global Impact</p>
+                    <h2 class="section-headline" data-translate="stats.headline">Stroke by the Numbers</h2>
+                    <p class="section-description" data-translate="stats.description">
                         Understanding the global burden of stroke and the importance of awareness
                     </p>
                 </div>
 
                 <div class="stats-grid">
                     <div class="stat-item">
-                        <span class="stat-number">15M</span>
-                        <span class="stat-label">People suffer strokes worldwide annually</span>
+                        <span class="stat-number">12M+</span>
+                        <span class="stat-label" data-translate="stats.item1">People suffer first strokes worldwide annually</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">6M</span>
-                        <span class="stat-label">Deaths from stroke each year</span>
+                        <span class="stat-number">6.5M</span>
+                        <span class="stat-label" data-translate="stats.item2">Deaths from stroke each year globally</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">80%</span>
-                        <span class="stat-label">Of strokes are preventable</span>
+                        <span class="stat-label" data-translate="stats.item3">Of strokes are preventable</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">40</span>
-                        <span class="stat-label">Seconds between strokes in the US</span>
+                        <span class="stat-label" data-translate="stats.item4">Seconds between strokes in the US</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">3x</span>
-                        <span class="stat-label">Better recovery with fast treatment</span>
+                        <span class="stat-number">795K</span>
+                        <span class="stat-label" data-translate="stats.item5">Strokes occur annually in the US</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">#5</span>
-                        <span class="stat-label">Leading cause of death globally</span>
+                        <span class="stat-number">#2</span>
+                        <span class="stat-label" data-translate="stats.item6">Leading cause of death globally</span>
                     </div>
+                </div>
+                
+                <!-- Citations Section -->
+                <div style="margin-top: 32px; padding: 24px; background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h4 style="color: var(--blue-light); font-size: 16px; margin-bottom: 16px; font-weight: 600;">
+                        <i class="fas fa-quote-left"></i> Data Sources
+                    </h4>
+                    <ul style="list-style: none; padding: 0; font-size: 14px; color: var(--gray-400); line-height: 1.8;">
+                        <li style="margin-bottom: 8px;">
+                            <i class="fas fa-circle" style="font-size: 6px; margin-right: 8px;"></i>
+                            World Stroke Organization: Global Stroke Fact Sheet 2025 - Published in <em>International Journal of Stroke</em>, 2025
+                        </li>
+                        <li style="margin-bottom: 8px;">
+                            <i class="fas fa-circle" style="font-size: 6px; margin-right: 8px;"></i>
+                            CDC Stroke Facts - Updated October 24, 2024
+                        </li>
+                        <li style="margin-bottom: 8px;">
+                            <i class="fas fa-circle" style="font-size: 6px; margin-right: 8px;"></i>
+                            American Heart Association: 2024 Heart Disease and Stroke Statistics
+                        </li>
+                        <li>
+                            <i class="fas fa-circle" style="font-size: 6px; margin-right: 8px;"></i>
+                            WHO Global Burden of Disease Study 2021, published in <em>The Lancet Neurology</em> 2024
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -1223,15 +1288,15 @@
         <div class="content-container">
             <div class="interactive-demo">
                 <div class="section-header">
-                    <p class="section-eyebrow">Interactive Learning</p>
-                    <h2 class="section-headline">Test Your Knowledge</h2>
-                    <p class="section-description">
+                    <p class="section-eyebrow" data-translate="demo.eyebrow">Interactive Learning</p>
+                    <h2 class="section-headline" data-translate="demo.headline">Test Your Knowledge</h2>
+                    <p class="section-description" data-translate="demo.description">
                         Practice identifying stroke symptoms with our interactive assessment tool
                     </p>
                 </div>
                 
                 <button class="demo-button" onclick="startStrokeAssessment()">
-                    <i class="fas fa-play"></i> Start F.A.S.T Assessment
+                    <i class="fas fa-play"></i> <span data-translate="demo.button">Start F.A.S.T Assessment</span>
                 </button>
             </div>
         </div>
@@ -1243,28 +1308,23 @@
     </div>
 
     <!-- Google Translate Widget -->
-    <div id="google_translate_element" style="display: none;"></div>
+    <div id="google_translate_element"></div>
+
+    <script type="text/javascript">
+        // Google Translate Widget initialization
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'af,sq,am,ar,hy,az,eu,be,bn,bs,bg,ca,ceb,ny,zh-CN,zh-TW,co,hr,cs,da,nl,en,eo,et,tl,fi,fr,fy,gl,ka,de,el,gu,ht,ha,haw,iw,hi,hmn,hu,is,ig,id,ga,it,ja,jw,kn,kk,km,ko,ku,ky,lo,la,lv,lt,lb,mk,mg,ms,ml,mt,mi,mr,mn,my,ne,no,ps,fa,pl,pt,pa,ro,ru,sm,gd,sr,st,sn,sd,si,sk,sl,so,es,su,sw,sv,tg,ta,te,th,tr,uk,ur,uz,vi,cy,xh,yi,yo,zu',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
-        // TRANSLATION API CONFIGURATION
-        // Option 1: Google Translate Widget (FREE - No API key needed)
-        // Currently active - works without any setup
-        
-        // Option 2: Google Cloud Translation API (PAID - Better control)
-        const GOOGLE_TRANSLATE_API_KEY = 'AIzaSyAjobYfwrqcKsGBEMhgeMqg22KCcSL3erU'; // Add your API key here
-        const GOOGLE_TRANSLATE_API_URL = 'https://translation.googleapis.com/language/translate/v2';
-        
-        // Option 3: Other APIs
-        const MICROSOFT_TRANSLATOR_KEY = 'YOUR_MICROSOFT_KEY_HERE';
-        const DEEPL_API_KEY = 'YOUR_DEEPL_KEY_HERE';
-        
-        let useCloudAPI = false; // Set to true to use Google Cloud API instead of widget
-
-        // UNIVERSAL TRANSLATION SYSTEM  
-        let currentLanguage = 'en';
-        let translationActive = false;
-        
-        // Comprehensive language database with 100+ languages
+        // Language configurations
         const languages = [
             {code: 'en', name: 'English', native: 'English', flag: '🇺🇸'},
             {code: 'es', name: 'Spanish', native: 'Español', flag: '🇪🇸'},
@@ -1273,8 +1333,8 @@
             {code: 'it', name: 'Italian', native: 'Italiano', flag: '🇮🇹'},
             {code: 'pt', name: 'Portuguese', native: 'Português', flag: '🇵🇹'},
             {code: 'ru', name: 'Russian', native: 'Русский', flag: '🇷🇺'},
-            {code: 'zh-cn', name: 'Chinese (Simplified)', native: '简体中文', flag: '🇨🇳'},
-            {code: 'zh-tw', name: 'Chinese (Traditional)', native: '繁體中文', flag: '🇹🇼'},
+            {code: 'zh-CN', name: 'Chinese (Simplified)', native: '简体中文', flag: '🇨🇳'},
+            {code: 'zh-TW', name: 'Chinese (Traditional)', native: '繁體中文', flag: '🇹🇼'},
             {code: 'ja', name: 'Japanese', native: '日本語', flag: '🇯🇵'},
             {code: 'ko', name: 'Korean', native: '한국어', flag: '🇰🇷'},
             {code: 'ar', name: 'Arabic', native: 'العربية', flag: '🇸🇦'},
@@ -1297,7 +1357,7 @@
             {code: 'bg', name: 'Bulgarian', native: 'Български', flag: '🇧🇬'},
             {code: 'ro', name: 'Romanian', native: 'Română', flag: '🇷🇴'},
             {code: 'el', name: 'Greek', native: 'Ελληνικά', flag: '🇬🇷'},
-            {code: 'he', name: 'Hebrew', native: 'עברית', flag: '🇮🇱'},
+            {code: 'iw', name: 'Hebrew', native: 'עברית', flag: '🇮🇱'},
             {code: 'fa', name: 'Persian', native: 'فارسی', flag: '🇮🇷'},
             {code: 'ur', name: 'Urdu', native: 'اردو', flag: '🇵🇰'},
             {code: 'bn', name: 'Bengali', native: 'বাংলা', flag: '🇧🇩'},
@@ -1340,55 +1400,18 @@
             {code: 'mk', name: 'Macedonian', native: 'Македонски', flag: '🇲🇰'},
             {code: 'sq', name: 'Albanian', native: 'Shqip', flag: '🇦🇱'},
             {code: 'bs', name: 'Bosnian', native: 'Bosanski', flag: '🇧🇦'},
-            {code: 'me', name: 'Montenegrin', native: 'Crnogorski', flag: '🇲🇪'},
             {code: 'hy', name: 'Armenian', native: 'Հայերեն', flag: '🇦🇲'},
             {code: 'az', name: 'Azerbaijani', native: 'Azərbaycan', flag: '🇦🇿'},
             {code: 'kk', name: 'Kazakh', native: 'Қазақша', flag: '🇰🇿'},
             {code: 'ky', name: 'Kyrgyz', native: 'Кыргызча', flag: '🇰🇬'},
             {code: 'uz', name: 'Uzbek', native: "O'zbekcha", flag: '🇺🇿'},
             {code: 'tg', name: 'Tajik', native: 'Тоҷикӣ', flag: '🇹🇯'},
-            {code: 'mn', name: 'Mongolian', native: 'Монгол', flag: '🇲🇳'},
-            {code: 'bo', name: 'Tibetan', native: 'བོད་སྐད་', flag: '🏳️'}
+            {code: 'mn', name: 'Mongolian', native: 'Монгол', flag: '🇲🇳'}
         ];
 
-        // Google Cloud Translation API function (requires API key)
-        async function translateWithCloudAPI(text, targetLang) {
-            try {
-                const response = await fetch(`${GOOGLE_TRANSLATE_API_URL}?key=${GOOGLE_TRANSLATE_API_KEY}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        q: text,
-                        source: 'en',
-                        target: targetLang,
-                        format: 'text'
-                    })
-                });
-                
-                const data = await response.json();
-                return data.data.translations[0].translatedText;
-            } catch (error) {
-                console.error('Cloud API translation failed:', error);
-                return text; // Return original text if translation fails
-            }
-        }
-
-        // Google Translate Widget Implementation (FREE)
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: languages.map(lang => lang.code).join(','),
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false,
-                multilanguagePage: true
-            }, 'google_translate_element');
-            
-            console.log('✅ Google Translate Widget initialized');
-        }
-
-        // Translation variables initialized above
+        // Global variables
+        let currentLanguage = 'en';
+        let isTranslating = false;
 
         // Toggle translation panel
         function toggleTranslationPanel() {
@@ -1442,10 +1465,11 @@
             }
         }
 
-        // Enhanced translation function with API support
+        // Main translation function using Google Translate Widget
         function translateToLanguage(langCode, langName) {
-            if (langCode === currentLanguage) return;
+            if (langCode === currentLanguage || isTranslating) return;
             
+            isTranslating = true;
             showStatus(`Translating to ${langName}...`, 'info');
             
             // Update active language in UI
@@ -1461,103 +1485,62 @@
                 }
             });
             
-            if (useCloudAPI && GOOGLE_TRANSLATE_API_KEY !== 'YOUR_GOOGLE_TRANSLATE_API_KEY_HERE') {
-                // Use Google Cloud Translation API
-                translatePageWithCloudAPI(langCode, langName);
-            } else {
-                // Use Google Translate Widget (FREE)
-                translateWithWidget(langCode, langName);
-            }
+            // Use Google Translate Widget
+            translateWithWidget(langCode, langName);
         }
-        
-        // Cloud API translation for entire page
-        async function translatePageWithCloudAPI(langCode, langName) {
-            try {
-                const elementsToTranslate = document.querySelectorAll('h1, h2, h3, h4, p, li, button:not(.language-option):not(.quick-lang-btn), .nav-link');
+
+        // Widget translation
+        function translateWithWidget(langCode, langName) {
+            // Create a cookie to set the language
+            document.cookie = `googtrans=/en/${langCode}; path=/`;
+            
+            // Reload the widget
+            const iframe = document.querySelector('.goog-te-menu-frame');
+            if (iframe) {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const langSelector = iframeDoc.querySelector('.goog-te-menu2-item span.text');
                 
-                showStatus(`Translating ${elementsToTranslate.length} elements...`, 'info');
-                
-                for (let i = 0; i < elementsToTranslate.length; i++) {
-                    const element = elementsToTranslate[i];
-                    const originalText = element.textContent.trim();
-                    
-                    if (originalText.length > 2) {
-                        // Store original text
-                        if (!element.getAttribute('data-original')) {
-                            element.setAttribute('data-original', originalText);
-                        }
-                        
-                        const translatedText = await translateWithCloudAPI(originalText, langCode);
-                        element.textContent = translatedText;
-                        
-                        // Show progress
-                        const progress = Math.round(((i + 1) / elementsToTranslate.length) * 100);
-                        showStatus(`Translating... ${progress}%`, 'info');
+                // Find and click the language
+                const langElements = iframeDoc.querySelectorAll('.goog-te-menu2-item');
+                langElements.forEach(element => {
+                    if (element.textContent.includes(langName)) {
+                        element.click();
+                        currentLanguage = langCode;
+                        isTranslating = false;
+                        showStatus(`✅ Translated to ${langName}`, 'success');
+                        setTimeout(() => {
+                            toggleTranslationPanel();
+                        }, 2000);
+                        return;
                     }
-                }
-                
-                currentLanguage = langCode;
-                showStatus(`✅ Translated to ${langName} using Cloud API`, 'success');
-                
-            } catch (error) {
-                console.error('Cloud API translation failed:', error);
-                showStatus('Cloud API failed, trying widget...', 'warning');
-                translateWithWidget(langCode, langName);
+                });
             }
             
-            setTimeout(() => toggleTranslationPanel(), 2000);
-        }
-        
-        // Widget translation (original method)
-        function translateWithWidget(langCode, langName) {
-            // Wait for Google Translate to be ready and trigger translation
-            function attemptTranslation(attempts = 0) {
-                const selectElement = document.querySelector('select.goog-te-combo');
-                
-                if (selectElement) {
-                    // Google Translate is ready
-                    selectElement.value = langCode;
-                    selectElement.dispatchEvent(new Event('change'));
-                    
+            // Fallback: trigger Google Translate directly
+            if (window.google && window.google.translate) {
+                const googleTranslateWidget = document.querySelector('.goog-te-combo');
+                if (googleTranslateWidget) {
+                    googleTranslateWidget.value = langCode;
+                    googleTranslateWidget.dispatchEvent(new Event('change'));
                     currentLanguage = langCode;
+                    isTranslating = false;
                     showStatus(`✅ Translated to ${langName}`, 'success');
-                    
                     setTimeout(() => {
                         toggleTranslationPanel();
                     }, 2000);
-                    
-                } else if (attempts < 10) {
-                    // Google Translate not ready yet, try again
-                    setTimeout(() => attemptTranslation(attempts + 1), 500);
-                } else {
-                    // Fallback: Open Google Translate in new tab
-                    showStatus(`Opening ${langName} translation in new tab...`, 'info');
-                    const url = `https://translate.google.com/translate?sl=en&tl=${langCode}&u=${encodeURIComponent(window.location.href)}`;
-                    window.open(url, '_blank');
-                    
-                    setTimeout(() => {
-                        toggleTranslationPanel();
-                    }, 1000);
                 }
             }
             
-            attemptTranslation();
+            isTranslating = false;
         }
 
         // Reset to original English
         function resetToOriginal() {
-            const selectElement = document.querySelector('select.goog-te-combo');
-            if (selectElement) {
-                selectElement.value = 'en';
-                selectElement.dispatchEvent(new Event('change'));
-                currentLanguage = 'en';
-                translationActive = false;
-                showStatus('✓ Reset to English', 'success');
-                toggleTranslationPanel();
-            } else {
-                // If Google Translate not available, reload page
-                window.location.reload();
-            }
+            // Clear the translation cookie
+            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            
+            // Reload the page to reset
+            window.location.reload();
         }
 
         // Show status notification
@@ -1578,28 +1561,28 @@
             showStatus('🧠 Starting F.A.S.T Assessment...', 'info');
             
             setTimeout(() => {
-                const assessment = `
-                    <div style="background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
-                        <div style="background: linear-gradient(135deg, var(--gray-600), var(--black)); border-radius: 24px; padding: 40px; max-width: 600px; width: 100%; color: var(--pure-white); box-shadow: var(--shadow-xl); border: 1px solid rgba(255,255,255,0.1);">
-                            <h2 style="font-size: 32px; margin-bottom: 24px; text-align: center; color: var(--red);">
-                                <i class="fas fa-brain"></i> F.A.S.T Assessment
-                            </h2>
-                            <div id="assessmentContent" style="text-align: center;">
-                                <p style="font-size: 18px; margin-bottom: 32px; line-height: 1.6;">
-                                    This interactive assessment will help you practice identifying stroke symptoms. 
-                                    Answer each question as if you were observing someone who might be having a stroke.
-                                </p>
-                                <button onclick="startAssessmentQuestions()" style="background: var(--red); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; box-shadow: var(--shadow-md);">
-                                    Begin Assessment
-                                </button>
-                            </div>
-                            <button onclick="closeAssessment()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--gray-400); font-size: 24px; cursor: pointer;">
-                                <i class="fas fa-times"></i>
+                const assessmentDiv = document.createElement('div');
+                assessmentDiv.style.cssText = 'background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;';
+                assessmentDiv.innerHTML = `
+                    <div style="background: linear-gradient(135deg, var(--gray-600), var(--black)); border-radius: 24px; padding: 40px; max-width: 600px; width: 100%; color: var(--pure-white); box-shadow: var(--shadow-xl); border: 1px solid rgba(255,255,255,0.1);">
+                        <h2 style="font-size: 32px; margin-bottom: 24px; text-align: center; color: var(--red);">
+                            <i class="fas fa-brain"></i> F.A.S.T Assessment
+                        </h2>
+                        <div id="assessmentContent" style="text-align: center;">
+                            <p style="font-size: 18px; margin-bottom: 32px; line-height: 1.6;">
+                                This interactive assessment will help you practice identifying stroke symptoms. 
+                                Answer each question as if you were observing someone who might be having a stroke.
+                            </p>
+                            <button onclick="startAssessmentQuestions()" style="background: var(--red); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; box-shadow: var(--shadow-md);">
+                                Begin Assessment
                             </button>
                         </div>
+                        <button onclick="closeAssessment()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--gray-400); font-size: 24px; cursor: pointer;">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 `;
-                document.body.insertAdjacentHTML('beforeend', assessment);
+                document.body.appendChild(assessmentDiv);
             }, 500);
         }
 
@@ -1734,28 +1717,20 @@
         // Close assessment
         window.closeAssessment = function() {
             const assessment = document.querySelector('[style*="position: fixed"]');
-            if (assessment) {
+            if (assessment && assessment.style.background.includes('rgba(0,0,0,0.95)')) {
                 assessment.remove();
             }
         };
 
-        // Navigation scroll effects
+        // Initialize on DOM ready
         document.addEventListener('DOMContentLoaded', function() {
-            // Load Google Translate script
-            const script = document.createElement('script');
-            script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-            script.onerror = function() {
-                console.log('⚠️ Google Translate failed to load, using fallback');
-                showStatus('Translation service loading...', 'info');
-            };
-            document.head.appendChild(script);
-
             // Smooth scrolling for navigation links
             const anchors = document.querySelectorAll('a[href^="#"]');
             anchors.forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
+                    const targetId = this.getAttribute('href').substring(1);
+                    const target = document.getElementById(targetId);
                     if (target) {
                         const offset = 100;
                         const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
@@ -1848,7 +1823,7 @@
             if (langCode !== 'en' && languages.find(l => l.code === langCode)) {
                 setTimeout(() => {
                     const lang = languages.find(l => l.code === langCode);
-                    showStatus(`🌍 Translate to ${lang.name}? Press Ctrl+T`, 'info');
+                    showStatus(`🌍 Translate to ${lang.name}? Click the language button`, 'info');
                 }, 3000);
             }
 
@@ -1862,7 +1837,7 @@
 
             // Initialize status
             setTimeout(() => {
-                showStatus('✅ Page loaded - Ready for universal translation', 'success');
+                showStatus('✅ Page loaded - 100+ languages available', 'success');
             }, 1000);
 
             console.log('🧠 Stroke Education Platform Loaded');
@@ -1871,43 +1846,14 @@
             console.log('🚨 Emergency Information Accessible');
         });
 
-        // Additional utility functions
-        function copyEmergencyInfo() {
-            const text = `🚨 STROKE EMERGENCY SIGNS (F.A.S.T):
-F - Face drooping
-A - Arm weakness  
-S - Speech difficulty
-T - Time to call 911
-
-If ANY of these signs are present, call emergency services immediately!`;
-            
-            navigator.clipboard.writeText(text).then(() => {
-                showStatus('📋 Emergency info copied to clipboard', 'success');
-            });
-        }
-
-        function shareStrokeInfo() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Stroke Education - Learn F.A.S.T Protocol',
-                    text: 'Learn to recognize stroke symptoms and save lives. Every minute counts!',
-                    url: window.location.href
-                });
-            } else {
-                copyEmergencyInfo();
-            }
-        }
-
-        // Expose functions globally for onclick handlers
+        // Expose functions globally
         window.toggleTranslationPanel = toggleTranslationPanel;
         window.translateToLanguage = translateToLanguage;
         window.quickTranslate = quickTranslate;
         window.resetToOriginal = resetToOriginal;
         window.filterLanguages = filterLanguages;
         window.startStrokeAssessment = startStrokeAssessment;
-        window.copyEmergencyInfo = copyEmergencyInfo;
-        window.shareStrokeInfo = shareStrokeInfo;
-        window.googleTranslateElementInit = googleTranslateElementInit;
+        window.showStatus = showStatus;
     </script>
 </body>
 </html>

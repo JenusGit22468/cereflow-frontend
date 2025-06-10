@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.A.S.T Stroke Recognition Card - Ctrl+Z Stroke</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --pure-white: #FFFFFF;
+            --gray-100: #F5F5F7;
+            --gray-200: #E8E8ED;
+            --gray-300: #D2D2D7;
+            --gray-400: #86868B;
+            --gray-500: #515154;
+            --gray-600: #1D1D1F;
+            --red: #FF375F;
+            --red-light: #FF6B8A;
+            --red-dark: #CC2D4C;
+            --blue: #0071E3;
+            --green: #30D158;
+            --orange: #FF9500;
+            --transition: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
+            color: var(--gray-600);
+            line-height: 1.47;
+            letter-spacing: -0.022em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--pure-white);
+            border-radius: 24px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.08),
+                0 8px 25px rgba(0, 0, 0, 0.06),
+                0 2px 8px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--red) 0%, var(--red-light) 50%, var(--red) 100%);
+        }
+
+        .card-header {
+            padding: 40px 40px 30px;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--pure-white) 0%, rgba(255, 55, 95, 0.02) 100%);
+        }
+
+        .watermark {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            opacity: 0.1;
+            font-size: 14px;
+            color: var(--gray-500);
+            font-weight: 600;
+            transform: rotate(12deg);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .watermark-keys {
+            display: inline-flex;
+            gap: 2px;
+            align-items: center;
+        }
+
+        .watermark-key {
+            background: var(--gray-300);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .watermark-plus {
+            font-size: 10px;
+            margin: 0 2px;
+        }
+
+        .emergency-badge {
+            display: inline-block;
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.2);
+            border-radius: 100px;
+            padding: 8px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--red);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .card-subtitle {
+            font-size: 18px;
+            color: var(--gray-500);
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        .urgency-message {
+            background: rgba(255, 149, 0, 0.1);
+            border: 1px solid rgba(255, 149, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: var(--orange);
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .fast-grid {
+            padding: 0 40px 40px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .fast-item {
+            background: var(--gray-100);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s var(--transition);
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fast-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--red);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.3s var(--transition);
+        }
+
+        .fast-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .fast-item:hover {
+            background: var(--pure-white);
+            box-shadow: 0 8px 25px rgba(255, 55, 95, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .fast-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .fast-letter {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--red) 0%, var(--red-light) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pure-white);
+            box-shadow: 0 4px 16px rgba(255, 55, 95, 0.3);
+        }
+
+        .fast-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .fast-description {
+            font-size: 16px;
+            color: var(--gray-500);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .fast-action {
+            font-size: 14px;
+            color: var(--red);
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .card-footer {
+            background: var(--gray-600);
+            color: var(--pure-white);
+            padding: 30px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .emergency-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--pure-white);
+            margin-bottom: 8px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+        }
+
+        .emergency-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .brand-keys {
+            display: inline-flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .brand-key {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--pure-white);
+        }
+
+        .brand-plus {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin: 0 4px;
+        }
+
+        .brand-text {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--pure-white) 0%, rgba(255, 255, 255, 0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .download-section {
+            text-align: center;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            background: var(--red);
+            color: var(--pure-white);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            background: var(--red-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 55, 95, 0.3);
+        }
+
+        .download-btn.secondary {
+            background: transparent;
+            color: var(--gray-600);
+            border: 2px solid var(--gray-300);
+        }
+
+        .download-btn.secondary:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-400);
+            color: var(--gray-600);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .download-section {
+                display: none;
+            }
+            
+            .card {
+                box-shadow: none;
+                border: 1px solid var(--gray-300);
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 20px 10px;
+            }
+            
+            .card-header,
+            .fast-grid,
+            .card-footer {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            
+            .card-title {
+                font-size: 32px;
+            }
+            
+            .card-subtitle {
+                font-size: 16px;
+            }
+            
+            .fast-item {
+                padding: 20px;
+            }
+            
+            .fast-letter {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .fast-title {
+                font-size: 18px;
+            }
+            
+            .fast-description {
+                font-size: 15px;
+            }
+            
+            .emergency-number {
+                font-size: 24px;
+            }
+            
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .download-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .emergency-number {
+            animation: pulse 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <!-- F.A.S.T Card -->
+        <div class="card">
+            <!-- Watermark -->
+            <div class="watermark">
+                <span class="watermark-keys">
+                    <span class="watermark-key">Ctrl</span>
+                    <span class="watermark-plus">+</span>
+                    <span class="watermark-key">Z</span>
+                </span>
+                <span>Stroke</span>
+            </div>
+
+            <!-- Header -->
+            <div class="card-header">
+                <div class="emergency-badge">Stroke Recognition</div>
+                <h1 class="card-title">F.A.S.T</h1>
+                <p class="card-subtitle">Every Second Counts in Stroke Detection</p>
+                <div class="urgency-message">
+                    <i class="fas fa-clock"></i> Time is brain - Act immediately if you see these signs
+                </div>
+            </div>
+
+            <!-- F.A.S.T Grid -->
+            <div class="fast-grid">
+                <div class="fast-item">
+                    <div class="fast-header">
+                        <div class="fast-letter">F</div>
+                        <div>
+                            <div class="fast-title">Face Drooping</div>
+                            <div class="fast-description">Does one side of the face droop or is it numb?</div>
+                            <div class="fast-action">Ask the person to smile. Is their smile uneven or lopsided?</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fast-item">
+                    <div class="fast-header">
+                        <div class="fast-letter">A</div>
+                        <div>
+                            <div class="fast-title">Arm Weakness</div>
+                            <div class="fast-description">Is one arm weak or numb?</div>
+                            <div class="fast-action">Ask the person to raise both arms. Does one arm drift downward?</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fast-item">
+                    <div class="fast-header">
+                        <div class="fast-letter">S</div>
+                        <div>
+                            <div class="fast-title">Speech Difficulty</div>
+                            <div class="fast-description">Is speech slurred or strange?</div>
+                            <div class="fast-action">Ask them to repeat a simple phrase. Are their words slurred or confused?</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fast-item">
+                    <div class="fast-header">
+                        <div class="fast-letter">T</div>
+                        <div>
+                            <div class="fast-title">Time to Call</div>
+                            <div class="fast-description">If you see any of these signs, time is critical.</div>
+                            <div class="fast-action">Call emergency services immediately and note the time symptoms first appeared.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer">
+                <div class="emergency-number">Emergency Services</div>
+                <div class="emergency-text">Call your local emergency number immediately</div>
+                <div style="margin: 20px 0; font-size: 14px; color: rgba(255, 255, 255, 0.7);">
+                    <strong>Common numbers:</strong> 911 (US/CA), 999 (UK), 112 (EU), 000 (AU), 119 (JP)
+                </div>
+                <div class="brand-logo">
+                    <span class="brand-keys">
+                        <span class="brand-key">Ctrl</span>
+                        <span class="brand-plus">+</span>
+                        <span class="brand-key">Z</span>
+                    </span>
+                    <span class="brand-text">Stroke</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download Section -->
+        <div class="download-section">
+            <div class="download-buttons">
+                <button class="download-btn" onclick="printCard()">
+                    <i class="fas fa-print"></i>
+                    Print Card
+                </button>
+                <button class="download-btn" onclick="saveAsImage()">
+                    <i class="fas fa-download"></i>
+                    Save as Image
+                </button>
+                <button class="download-btn secondary" onclick="shareCard()">
+                    <i class="fas fa-share"></i>
+                    Share Card
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        function printCard() {
+            window.print();
+        }
+
+        async function saveAsImage() {
+            const button = document.querySelector('[onclick="saveAsImage()"]');
+            const originalText = button.innerHTML;
+            
+            try {
+                // Show loading
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+                button.disabled = true;
+
+                // Hide download section
+                const downloadSection = document.querySelector('.download-section');
+                downloadSection.style.display = 'none';
+
+                // Generate image
+                const card = document.querySelector('.card');
+                const canvas = await html2canvas(card, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    useCORS: true
+                });
+
+                // Show download section
+                downloadSection.style.display = 'block';
+
+                // Download image
+                const link = document.createElement('a');
+                link.download = 'FAST-Stroke-Card.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                showMessage('✅ Image downloaded successfully!');
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('❌ Error generating image');
+            } finally {
+                // Reset button
+                button.innerHTML = originalText;
+                button.disabled = false;
+                document.querySelector('.download-section').style.display = 'block';
+            }
+        }
+
+        async function shareCard() {
+            const shareText = `🚨 F.A.S.T Stroke Recognition Card\n\nLearn stroke signs:\n✓ Face Drooping\n✓ Arm Weakness\n✓ Speech Difficulty\n✓ Time to Call\n\nEvery second counts!\n\n${window.location.href}`;
+            
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'F.A.S.T Stroke Card',
+                        text: shareText
+                    });
+                } else {
+                    await navigator.clipboard.writeText(shareText);
+                    showMessage('✅ Link and message copied to clipboard!');
+                }
+            } catch (error) {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = shareText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showMessage('✅ Copied to clipboard!');
+            }
+        }
+
+        function showMessage(text) {
+            // Remove existing message
+            const existing = document.querySelector('.temp-message');
+            if (existing) existing.remove();
+
+            // Create message
+            const message = document.createElement('div');
+            message.className = 'temp-message';
+            message.textContent = text;
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #30D158;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 14px;
+                z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            `;
+
+            if (text.includes('❌')) {
+                message.style.background = '#FF375F';
+            }
+
+            document.body.appendChild(message);
+
+            // Auto remove
+            setTimeout(() => message.remove(), 3000);
+        }
+
+        // Add animations on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.fast-item');
+            
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>
