@@ -3156,6 +3156,23 @@
                 var resultsModal = document.getElementById('resultsModal');
                 var resultsList = document.getElementById('resultsList');
                 
+                // Check if Support Groups is selected
+                if (service === 'support_groups') {
+                    resultsModal.style.display = 'flex';
+                    resultsList.innerHTML = '<div style="text-align: center; padding: 60px;"><div class="loading"></div><p style="margin-top: 20px; color: var(--gray-400);">Finding support groups...</p></div>';
+                    
+                    // Hide controls while loading
+                    document.querySelector('.results-controls').style.display = 'none';
+                    
+                    // Show loading for 2-3 seconds then redirect
+                    setTimeout(function() {
+                        window.open('https://www.stroke.org/en/stroke-support-group-finder', '_blank');
+                        resultsModal.style.display = 'none';
+                    }, 2500);
+                    
+                    return; // Exit early for support groups
+                }
+                
                 resultsModal.style.display = 'flex';
                 resultsList.innerHTML = '<div style="text-align: center; padding: 60px;"><div class="loading"></div><p style="margin-top: 20px; color: var(--gray-400);">Searching for facilities...</p></div>';
                 
