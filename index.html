@@ -3553,7 +3553,7 @@
             formData.append('audio', fileInput.files[0]);
             
             try {
-                const response = await fetch('http://localhost:8000/api/create-voice-profile', {
+                const response = await fetch('https://ctrlzstroke-backend.onrender.com/api/create-voice-profile', {
                     method: 'POST',
                     body: formData
                 });
@@ -3691,7 +3691,7 @@
                     formData.append('voice_id', speechUserVoiceId);
                 }
                 
-                const response = await fetch('http://localhost:8000/api/process-speech-fast', {
+                const response = await fetch('https://ctrlzstroke-backend.onrender.com/api/process-speech-fast', {
                     method: 'POST',
                     body: formData
                 });
