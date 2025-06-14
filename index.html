@@ -2954,6 +2954,8 @@
         let filteredResults = [];
         let currentPage = 1;
         let itemsPerPage = 10;
+        // Store the voice ID for cleanup
+        let currentVoiceId = null;
 
         // Google Maps API Key - Replace with your actual API key
         // Get your API key from: https://console.cloud.google.com/apis/credentials
@@ -3597,6 +3599,15 @@
         }
 
         async function startRecording() {
+            // Cleanup previous voice if exists
+            if (currentVoiceId) {
+                fetch(`https://ctrlzstroke-backend.onrender.com/api/delete-voice/${currentVoiceId}`, { 
+                    method: 'DELETE'
+                });
+                console.log('Cleaning up previous voice for new recording:', currentVoiceId);
+                currentVoiceId = null;
+            }
+            
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 speechMediaRecorder = new MediaRecorder(stream);
@@ -3707,6 +3718,12 @@
                         document.getElementById('processingLoader').style.display = 'none';
                         document.getElementById('transcriptionResults').style.display = 'block';
                         
+                        // Store voice ID for cleanup if auto-cloned
+                        if (result.voice_used && result.auto_cloned) {
+                            currentVoiceId = result.voice_used;
+                            console.log('Stored voice ID for cleanup:', currentVoiceId);
+                        }
+                        
                         // Display results
                         document.getElementById('originalText').textContent = result.original_text;
                         document.getElementById('enhancedText').textContent = result.enhanced_text;
@@ -3763,6 +3780,18 @@
                 btn.innerHTML = '<i class="fas fa-play"></i> Play Enhanced Speech';
             };
         }
+
+        // Cleanup when user leaves or reloads page
+        window.addEventListener('beforeunload', function() {
+            if (currentVoiceId) {
+                fetch(`https://ctrlzstroke-backend.onrender.com/api/delete-voice/${currentVoiceId}`, { 
+                    method: 'DELETE',
+                    keepalive: true  // Ensures request completes even as page unloads
+                });
+                console.log('Cleaning up voice on page unload:', currentVoiceId);
+                currentVoiceId = null;
+            }
+        });
     </script>
 </body>
 </html>
