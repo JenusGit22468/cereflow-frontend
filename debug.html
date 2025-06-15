@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice Clone Debug - Your App</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 20px auto; 
+            padding: 20px;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .result { 
+            background: #fff; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .error { 
+            background: #ffebee; 
+            border-color: #f44336;
+            color: #c62828;
+        }
+        .success { 
+            background: #e8f5e8; 
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        .warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+        button { 
+            background: #007bff; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { 
+            background: #6c757d; 
+            cursor: not-allowed;
+        }
+        input[type="file"] { 
+            margin: 10px 0; 
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .loading { 
+            color: #666; 
+            font-style: italic;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-ok { background: #4caf50; }
+        .status-error { background: #f44336; }
+        .status-unknown { background: #9e9e9e; }
+    </style>
+</head>
+<body>
+    <h1>🔬 Voice Cloning Debug Tool</h1>
+    <p>Testing your app: <strong>https://ctrlzstroke-backend.onrender.com</strong></p>
+    
+    <div class="test-section">
+        <h3>🏥 Step 1: Basic Health Check</h3>
+        <button onclick="testHealth()">Test App Health</button>
+        <div id="healthResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔑 Step 2: API Key Test</h3>
+        <button onclick="testApiKey()">Test ElevenLabs API Key</button>
+        <div id="apiResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🎤 Step 3: Voice Clone Debug</h3>
+        <input type="file" id="audioFile" accept="audio/*">
+        <br>
+        <button onclick="testVoiceClone()">Debug Voice Cloning</button>
+        <div id="cloneResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🎯 Step 4: Full Process Test</h3>
+        <button onclick="testFullProcess()">Test Complete Speech Process</button>
+        <div id="processResult" class="result"></div>
+    </div>
+
+    <script>
+        const BASE_URL = 'https://ctrlzstroke-backend.onrender.com';
+        
+        function updateResult(elementId, content, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = content;
+            element.className = `result ${type}`;
+        }
+        
+        async function testHealth() {
+            updateResult('healthResult', '⏳ Testing app health...', 'loading');
+            
+            try {
+                const response = await fetch(`${BASE_URL}/api/health`);
+                const data = await response.json();
+                
+                let statusHtml = `<span class="status-indicator status-ok"></span><strong>App Status:</strong> ${data.status}\n\n`;
+                statusHtml += `<strong>API Configuration:</strong>\n`;
+                statusHtml += `• Google Maps: ${data.apis.google_maps}\n`;
+                statusHtml += `• OpenAI: ${data.apis.openai}\n`;
+                statusHtml += `• ElevenLabs: ${data.apis.elevenlabs}\n\n`;
+                statusHtml += `<strong>Raw Response:</strong>\n${JSON.stringify(data, null, 2)}`;
+                
+                updateResult('healthResult', statusHtml, 'success');
+            } catch (error) {
+                updateResult('healthResult', `<span class="status-indicator status-error"></span>❌ Health check failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testApiKey() {
+            updateResult('apiResult', '⏳ Testing ElevenLabs API key...', 'loading');
+            
+            try {
+                // First, let's just try the health endpoint to see if the route exists
+                const response = await fetch(`${BASE_URL}/api/quick-test`);
+                
+                if (response.status === 404) {
+                    updateResult('apiResult', `❌ The /api/quick-test endpoint doesn't exist yet.\n\nYou need to add this to your code:\n\n@app.route('/api/quick-test', methods=['GET'])\ndef quick_test():\n    try:\n        response = requests.get(\n            f"{speech_processor.elevenlabs_base_url}/voices",\n            headers={"xi-api-key": ELEVENLABS_API_KEY}\n        )\n        return jsonify({\n            "api_key_works": response.status_code == 200,\n            "status_code": response.status_code,\n            "error": response.text if response.status_code != 200 else None\n        })\n    except Exception as e:\n        return jsonify({"error": str(e)})`, 'warning');
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                let resultHtml = `<span class="status-indicator ${data.api_key_works ? 'status-ok' : 'status-error'}"></span>`;
+                resultHtml += `<strong>API Key Status:</strong> ${data.api_key_works ? '✅ Working' : '❌ Failed'}\n`;
+                resultHtml += `<strong>Status Code:</strong> ${data.status_code}\n`;
+                if (data.error) {
+                    resultHtml += `<strong>Error:</strong> ${data.error}\n`;
+                }
+                resultHtml += `\n<strong>Raw Response:</strong>\n${JSON.stringify(data, null, 2)}`;
+                
+                updateResult('apiResult', resultHtml, data.api_key_works ? 'success' : 'error');
+            } catch (error) {
+                updateResult('apiResult', `❌ API key test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testVoiceClone() {
+            const fileInput = document.getElementById('audioFile');
+            
+            if (!fileInput.files[0]) {
+                updateResult('cloneResult', '⚠️ Please select an audio file first!', 'warning');
+                return;
+            }
+            
+            updateResult('cloneResult', '⏳ Testing voice cloning...', 'loading');
+            
+            try {
+                const formData = new FormData();
+                formData.append('audio', fileInput.files[0]);
+                
+                const response = await fetch(`${BASE_URL}/api/debug-voice-clone`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                let resultHtml = `<span class="status-indicator ${data.success ? 'status-ok' : 'status-error'}"></span>`;
+                resultHtml += `<strong>Voice Clone Test:</strong> ${data.success ? '✅ Success' : '❌ Failed'}\n\n`;
+                
+                if (data.debug && Array.isArray(data.debug)) {
+                    resultHtml += `<strong>Debug Steps:</strong>\n`;
+                    data.debug.forEach(step => {
+                        resultHtml += `${step}\n`;
+                    });
+                    resultHtml += `\n`;
+                }
+                
+                if (data.error) {
+                    resultHtml += `<strong>Error:</strong> ${data.error}\n\n`;
+                }
+                
+                if (data.response_text) {
+                    resultHtml += `<strong>ElevenLabs Response:</strong>\n${data.response_text}\n\n`;
+                }
+                
+                resultHtml += `<strong>Full Response:</strong>\n${JSON.stringify(data, null, 2)}`;
+                
+                updateResult('cloneResult', resultHtml, data.success ? 'success' : 'error');
+            } catch (error) {
+                updateResult('cloneResult', `❌ Voice clone test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testFullProcess() {
+            const fileInput = document.getElementById('audioFile');
+            
+            if (!fileInput.files[0]) {
+                updateResult('processResult', '⚠️ Please select an audio file first!', 'warning');
+                return;
+            }
+            
+            updateResult('processResult', '⏳ Testing full speech process...', 'loading');
+            
+            try {
+                const formData = new FormData();
+                formData.append('audio', fileInput.files[0]);
+                formData.append('auto_clone', 'true');
+                
+                const response = await fetch(`${BASE_URL}/api/process-speech-fast`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                let resultHtml = `<span class="status-indicator ${data.success ? 'status-ok' : 'status-error'}"></span>`;
+                resultHtml += `<strong>Full Process:</strong> ${data.success ? '✅ Success' : '❌ Failed'}\n\n`;
+                
+                if (data.success) {
+                    resultHtml += `<strong>Results:</strong>\n`;
+                    resultHtml += `• Transcription: "${data.original_text}"\n`;
+                    resultHtml += `• Enhanced: "${data.enhanced_text}"\n`;
+                    resultHtml += `• Voice Used: ${data.voice_used}\n`;
+                    resultHtml += `• Auto Cloned: ${data.auto_cloned ? '✅ Yes' : '❌ No'}\n`;
+                    resultHtml += `• Speech Generation: ${data.speech_generation_success ? '✅ Success' : '❌ Failed'}\n`;
+                    
+                    if (data.clone_warning) {
+                        resultHtml += `• Clone Warning: ⚠️ ${data.clone_warning}\n`;
+                    }
+                    
+                    resultHtml += `\n<strong>Timing:</strong>\n`;
+                    resultHtml += `• Transcription: ${data.timing.transcription}s\n`;
+                    resultHtml += `• Voice Cloning: ${data.timing.voice_cloning}s\n`;
+                    resultHtml += `• Processing: ${data.timing.processing}s\n`;
+                    resultHtml += `• Total: ${data.timing.total}s\n`;
+                }
+                
+                if (data.error) {
+                    resultHtml += `<strong>Error:</strong> ${data.error}\n\n`;
+                }
+                
+                resultHtml += `\n<strong>Full Response:</strong>\n${JSON.stringify(data, null, 2)}`;
+                
+                updateResult('processResult', resultHtml, data.success ? 'success' : 'error');
+            } catch (error) {
+                updateResult('processResult', `❌ Full process test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        // Auto-run health check on page load
+        window.onload = function() {
+            testHealth();
+        };
+    </script>
+</body>
+</html>
